@@ -1,13 +1,24 @@
 [project]
-name = "cgse-setup"
+name = "navdict"
 version = "0.1.0"
-description = "Add your description here"
+description = "AN intelligent navigable dictionary"
 readme = "README.md"
 authors = [
     { name = "Rik Huygen", email = "rik.huygen@kuleuven.be" }
 ]
-requires-python = ">=3.13"
-dependencies = []
+requires-python = ">=3.9"
+dependencies = [
+    "rich>=14.0.0",
+    "ruamel-yaml>=0.18.12",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.0",
+]
+lint = [
+    "ruff>=0.11.12",
+]
 
 [build-system]
 requires = ["hatchling"]
