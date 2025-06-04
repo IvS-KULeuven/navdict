@@ -1,12 +1,26 @@
 [project]
 name = "navdict"
-version = "0.1.0"
-description = "AN intelligent navigable dictionary"
+version = "0.2.0"
+description = "An intelligent navigable dictionary"
 readme = "README.md"
 authors = [
-    { name = "Rik Huygen", email = "rik.huygen@kuleuven.be" }
+    {name = "IvS KU Leuven"}
+]
+maintainers = [
+    {name = "Rik Huygen", email = "rik.huygen@kuleuven.be"},
 ]
 requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
 dependencies = [
     "rich>=14.0.0",
     "ruamel-yaml>=0.18.12",
