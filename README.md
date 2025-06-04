@@ -1,1 +1,1 @@
-# A navigable Setup
+# An intelligent navigable dictionary
