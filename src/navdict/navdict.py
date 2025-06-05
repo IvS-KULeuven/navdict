@@ -1,119 +1,31 @@
 """
-# Setup
+NavDict: A navigable dictionary with dot notation access and automatic file loading.
 
-This module defines the Setup, which contains the complete configuration information for a test.
+NavDict extends Python's built-in dictionary to support convenient dot notation
+access (data.user.name) alongside traditional key access (data["user"]["name"]).
+It automatically loads data files and can instantiate classes dynamically based
+on configuration.
 
-The Setup class contains all configuration items that are specific for a test or observation
-and is normally (during nominal operation/testing) loaded automatically from the configuration
-manager. The Setup includes type and identification of hardware that is used, calibration files,
-software versions, reference frames and coordinate systems that link positions of alignment
-equipment, conversion functions for temperature sensors, etc.
+Features:
+    - Dot notation access for nested data structures
+    - Automatic file loading (CSV, YAML, JSON, etc.)
+    - Dynamic class instantiation from configuration
+    - Full backward compatibility with standard dictionaries
 
-The configuration information that is in the Setup can be navigated in two different ways. First,
-the Setup is a dictionary, so all information can be accessed by keys as in the following example.
+Example:
+    >>> from navdict import navdict
+    >>> data = navdict({"user": {"name": "Alice", "config_file": "yaml//settings.yaml"}})
+    >>> data.user.name              # "Alice"
+    >>> data.user.config_file       # Automatically loads and parses settings.yaml
+    >>> data["user"]["name"]        # Still works with traditional access
 
-    >>> setup = Setup({"gse": {"hexapod": {"ID": 42, "calibration": [0,1,2,3,4,5]}}})
-    >>> setup["gse"]["hexapod"]["ID"]
-    42
-
-Second, each of the _keys_ is also available as an attribute of the Setup and that make it
-possible to navigate the Setup with dot-notation:
-
-    >>> id = setup.gse.hexapod.ID
-
-In the above example you can see how to navigate from the setup to a device like the PUNA Hexapod.
-The Hexapod device is connected to the control server and accepts commands as usual. If you want to
-know which keys you can use to navigate the Setup, use the `keys()` method.
-
-    >>> setup.gse.hexapod.keys()
-    dict_keys(['ID', 'calibration'])
-    >>> setup.gse.hexapod.calibration
-    [0, 1, 2, 3, 4, 5]
-
-To get a full printout of the Setup, you can use the `pretty_str()` method. Be careful, because
-this can print out a lot of information when a full Setup is loaded.
-
-    >>> print(setup)
-    Setup
-    └── gse
-        └── hexapod
-            ├── ID: 42
-            └── calibration: [0, 1, 2, 3, 4, 5]
-
-### Special Values
-
-Some of the information in the Setup is interpreted in a special way, i.e. some values are
-processed before returning. Examples are the device classes and calibration/data files. The
-following values are treated special if they start with:
-
-* `class//`: instantiate the class and return the object
-* `factory//`: instantiates a factory and executes its `create()` method
-* `csv//`: load the CSV file and return a numpy array
-* `yaml//`: load the YAML file and return a dictionary
-* `pandas//`: load a CSV file into a pandas Dataframe
-* `int-enum//`: dynamically create the enumeration and return the Enum object
-
-#### Device Classes
-
-Most of the hardware components in the Setup will have a `device` key that defines the class for
-the device controller. The `device` keys have a value that starts with `class//` and it will
-return the device object. As an example, the following defines the Hexapod device:
-
-    >>> setup = Setup(
-    ...   {
-    ...     "gse": {
-    ...       "hexapod": {"ID": 42, "device": "class//egse.hexapod.symetrie.puna.PunaSimulator"}
-    ...     }
-    ...   }
-    ... )
-    >>> setup.gse.hexapod.device.is_homing_done()
-    False
-    >>> setup.gse.hexapod.device.info()
-    'Info about the PunaSimulator...'
-
-In the above example you see that we can call the `is_homing_done()` and `info()` methodes
-directly on the device by navigating the Setup. It would however be better (more performant) to
-put the device object in a variable and work with that variable:
-
-    >>> hexapod = setup.gse.hexapod.device
-    >>> hexapod.homing()
-    >>> hexapod.is_homing_done()
-    True
-    >>> hexapod.get_user_positions()
-
-If you need, for some reason, to have access to the actual raw value of the hexapod device key,
-use the `get_raw_value()` method:
-
-    >>> setup.gse.hexapod.get_raw_value("device")
-    <egse.hexapod.symetrie.puna.PunaSimulator object at ...
-
-#### Data Files
-
-Some information is too large to add to the Setup as such and should be loaded from a data file.
-Examples are calibration files, flat-fields, temperature conversion curves, etc.
-
-The Setup will automatically load the file when you access a key that contains a value that
-starts with `csv//` or `yaml//`.
-
-    >>> setup = Setup({
-    ...     "instrument": {"coeff": "csv//cal_coeff_1234.csv"}
-    ... })
-    >>> setup.instrument.coeff[0, 4]
-    5.0
-
-Note: the resource location is always relative to the path defined by the *PROJECT*_CONF_DATA_LOCATION
-environment variable.
-
-The Setup inherits from a NavigableDict (aka navdict) which is also defined in this module.
-
----
-
+Author: Rik Huygen
+License: MIT
 """
 
 from __future__ import annotations
 
 __all__ = [
-    "Setup",
     "navdict",  # noqa: ignore typo
 ]
 
@@ -124,7 +36,6 @@ import importlib
 import logging
 import textwrap
 import warnings
-from functools import lru_cache
 from pathlib import Path
 from typing import Any
 from typing import Union
