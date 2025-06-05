@@ -1,3 +1,4 @@
+import enum
 from pathlib import Path
 
 import pytest
@@ -35,6 +36,27 @@ root:
     with_args:
         dev: class//test_navdict.TakeTwoOptionalArguments
         dev_args: [42, 73]
+"""
+
+YAML_STRING_WITH_INT_ENUM = """
+F_FEE:
+    ccd_sides:
+        enum: int_enum//FEE_SIDES
+        content:
+            E:
+                alias: ['E_SIDE', 'RIGHT_SIDE']
+                value: 1
+            F:
+                alias: ['F_SIDE', 'LEFT_SIDE']
+                value: 0
+"""
+
+YAML_STRING_WITH_UNKNOWN_CLASS = """
+root:
+    part_one:
+        cls: class//navdict.navdict
+    part_two:
+        cls: class//unknown.navdict
 """
 
 YAML_STRING_INVALID_INDENTATION = """
@@ -90,6 +112,18 @@ def test_from_yaml_file():
         assert "gse" in setup.Setup
         assert setup.Setup.gse.hexapod.id == "PUNA_01"
 
+    with create_text_file("with_unknown_class.yaml", YAML_STRING_WITH_UNKNOWN_CLASS) as fn:
+        # The following line shall not generate an exception, meaning the `class//`
+        # shall not be evaluated on load!
+        data = navdict.from_yaml_file(fn)
+
+        assert "root" in data
+        assert isinstance(data.root.part_one.cls, navdict)
+
+        # Only when accessed, it will generate an exception.
+        with pytest.raises(ModuleNotFoundError, match="No module named 'unknown'"):
+            _ = data.root.part_two.cls
+
 
 def test_to_yaml_file():
     """
@@ -141,3 +175,39 @@ def test_from_dict():
 
     with pytest.raises(AttributeError):
         _ = setup.answer.book
+
+
+def get_enum_metaclass():
+    """Get the enum metaclass in a version-compatible way."""
+    if hasattr(enum, 'EnumMeta'):
+        return enum.EnumMeta
+    elif hasattr(enum, 'EnumType'):  # Python 3.11+
+        return enum.EnumType
+    else:
+        # Fallback: get it from a known enum
+        return type(enum.IntEnum)
+
+
+def test_int_enum():
+
+    setup = navdict.from_yaml_string(YAML_STRING_WITH_INT_ENUM)
+
+    assert "enum" in setup.F_FEE.ccd_sides
+    assert "content" in setup.F_FEE.ccd_sides
+    assert "E" in setup.F_FEE.ccd_sides.content
+    assert "F" in setup.F_FEE.ccd_sides.content
+
+    assert setup.F_FEE.ccd_sides.enum.E.value == 1
+    assert setup.F_FEE.ccd_sides.enum.E_SIDE.value == 1
+    assert setup.F_FEE.ccd_sides.enum.RIGHT_SIDE.value == 1
+    assert setup.F_FEE.ccd_sides.enum.RIGHT_SIDE.name == 'E'
+
+    assert setup.F_FEE.ccd_sides.enum.F.value == 0
+    assert setup.F_FEE.ccd_sides.enum.F_SIDE.value == 0
+    assert setup.F_FEE.ccd_sides.enum.LEFT_SIDE.value == 0
+    assert setup.F_FEE.ccd_sides.enum.LEFT_SIDE.name == 'F'
+
+    assert issubclass(setup.F_FEE.ccd_sides.enum, enum.IntEnum)
+    assert isinstance(setup.F_FEE.ccd_sides.enum, get_enum_metaclass())
+    assert isinstance(setup.F_FEE.ccd_sides.enum, type)
+    assert isinstance(setup.F_FEE.ccd_sides.enum.E, enum.IntEnum)  # noqa

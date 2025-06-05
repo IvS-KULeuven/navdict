@@ -36,11 +36,12 @@ import importlib
 import logging
 import textwrap
 import warnings
+from enum import Enum
 from pathlib import Path
 from typing import Any
+from typing import Type
 from typing import Union
 
-import rich.repr
 from _ruamel_yaml import ScannerError
 from rich.text import Text
 from rich.tree import Tree
@@ -90,12 +91,27 @@ def _load_csv(resource_name: str):
     return data
 
 
-def _load_int_enum(enum_name: str, enum_content):
+def _load_int_enum(enum_name: str, enum_content) -> Type[Enum]:
     """Dynamically build (and return) and IntEnum.
+
+    In the YAML file this will look like below.
+    The IntEnum directive (where <name> is the class name):
+
+        enum: int_enum//<name>
+
+    The IntEnum content:
+
+        content:
+            E:
+                alias: ['E_SIDE', 'RIGHT_SIDE']
+                value: 1
+            F:
+                alias: ['F_SIDE', 'LEFT_SIDE']
+                value: 0
 
     Args:
         - enum_name: Enumeration name (potentially prepended with "int_enum//").
-        - enum_content: Content of the enumeration, as read from the setup.
+        - enum_content: Content of the enumeration, as read from the navdict field.
     """
     if enum_name.startswith("int_enum//"):
         enum_name = enum_name[10:]
@@ -112,6 +128,7 @@ def _load_int_enum(enum_name: str, enum_content):
 
         for alias in aliases:
             definition[alias] = value
+
     return enum.IntEnum(enum_name, definition)
 
 
@@ -174,6 +191,7 @@ class NavigableDict(dict):
             head (dict): the original dictionary
             label (str): a label or name that is used when printing the navdict
         """
+
         head = head or {}
         super().__init__(head)
         self.__dict__["_memoized"] = {}
@@ -183,8 +201,8 @@ class NavigableDict(dict):
         # That way we enforce that always all keys are navigable, or none.
 
         if any(True for k in head.keys() if not isinstance(k, str)):
-            invalid_keys = list(k for k in head.keys() if not isinstance(k, str))
-            logger.warning(f"Dictionary will not be dot-navigable, not all keys are strings [{invalid_keys=}].")
+            # invalid_keys = list(k for k in head.keys() if not isinstance(k, str))
+            # logger.warning(f"Dictionary will not be dot-navigable, not all keys are strings [{invalid_keys=}].")
             return
 
         for key, value in head.items():
@@ -502,10 +520,10 @@ class NavigableDict(dict):
         if not filename:
             raise ValueError("Invalid argument to function: No filename or None given.")
 
-        data = NavigableDict(_load_yaml(str(filename)))
+        data = _load_yaml(str(filename))
 
         if data == {}:
-            warnings.warn(f"Empty Setup file: {filename!s}")
+            warnings.warn(f"Empty YAML file: {filename!s}")
 
         data.set_private_attribute("_filename", Path(filename))
 
@@ -549,35 +567,16 @@ class NavigableDict(dict):
 
         self.set_private_attribute("_filename", Path(filename))
 
-
-navdict = NavigableDict  # noqa: ignore typo
-"""Shortcut for NavigableDict and more Pythonic."""
-
-
-class Setup(NavigableDict):
-    """The Setup class represents a version of the configuration of the test facility, the
-    test setup and the Camera Under Test (CUT)."""
-
-    def __init__(self, nav_dict: NavigableDict | dict = None, label: str = None):
-        super().__init__(nav_dict or {}, label=label)
-
-
-
-    def __rich__(self) -> Tree:
-        tree = super().__rich__()
-
-        if self.has_private_attribute("_filename"):
-            filename = self.get_private_attribute("_filename")
-            tree.add(f"Loaded from: {filename}", style="grey50")
-
-        return tree
-
     def get_filename(self) -> str | None:
-        """Returns the filename for this Setup or None when no filename could be determined."""
+        """Returns the filename for this navdict or None when no filename could be determined."""
         if self.has_private_attribute("_filename"):
             return self.get_private_attribute("_filename")
         else:
             return None
+
+
+navdict = NavigableDict  # noqa: ignore typo
+"""Shortcut for NavigableDict and more Pythonic."""
 
 
 def _walk_dict_tree(dictionary: dict, tree: Tree, text_style: str = "green"):
