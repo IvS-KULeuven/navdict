@@ -115,7 +115,7 @@ def _load_int_enum(enum_name: str, enum_content):
     return enum.IntEnum(enum_name, definition)
 
 
-def _load_yaml(resource_name: str):
+def _load_yaml(resource_name: str) -> NavigableDict:
     """Find and return the content of a YAML file."""
 
     if resource_name.startswith("yaml//"):
@@ -139,7 +139,7 @@ def _load_yaml(resource_name: str):
         logger.error(f"Couldn't load resource '{resource_name}', file seems to be a directory", exc_info=True)
         raise
 
-    return data
+    return navdict(data)
 
 
 def _get_attribute(self, name, default):
@@ -150,7 +150,6 @@ def _get_attribute(self, name, default):
     return attr
 
 
-@rich.repr.auto
 class NavigableDict(dict):
     """
     A NavigableDict is a dictionary where all keys in the original dictionary are also accessible
