@@ -211,3 +211,19 @@ def test_int_enum():
     assert isinstance(setup.F_FEE.ccd_sides.enum, get_enum_metaclass())
     assert isinstance(setup.F_FEE.ccd_sides.enum, type)
     assert isinstance(setup.F_FEE.ccd_sides.enum.E, enum.IntEnum)  # noqa
+
+
+YAML_STRING_LOADS_YAML_FILE = """
+root:
+    simple: yaml//enum.yaml
+"""
+
+
+def test_recursive_load():
+
+    with (
+        create_text_file("load_yaml.yaml", YAML_STRING_LOADS_YAML_FILE) as fn,
+        create_text_file("enum.yaml", YAML_STRING_WITH_INT_ENUM)
+    ):
+        data = navdict.from_yaml_file(fn)
+        assert data.root.simple.F_FEE.ccd_sides.enum.E.value == 1
