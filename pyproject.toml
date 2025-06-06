@@ -49,6 +49,12 @@ testpaths = [
     "tests",
 ]
 addopts = "-rA --cov --cov-branch --cov-report html"
+log_cli = true
+log_cli_level = "INFO"
+filterwarnings = [
+    "ignore::DeprecationWarning"
+]
+
 
 [build-system]
 requires = ["hatchling"]

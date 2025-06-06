@@ -51,6 +51,12 @@ from ruamel.yaml import YAML
 logger = logging.getLogger("navdict")
 
 
+def _load_directive_plugins():
+    """
+    Load any directive plugins that are available in your environment.
+    """
+
+
 def _load_class(class_name: str):
     """
     Find and returns a class based on the fully qualified name.
@@ -71,7 +77,7 @@ def _load_class(class_name: str):
     return getattr(module, class_name)
 
 
-def _load_csv(resource_name: str, **kwargs):
+def _load_csv(resource_name: str, *args, **kwargs):
     """Find and return the content of a CSV file."""
 
     if resource_name.startswith("csv//"):
@@ -180,6 +186,10 @@ class NavigableDict(dict):
     "site_id" which is accessible as `setup['site_id']`, it will also be accessible as
     `setup.site_id`.
 
+    Args:
+        head (dict): the original dictionary
+        label (str): a label or name that is used when printing the navdict
+
     Examples:
         >>> setup = NavigableDict({'site_id': 'KU Leuven', 'version': "0.1.0"})
         >>> assert setup['site_id'] == setup.site_id
@@ -192,11 +202,6 @@ class NavigableDict(dict):
     """
 
     def __init__(self, head: dict = None, label: str = None):
-        """
-        Args:
-            head (dict): the original dictionary
-            label (str): a label or name that is used when printing the navdict
-        """
 
         head = head or {}
         super().__init__(head)
@@ -257,40 +262,22 @@ class NavigableDict(dict):
         except KeyError:
             pass
 
+    # This method is called:
+    #   - for *every* single attribute access on an object using dot notation.
+    #   - when using the `getattr(obj, 'name') function
+    #   - accessing any kind of attributes, e.g. instance or class variables,
+    #     methods, properties, dunder methods, ...
+    #
+    # Note: `__getattr__` is only called when an attribute cannot be found
+    #       through normal means.
     def __getattribute__(self, key):
         # logger.info(f"called __getattribute__({key})")
         value = object.__getattribute__(self, key)
-        if isinstance(value, str) and value.startswith("class//"):
-            try:
-                dev_args = object.__getattribute__(self, f"{key}_args")
-            except AttributeError:
-                dev_args = ()
-            return _load_class(value)(*dev_args)
-        elif isinstance(value, str) and value.startswith("factory//"):
-            factory_args = _get_attribute(self, f"{key}_args", {})
-            return _load_class(value)().create(**factory_args)
-        elif isinstance(value, str) and value.startswith("int_enum//"):
-            content = object.__getattribute__(self, "content")
-            return _load_int_enum(value, content)
-        elif isinstance(value, str) and value.startswith("csv//"):
-            if key in self.__dict__["_memoized"]:
-                return self.__dict__["_memoized"][key]
-            try:
-                kwargs = object.__getattribute__(self, "kwargs")
-            except AttributeError:
-                kwargs = {}
-
-            content = _load_csv(value, **kwargs)
-            self.__dict__["_memoized"][key] = content
-            return content
-        elif isinstance(value, str) and value.startswith("yaml//"):
-            if key in self.__dict__["_memoized"]:
-                return self.__dict__["_memoized"][key]
-            content = _load_yaml(value)
-            self.__dict__["_memoized"][key] = content
-            return content
-        else:
+        if key.startswith('__'):  # small optimization
             return value
+        # We can not directly call the `_handle_directive` function here due to infinite recursion
+        m = object.__getattribute__(self, "_handle_directive")
+        return m(key, value)
 
     def __delattr__(self, item):
         # logger.info(f"called __delattr__({self!r}, {item})")
@@ -308,26 +295,92 @@ class NavigableDict(dict):
         except KeyError:
             pass
 
+    # This method is called:
+    #   - whenever square brackets `[]` are used on an object, e.g. indexing or slicing.
+    #   - during iteration, if an object doesn't have __iter__ defined, Python will try
+    #     to iterate using __getitem__ with successive integer indices starting from 0.
     def __getitem__(self, key):
         # logger.info(f"called __getitem__({self!r}, {key})")
         value = super().__getitem__(key)
+        if key.startswith('__'):
+            return value
+        # no danger for recursion here, so we can directly call the function
+        return self._handle_directive(key, value)
+
+    def _handle_directive(self, key, value) -> Any:
+        """
+        This method will handle the available directives. This may be builtin directives
+        like `class/` or `yaml//`, or it may be external directives that were provided
+        as a plugin. TO BE IMPLEMENTED
+
+        Args:
+            key: the key of the field that might contain a directive
+            value: the value which might be a directive
+
+        Returns:
+            This function will return the value, either the original value or the result of
+                evaluating and executing a directive.
+        """
+        # logger.info(f"called _handle_directive({key}, {value!r})")
         if isinstance(value, str) and value.startswith("class//"):
-            try:
-                dev_args = object.__getattribute__(self, "device_args")
-            except AttributeError:
-                dev_args = ()
-            return _load_class(value)(*dev_args)
-        if isinstance(value, str) and value.startswith("csv//"):
-            try:
-                kwargs = object.__getattribute__(self, "kwargs")
-            except AttributeError:
-                kwargs = {}
-            return _load_csv(value, **kwargs)
-        if isinstance(value, str) and value.startswith("int_enum//"):
+            args, kwargs = self._get_args_and_kwargs(key)
+            return _load_class(value)(*args, **kwargs)
+
+        elif isinstance(value, str) and value.startswith("factory//"):
+            factory_args = _get_attribute(self, f"{key}_args", {})
+            return _load_class(value)().create(**factory_args)
+
+        elif isinstance(value, str) and value.startswith("yaml//"):
+            if key in self.__dict__["_memoized"]:
+                return self.__dict__["_memoized"][key]
+            content = _load_yaml(value)
+            self.__dict__["_memoized"][key] = content
+            return content
+
+        elif isinstance(value, str) and value.startswith("csv//"):
+            if key in self.__dict__["_memoized"]:
+                return self.__dict__["_memoized"][key]
+            args, kwargs = self._get_args_and_kwargs(key)
+            content = _load_csv(value, **kwargs)
+            self.__dict__["_memoized"][key] = content
+            return content
+
+        elif isinstance(value, str) and value.startswith("int_enum//"):
             content = object.__getattribute__(self, "content")
             return _load_int_enum(value, content)
+
         else:
             return value
+
+    def _get_args_and_kwargs(self, key):
+        """
+        Read the args and kwargs that are associated with the key of a directive.
+
+        An example of such a directive:
+
+          hexapod:
+              device: class//egse.hexapod.PunaProxy
+              device_args: [PUNA_01]
+              device_kwargs:
+                  sim: true
+
+        There might not be any positional nor keyword arguments provided in which
+        case and empty tuple and/or dictionary is returned.
+
+        Returns:
+            A tuple containing any positional arguments and a dictionary containing
+                keyword arguments.
+        """
+        try:
+            args = object.__getattribute__(self, f"{key}_args")
+        except AttributeError:
+            args = ()
+        try:
+            kwargs = object.__getattribute__(self, f"{key}_kwargs")
+        except AttributeError:
+            kwargs = {}
+
+        return args, kwargs
 
     def set_private_attribute(self, key: str, value: Any) -> None:
         """Sets a private attribute for this object.
