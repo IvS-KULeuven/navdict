@@ -20,6 +20,14 @@ class TakeTwoOptionalArguments:
         return f"a={self._a}, b={self._b}"
 
 
+class TakeOneKeywordArgument:
+    def __init__(self, *, sim: bool):
+        self._sim = sim
+
+    def __str__(self):
+        return f"sim = {self._sim}"
+
+
 YAML_STRING_SIMPLE = """
 Setup:
     site_id: KUL
@@ -37,6 +45,10 @@ root:
     with_args:
         dev: class//test_navdict.TakeTwoOptionalArguments
         dev_args: [42, 73]
+    with_kwarg:
+        dev: class//test_navdict.TakeOneKeywordArgument
+        dev_kwargs:
+            sim: true
 """
 
 YAML_STRING_WITH_INT_ENUM = """
@@ -154,6 +166,10 @@ def test_class_directive():
     assert isinstance(obj, TakeTwoOptionalArguments)
     assert str(obj) == "a=42, b=73"
 
+    obj = setup.root.with_kwarg.dev
+    assert isinstance(obj, TakeOneKeywordArgument)
+    assert str(obj) == "sim = True"
+
 
 def test_from_dict():
 
@@ -233,7 +249,7 @@ def test_recursive_load():
 YAML_STRING_LOADS_CSV_FILE = """
 root:
     sample: csv//sample.csv
-    kwargs:
+    sample_kwargs:
         header_rows: 2
 """
 
