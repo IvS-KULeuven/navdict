@@ -10,5 +10,6 @@ wheels/
 .venv
 
 # IDE
-
 .idea/
+
+.coverage
