@@ -1,3 +1,3 @@
-__all__ = ["navdict"]
+__all__ = ["navdict", "NavDict"]
 
-from .navdict import navdict
+from .navdict import navdict, NavDict

@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 
 from navdict import navdict
+from tests.helpers import create_test_csv_file
 from tests.helpers import create_text_file
 
 
@@ -227,3 +228,38 @@ def test_recursive_load():
     ):
         data = navdict.from_yaml_file(fn)
         assert data.root.simple.F_FEE.ccd_sides.enum.E.value == 1
+
+
+YAML_STRING_LOADS_CSV_FILE = """
+root:
+    sample: csv//sample.csv
+    kwargs:
+        header_rows: 2
+"""
+
+
+def test_load_csv():
+
+    with (
+        create_text_file("load_csv.yaml", YAML_STRING_LOADS_CSV_FILE) as fn,
+        create_test_csv_file("sample.csv")
+    ):
+
+        data = navdict.from_yaml_file(fn)
+
+        header, csv_data = data.root.sample
+
+        assert len(header) == 2
+        assert len(header[0]) == 9
+        assert isinstance(header, list)
+        assert isinstance(header[0], list)
+
+        assert len(csv_data[0]) == 9
+        assert isinstance(csv_data, list)
+        assert isinstance(csv_data[0], list)
+
+        assert header[0][3] == "department"
+        assert header[1][0] == "# a comment line"
+
+        assert csv_data[0][0] == '1001'
+        assert csv_data[0][8] == "john.smith@company.com"
