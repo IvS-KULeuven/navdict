@@ -27,6 +27,7 @@ from __future__ import annotations
 
 __all__ = [
     "navdict",  # noqa: ignore typo
+    "NavDict",
 ]
 
 import csv
@@ -70,7 +71,7 @@ def _load_class(class_name: str):
     return getattr(module, class_name)
 
 
-def _load_csv(resource_name: str):
+def _load_csv(resource_name: str, **kwargs):
     """Find and return the content of a CSV file."""
 
     if resource_name.startswith("csv//"):
@@ -80,7 +81,12 @@ def _load_csv(resource_name: str):
     in_dir, fn = parts if len(parts) > 1 else [None, parts[0]]
 
     try:
-        csv_location = Path(in_dir or '.') / fn
+        n_header_rows = int(kwargs["header_rows"])
+    except KeyError:
+        n_header_rows = 0
+
+    try:
+        csv_location = Path(in_dir or '.').expanduser() / fn
         with open(csv_location, 'r', encoding='utf-8') as file:
             csv_reader = csv.reader(file)
             data = list(csv_reader)
@@ -88,7 +94,7 @@ def _load_csv(resource_name: str):
         logger.error(f"Couldn't load resource '{resource_name}', file not found", exc_info=True)
         raise
 
-    return data
+    return data[:n_header_rows], data[n_header_rows:]
 
 
 def _load_int_enum(enum_name: str, enum_content) -> Type[Enum]:
@@ -143,7 +149,7 @@ def _load_yaml(resource_name: str) -> NavigableDict:
     in_dir, fn = parts if len(parts) > 1 else [None, parts[0]]
 
     try:
-        yaml_location = Path(in_dir or '.')
+        yaml_location = Path(in_dir or '.').expanduser()
 
         yaml = YAML(typ='safe')
         with open(yaml_location / fn, 'r') as file:
@@ -269,7 +275,12 @@ class NavigableDict(dict):
         elif isinstance(value, str) and value.startswith("csv//"):
             if key in self.__dict__["_memoized"]:
                 return self.__dict__["_memoized"][key]
-            content = _load_csv(value)
+            try:
+                kwargs = object.__getattribute__(self, "kwargs")
+            except AttributeError:
+                kwargs = {}
+
+            content = _load_csv(value, **kwargs)
             self.__dict__["_memoized"][key] = content
             return content
         elif isinstance(value, str) and value.startswith("yaml//"):
@@ -307,7 +318,11 @@ class NavigableDict(dict):
                 dev_args = ()
             return _load_class(value)(*dev_args)
         if isinstance(value, str) and value.startswith("csv//"):
-            return _load_csv(value)
+            try:
+                kwargs = object.__getattribute__(self, "kwargs")
+            except AttributeError:
+                kwargs = {}
+            return _load_csv(value, **kwargs)
         if isinstance(value, str) and value.startswith("int_enum//"):
             content = object.__getattribute__(self, "content")
             return _load_int_enum(value, content)
@@ -383,7 +398,7 @@ class NavigableDict(dict):
         """
         Returns the raw value of the given key.
 
-        Some keys have special values that are interpreted by the AtributeDict class. An example is
+        Some keys have special values that are interpreted by the NavigableDict class. An example is
         a value that starts with 'class//'. When you access these values, they are first converted
         from their raw value into their expected value, e.g. the instantiated object in the above
         example. This method allows you to access the raw value before conversion.
@@ -575,8 +590,8 @@ class NavigableDict(dict):
             return None
 
 
-navdict = NavigableDict  # noqa: ignore typo
-"""Shortcut for NavigableDict and more Pythonic."""
+navdict = NavDict = NavigableDict  # noqa: ignore typo
+"""Shortcuts for NavigableDict and more Pythonic."""
 
 
 def _walk_dict_tree(dictionary: dict, tree: Tree, text_style: str = "green"):
