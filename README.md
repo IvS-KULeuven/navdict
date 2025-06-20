@@ -21,8 +21,34 @@ and
 
 ## Installation
 
-### From PyPI (Recommended)
+Always install packages into a virtual environment which you can create with
+```shell
+python3 -m venv .venv
+```
+or when you are already using `uv`:
+```shell
+uv venv --python 3.12
+```
+
+Then install the package in that environment:
 
 ```bash
+source .venv/bin/activate
 pip install navdict
+```
+
+or with `uv`, simply run the following, since `uv` will automatically use 
+the environment.
+
+```shell
+uv pip install navdict
+```
+
+### Installation in a project
+
+When you want to use `navdict` in a project you are developing, add the 
+dependency to your `pyproject.toml` manually, or using `uv`
+
+```shell
+uv add navdict
 ```
