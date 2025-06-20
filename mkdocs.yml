@@ -1,0 +1,91 @@
+
+# Project information
+
+site_name: navdict
+site_url: https://ivs-kuleuven.github.io/navdict/
+site_author: Rik Huygen
+site_description: >-
+  Official documentation of Navdict – a navigable dictionary with dot notation access and automatic file loading.
+
+# Repository
+
+repo_name: IvS-KULeuven/navdict
+repo_url: https://github.com/IvS-KULeuven/navdict
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      options:
+        custom_icons:
+          - overrides/.icons/
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - def_list
+  - meta
+  - footnotes
+  - toc:
+      permalink: true
+      baselevel: 1
+
+theme:
+    name: material
+    custom_dir: docs/custom_theme
+    icon:
+        admonition:
+            note: fontawesome/solid/note-sticky
+            abstract: fontawesome/solid/book
+            info: fontawesome/solid/circle-info
+            tip: fontawesome/solid/bullhorn
+            success: fontawesome/solid/check
+            question: fontawesome/solid/circle-question
+            warning: fontawesome/solid/triangle-exclamation
+            failure: fontawesome/solid/bomb
+            danger: fontawesome/solid/skull
+            bug: fontawesome/solid/robot
+            example: fontawesome/solid/flask
+            quote: fontawesome/solid/quote-left
+    features:
+        - navigation.tabs
+        - navigation.indexes
+        - navigation.tabs.sticky
+        - navigation.footer
+        - content.code.annotate
+        - content.code.copy
+    palette:
+        - media: "(prefers-color-scheme: light)"
+          scheme: default
+          accent: purple
+          toggle:
+              icon: material/weather-sunny
+              name: Switch to dark mode
+        - media: "(prefers-color-scheme: dark)"
+          scheme: slate
+          primary: black
+          toggle:
+              icon: material/weather-night
+              name: Switch to light mode
+
+plugins:
+    search:
+    autorefs:
+
+extra_css:
+  - stylesheets/custom.css
+  - stylesheets/extra.css
+
+extra:
+  social:
+  - icon: fontawesome/brands/github
+    link: https://github.com/IvS-KULeuven/navdict/
+    name: navdict on GitHub
+
+nav:
+  - index.md
+  - roadmap.md

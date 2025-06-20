@@ -32,14 +32,19 @@ dev = [
     "pytest>=8.4.0",
     "pytest-cov>=6.0.0",
     "pytest-mock>=3.14.0",
-    "setuptools",  # needed by PyCharm
+    "setuptools", # needed by PyCharm
+]
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material",
+    "mkdocs-autorefs",
 ]
 lint = [
     "ruff>=0.11.12",
 ]
 
 [tool.uv]
-default-groups = ["dev"]
+default-groups = ["dev", "docs"]
 
 [tool.pytest.ini_options]
 pythonpath = [
