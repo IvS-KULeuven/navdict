@@ -1,11 +1,14 @@
 import enum
+import os
 from pathlib import Path
 
 import pytest
 
+from helpers import create_test_csv_file
+from helpers import create_text_file
 from navdict import navdict
-from tests.helpers import create_test_csv_file
-from tests.helpers import create_text_file
+
+HERE = Path(__file__).parent
 
 
 class TakeTwoOptionalArguments:
@@ -36,6 +39,12 @@ Setup:
         hexapod:
             id:    PUNA_01
 
+"""
+
+YAML_STRING_WITH_RELATIVE_YAML = """
+Setup:
+    camera:
+        fm01: yaml//cameras/fm01.yaml
 """
 
 YAML_STRING_WITH_CLASS = """
@@ -95,6 +104,17 @@ def test_construction():
 
     setup = navdict(label="Setup")
     assert setup.label == "Setup"
+
+
+def test_navigation():
+
+    data = navdict.from_yaml_string(YAML_STRING_SIMPLE)
+
+    assert isinstance(data, navdict)
+    assert isinstance(data.Setup, navdict)
+
+    assert data.Setup.site_id == "KUL"
+    assert data.Setup.gse.hexapod.id == "PUNA_01"
 
 
 def test_from_yaml_string():
@@ -246,9 +266,46 @@ def test_recursive_load():
         assert data.root.simple.F_FEE.ccd_sides.enum.E.value == 1
 
 
+def test_relative_load():
+
+    with (
+        create_text_file(HERE / "data/conf/load_relative_yaml.yaml", YAML_STRING_WITH_RELATIVE_YAML) as fn,
+    ):
+        data = navdict.from_yaml_file(fn)
+        assert data.Setup.camera.fm01.calibration.temperature.T1.name == "TRP99"
+
+
+def test_relative_load_from_string():
+    """
+    The YAML string contains a directive to load another YAML file, but since
+    we will load this navdict from the string instead of the file, it doesn't
+    have a location and therefore the directive will be loaded relative to the
+    working directory.
+
+    When we change the current working directory to the expected location, things
+    work just fine.
+
+    """
+    data = navdict.from_yaml_string(YAML_STRING_WITH_RELATIVE_YAML)
+
+    assert "fm01" in data.Setup.camera
+
+    with pytest.raises(FileNotFoundError, match="No such file or directory: 'cameras/fm01.yaml'"):
+        assert data.Setup.camera.fm01
+
+    cwd = os.getcwd()
+
+    os.chdir(HERE / "data/conf")
+
+    assert data.Setup.camera.fm01.name == "FM01"
+    assert "T1" in data.Setup.camera.fm01.calibration.temperature
+
+    os.chdir(cwd)
+
+
 YAML_STRING_LOADS_CSV_FILE = """
 root:
-    sample: csv//sample.csv
+    sample: csv//data/sample.csv
     sample_kwargs:
         header_rows: 2
 """
@@ -257,8 +314,8 @@ root:
 def test_load_csv():
 
     with (
-        create_text_file("load_csv.yaml", YAML_STRING_LOADS_CSV_FILE) as fn,
-        create_test_csv_file("sample.csv")
+        create_text_file(HERE / "load_csv.yaml", YAML_STRING_LOADS_CSV_FILE) as fn,
+        create_test_csv_file(HERE / "data/sample.csv")
     ):
 
         data = navdict.from_yaml_file(fn)

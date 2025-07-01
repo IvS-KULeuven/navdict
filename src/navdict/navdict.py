@@ -77,8 +77,53 @@ def _load_class(class_name: str):
     return getattr(module, class_name)
 
 
-def _load_csv(resource_name: str, *args, **kwargs):
+def _get_resource_location(parent: NavigableDict, in_dir: str) -> Path:
+    """
+    Returns the resource location.
+
+    The resource location is the path to the file that is provided in a directive
+    such as `yaml//` or `csv//`. The location of the file can be given as an absolute
+    path or can be relative in which case there are two possibilities:
+
+    1. the parent NavDict exists and has a `_filename` attribute that is not None. In
+       this case the resource location will be relative to the parent's location.
+    2. the parent is not given, or it has no `_filename` attribute, or it's `_filename`
+       attribute is None. In this case the resource location is taken to be relative
+       to the current working directory '.'.
+
+    Args:
+        parent: the parent NavDict of this key-value pair, or None
+        in_dir: a location extracted from the directive's value.
+
+    Returns:
+        A Path object with the resource location.
+
+    """
+
+    def get_default_location() -> Path:
+
+        if parent and (resource_location := parent.get_private_attribute("_filename")):
+            return resource_location.parent
+
+        return Path('.').expanduser()
+
+    match in_dir:
+        case str() if Path(in_dir).is_absolute():
+            location = Path(in_dir)
+        case None:
+            location = get_default_location()
+        case _:
+            location = get_default_location() / in_dir
+
+    # logger.debug(f"{location=}, {fn=}")
+
+    return location
+
+
+def _load_csv(resource_name: str, *args, parent: navdict = None, **kwargs):
     """Find and return the content of a CSV file."""
+
+    # logger.debug(f"{resource_name=}, {parent=}")
 
     if resource_name.startswith("csv//"):
         resource_name = resource_name[5:]
@@ -91,9 +136,10 @@ def _load_csv(resource_name: str, *args, **kwargs):
     except KeyError:
         n_header_rows = 0
 
+    csv_location = _get_resource_location(parent, in_dir)
+
     try:
-        csv_location = Path(in_dir or '.').expanduser() / fn
-        with open(csv_location, 'r', encoding='utf-8') as file:
+        with open(csv_location / fn, 'r', encoding='utf-8') as file:
             csv_reader = csv.reader(file)
             data = list(csv_reader)
     except FileNotFoundError:
@@ -144,8 +190,10 @@ def _load_int_enum(enum_name: str, enum_content) -> Type[Enum]:
     return enum.IntEnum(enum_name, definition)
 
 
-def _load_yaml(resource_name: str) -> NavigableDict:
+def _load_yaml(resource_name: str, parent: NavDict = None) -> NavDict:
     """Find and return the content of a YAML file."""
+
+    # logger.debug(f"{resource_name=}, {parent=}")
 
     if resource_name.startswith("yaml//"):
         resource_name = resource_name[6:]
@@ -154,9 +202,9 @@ def _load_yaml(resource_name: str) -> NavigableDict:
 
     in_dir, fn = parts if len(parts) > 1 else [None, parts[0]]
 
-    try:
-        yaml_location = Path(in_dir or '.').expanduser()
+    yaml_location = _get_resource_location(parent, in_dir)
 
+    try:
         yaml = YAML(typ='safe')
         with open(yaml_location / fn, 'r') as file:
             data = yaml.load(file)
@@ -168,7 +216,11 @@ def _load_yaml(resource_name: str) -> NavigableDict:
         logger.error(f"Couldn't load resource '{resource_name}', file seems to be a directory", exc_info=True)
         raise
 
-    return navdict(data)
+    data = NavigableDict(data, _filename=yaml_location / fn)
+
+    # logger.debug(f"{data.get_private_attribute('_filename')=}")
+
+    return data
 
 
 def _get_attribute(self, name, default):
@@ -201,12 +253,13 @@ class NavigableDict(dict):
 
     """
 
-    def __init__(self, head: dict = None, label: str = None):
+    def __init__(self, head: dict = None, label: str = None, _filename: str = None):
 
         head = head or {}
         super().__init__(head)
         self.__dict__["_memoized"] = {}
         self.__dict__["_label"] = label
+        self.__dict__["_filename"] = _filename
 
         # By agreement, we only want the keys to be set as attributes if all keys are strings.
         # That way we enforce that always all keys are navigable, or none.
@@ -218,7 +271,8 @@ class NavigableDict(dict):
 
         for key, value in head.items():
             if isinstance(value, dict):
-                setattr(self, key, NavigableDict(head.__getitem__(key)))
+                value = NavigableDict(head.__getitem__(key), _filename=_filename)
+                setattr(self, key, value)
             else:
                 setattr(self, key, head.__getitem__(key))
 
@@ -245,7 +299,7 @@ class NavigableDict(dict):
             self.__delitem__(key)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}({super()!r})"
+        return f"{self.__class__.__name__}({super()!r}) [id={id(self)}]"
 
     def __delitem__(self, key):
         dict.__delitem__(self, key)
@@ -285,7 +339,7 @@ class NavigableDict(dict):
         dict.__delitem__(self, item)
 
     def __setitem__(self, key, value):
-        # logger.info(f"called __setitem__({self!r}, {key}, {value})")
+        # logger.debug(f"called __setitem__({self!r}, {key}, {value})")
         if isinstance(value, dict) and not isinstance(value, NavigableDict):
             value = NavigableDict(value)
         super().__setitem__(key, value)
@@ -321,7 +375,7 @@ class NavigableDict(dict):
             This function will return the value, either the original value or the result of
                 evaluating and executing a directive.
         """
-        # logger.info(f"called _handle_directive({key}, {value!r})")
+        # logger.debug(f"called _handle_directive({key}, {value!r}) [id={id(self)}]")
         if isinstance(value, str) and value.startswith("class//"):
             args, kwargs = self._get_args_and_kwargs(key)
             return _load_class(value)(*args, **kwargs)
@@ -333,7 +387,7 @@ class NavigableDict(dict):
         elif isinstance(value, str) and value.startswith("yaml//"):
             if key in self.__dict__["_memoized"]:
                 return self.__dict__["_memoized"][key]
-            content = _load_yaml(value)
+            content = _load_yaml(value, parent=self)
             self.__dict__["_memoized"][key] = content
             return content
 
@@ -341,7 +395,7 @@ class NavigableDict(dict):
             if key in self.__dict__["_memoized"]:
                 return self.__dict__["_memoized"][key]
             args, kwargs = self._get_args_and_kwargs(key)
-            content = _load_csv(value, **kwargs)
+            content = _load_csv(value, parent=self, **kwargs)
             self.__dict__["_memoized"][key] = content
             return content
 
@@ -416,7 +470,7 @@ class NavigableDict(dict):
             key (str): the name of the private attribute (must start with an underscore character).
 
         Returns:
-            the value of the private attribute given in `key`.
+            the value of the private attribute given in `key` or None if the attribute doesn't exist.
 
         Note:
             Because of the implementation, this private attribute can also be accessed as a 'normal'
@@ -425,7 +479,10 @@ class NavigableDict(dict):
         """
         if not key.startswith("_"):
             raise ValueError(f"Invalid argument key='{key}', must start with underscore character '_'.")
-        return self.__dict__[key]
+        try:
+            return self.__dict__[key]
+        except KeyError:
+            return None
 
     def has_private_attribute(self, key):
         """
@@ -440,6 +497,8 @@ class NavigableDict(dict):
         """
         if not key.startswith("_"):
             raise ValueError(f"Invalid argument key='{key}', must start with underscore character '_'.")
+
+        # logger.debug(f"{self.__dict__.keys()} for [id={id(self)}]")
 
         try:
             _ = self.__dict__[key]
@@ -593,8 +652,6 @@ class NavigableDict(dict):
         if data == {}:
             warnings.warn(f"Empty YAML file: {filename!s}")
 
-        data.set_private_attribute("_filename", Path(filename))
-
         return data
 
     def to_yaml_file(self, filename: str | Path = None) -> None:
@@ -637,10 +694,7 @@ class NavigableDict(dict):
 
     def get_filename(self) -> str | None:
         """Returns the filename for this navdict or None when no filename could be determined."""
-        if self.has_private_attribute("_filename"):
-            return self.get_private_attribute("_filename")
-        else:
-            return None
+        return self.get_private_attribute("_filename")
 
 
 navdict = NavDict = NavigableDict  # noqa: ignore typo
