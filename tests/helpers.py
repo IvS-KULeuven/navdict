@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import os
 import textwrap
 from pathlib import Path
@@ -23,7 +21,9 @@ def create_empty_file(filename: str | Path, create_folder: bool = False):
             self.filename = Path(filename)
 
             if self.filename.exists():
-                raise FileExistsError(f"The empty file you wanted to create already exists: {filename}")
+                raise FileExistsError(
+                    f"The empty file you wanted to create already exists: {filename}"
+                )
 
             if create_folder and not self.filename.parent.exists():
                 self.filename.parent.mkdir(parents=True)
@@ -61,7 +61,9 @@ def create_text_file(filename: str | Path, content: str, create_folder: bool = F
             self.filename = Path(filename)
 
             if self.filename.exists():
-                raise FileExistsError(f"The text file you wanted to create already exists: {filename}")
+                raise FileExistsError(
+                    f"The text file you wanted to create already exists: {filename}"
+                )
 
             if create_folder and not self.filename.parent.exists():
                 self.filename.parent.mkdir(parents=True)
@@ -139,14 +141,14 @@ def main():
     # Test the create_a_text_file() helper function
 
     with create_text_file(
-            fn,
-            textwrap.dedent(
-                """\
+        fn,
+        textwrap.dedent(
+            """\
             A,B,C,D
             1,2,3,4
             5,6,7,8
             """
-            ),
+        ),
     ) as filename:
         assert fn.exists()
         assert filename == fn

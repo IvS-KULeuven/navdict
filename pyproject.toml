@@ -1,6 +1,6 @@
 [project]
 name = "navdict"
-version = "0.2.5"
+version = "0.3.0"
 description = "A navigable dictionary with dot notation access and automatic file loading"
 readme = "README.md"
 authors = [
@@ -9,13 +9,12 @@ authors = [
 maintainers = [
     {name = "Rik Huygen", email = "rik.huygen@kuleuven.be"},
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
