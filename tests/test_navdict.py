@@ -96,7 +96,6 @@ YAML_STRING_EMPTY = """"""
 
 
 def test_construction():
-
     setup = navdict()
 
     assert setup == {}
@@ -107,7 +106,6 @@ def test_construction():
 
 
 def test_navigation():
-
     data = navdict.from_yaml_string(YAML_STRING_SIMPLE)
 
     assert isinstance(data, navdict)
@@ -118,7 +116,6 @@ def test_navigation():
 
 
 def test_from_yaml_string():
-
     setup = navdict.from_yaml_string(YAML_STRING_SIMPLE)
 
     assert "Setup" in setup
@@ -126,18 +123,25 @@ def test_from_yaml_string():
     assert "gse" in setup.Setup
     assert setup.Setup.gse.hexapod.id == "PUNA_01"
 
-    with pytest.raises(ValueError, match="Invalid YAML string: mapping values are not allowed in this context"):
+    with pytest.raises(
+        ValueError,
+        match="Invalid YAML string: mapping values are not allowed in this context",
+    ):
         setup = navdict.from_yaml_string(YAML_STRING_INVALID_INDENTATION)
 
-    with pytest.raises(ValueError, match="Invalid YAML string: mapping values are not allowed in this context"):
+    with pytest.raises(
+        ValueError,
+        match="Invalid YAML string: mapping values are not allowed in this context",
+    ):
         setup = navdict.from_yaml_string(YAML_STRING_MISSING_COLON)
 
-    with pytest.raises(ValueError, match="Invalid argument to function: No input string or None given"):
+    with pytest.raises(
+        ValueError, match="Invalid argument to function: No input string or None given"
+    ):
         setup = navdict.from_yaml_string(YAML_STRING_EMPTY)
 
 
 def test_from_yaml_file():
-
     with create_text_file("simple.yaml", YAML_STRING_SIMPLE) as fn:
         setup = navdict.from_yaml_file(fn)
         assert "Setup" in setup
@@ -145,7 +149,9 @@ def test_from_yaml_file():
         assert "gse" in setup.Setup
         assert setup.Setup.gse.hexapod.id == "PUNA_01"
 
-    with create_text_file("with_unknown_class.yaml", YAML_STRING_WITH_UNKNOWN_CLASS) as fn:
+    with create_text_file(
+        "with_unknown_class.yaml", YAML_STRING_WITH_UNKNOWN_CLASS
+    ) as fn:
         # The following line shall not generate an exception, meaning the `class//`
         # shall not be evaluated on load!
         data = navdict.from_yaml_file(fn)
@@ -175,7 +181,6 @@ def test_to_yaml_file():
 
 
 def test_class_directive():
-
     setup = navdict.from_yaml_string(YAML_STRING_WITH_CLASS)
 
     obj = setup.root.defaults.dev
@@ -192,7 +197,6 @@ def test_class_directive():
 
 
 def test_from_dict():
-
     setup = navdict.from_dict({"ID": "my-setup-001", "version": "0.1.0"}, label="Setup")
     assert setup["ID"] == setup.ID == "my-setup-001"
 
@@ -206,7 +210,9 @@ def test_from_dict():
         _ = setup.ID
 
     # Only the (sub-)dictionary that contains non-str keys will not be navigable.
-    setup = navdict.from_dict({"ID": 1234, "answer": {"book": "H2G2", 42: "forty two"}}, label="Setup")
+    setup = navdict.from_dict(
+        {"ID": 1234, "answer": {"book": "H2G2", 42: "forty two"}}, label="Setup"
+    )
     assert setup["ID"] == setup.ID == 1234
     assert setup.answer["book"] == "H2G2"
 
@@ -216,9 +222,9 @@ def test_from_dict():
 
 def get_enum_metaclass():
     """Get the enum metaclass in a version-compatible way."""
-    if hasattr(enum, 'EnumMeta'):
+    if hasattr(enum, "EnumMeta"):
         return enum.EnumMeta
-    elif hasattr(enum, 'EnumType'):  # Python 3.11+
+    elif hasattr(enum, "EnumType"):  # Python 3.11+
         return enum.EnumType
     else:
         # Fallback: get it from a known enum
@@ -226,7 +232,6 @@ def get_enum_metaclass():
 
 
 def test_int_enum():
-
     setup = navdict.from_yaml_string(YAML_STRING_WITH_INT_ENUM)
 
     assert "enum" in setup.F_FEE.ccd_sides
@@ -237,12 +242,12 @@ def test_int_enum():
     assert setup.F_FEE.ccd_sides.enum.E.value == 1
     assert setup.F_FEE.ccd_sides.enum.E_SIDE.value == 1
     assert setup.F_FEE.ccd_sides.enum.RIGHT_SIDE.value == 1
-    assert setup.F_FEE.ccd_sides.enum.RIGHT_SIDE.name == 'E'
+    assert setup.F_FEE.ccd_sides.enum.RIGHT_SIDE.name == "E"
 
     assert setup.F_FEE.ccd_sides.enum.F.value == 0
     assert setup.F_FEE.ccd_sides.enum.F_SIDE.value == 0
     assert setup.F_FEE.ccd_sides.enum.LEFT_SIDE.value == 0
-    assert setup.F_FEE.ccd_sides.enum.LEFT_SIDE.name == 'F'
+    assert setup.F_FEE.ccd_sides.enum.LEFT_SIDE.name == "F"
 
     assert issubclass(setup.F_FEE.ccd_sides.enum, enum.IntEnum)
     assert isinstance(setup.F_FEE.ccd_sides.enum, get_enum_metaclass())
@@ -257,19 +262,19 @@ root:
 
 
 def test_recursive_load():
-
     with (
         create_text_file("load_yaml.yaml", YAML_STRING_LOADS_YAML_FILE) as fn,
-        create_text_file("enum.yaml", YAML_STRING_WITH_INT_ENUM)
+        create_text_file("enum.yaml", YAML_STRING_WITH_INT_ENUM),
     ):
         data = navdict.from_yaml_file(fn)
         assert data.root.simple.F_FEE.ccd_sides.enum.E.value == 1
 
 
 def test_relative_load():
-
     with (
-        create_text_file(HERE / "data/conf/load_relative_yaml.yaml", YAML_STRING_WITH_RELATIVE_YAML) as fn,
+        create_text_file(
+            HERE / "data/conf/load_relative_yaml.yaml", YAML_STRING_WITH_RELATIVE_YAML
+        ) as fn,
     ):
         data = navdict.from_yaml_file(fn)
         assert data.Setup.camera.fm01.calibration.temperature.T1.name == "TRP99"
@@ -290,7 +295,9 @@ def test_relative_load_from_string():
 
     assert "fm01" in data.Setup.camera
 
-    with pytest.raises(FileNotFoundError, match="No such file or directory: 'cameras/fm01.yaml'"):
+    with pytest.raises(
+        FileNotFoundError, match="No such file or directory: 'cameras/fm01.yaml'"
+    ):
         assert data.Setup.camera.fm01
 
     cwd = os.getcwd()
@@ -312,12 +319,10 @@ root:
 
 
 def test_load_csv():
-
     with (
         create_text_file(HERE / "load_csv.yaml", YAML_STRING_LOADS_CSV_FILE) as fn,
-        create_test_csv_file(HERE / "data/sample.csv")
+        create_test_csv_file(HERE / "data/sample.csv"),
     ):
-
         data = navdict.from_yaml_file(fn)
 
         header, csv_data = data.root.sample
@@ -334,5 +339,5 @@ def test_load_csv():
         assert header[0][3] == "department"
         assert header[1][0] == "# a comment line"
 
-        assert csv_data[0][0] == '1001'
+        assert csv_data[0][0] == "1001"
         assert csv_data[0][8] == "john.smith@company.com"
