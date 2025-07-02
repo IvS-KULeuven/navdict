@@ -662,6 +662,11 @@ class NavigableDict(dict):
         if not filename:
             raise ValueError("Invalid argument to function: No filename or None given.")
 
+        # Make sure the filename exists and is a regular file
+        filename = Path(filename).expanduser().resolve()
+        if not filename.is_file():
+            raise ValueError(f"Invalid argument to function, filename does not exist: {filename!s}")
+
         data = _load_yaml(str(filename))
 
         if data == {}:
