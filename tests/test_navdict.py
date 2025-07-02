@@ -142,6 +142,11 @@ def test_from_yaml_string():
 
 
 def test_from_yaml_file():
+
+    with pytest.raises(ValueError, match=r"Invalid argument to function, filename does not exist: "
+                                         r".*/simple.yaml"):
+        navdict.from_yaml_file("~/simple.yaml")
+
     with create_text_file("simple.yaml", YAML_STRING_SIMPLE) as fn:
         setup = navdict.from_yaml_file(fn)
         assert "Setup" in setup
