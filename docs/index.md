@@ -54,6 +54,9 @@ with:
 * `yaml//`: load the YAML file and return a dictionary
 * `int-enum//`: dynamically create the enumeration and return the Enum object
 
+We call these values _directives_ and they are explained in more detail in 
+[How directives work](./directives.md).
+
 #### Data Files
 
 Some information is too large to add to the navdict as such and should be loaded
