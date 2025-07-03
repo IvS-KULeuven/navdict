@@ -87,5 +87,7 @@ extra:
     name: navdict on GitHub
 
 nav:
-  - index.md
-  - roadmap.md
+    - navdict:
+        - index.md
+        - directives.md
+    - roadmap.md
