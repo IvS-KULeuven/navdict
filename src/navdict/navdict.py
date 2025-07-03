@@ -28,25 +28,23 @@ from __future__ import annotations
 __all__ = [
     "navdict",  # noqa: ignore typo
     "NavDict",
+    "NavigableDict",
 ]
 
 import csv
 import datetime
-import enum
 import importlib
 import logging
 import textwrap
 import warnings
-from enum import Enum
+from enum import IntEnum
 from pathlib import Path
 from typing import Any
-from typing import Type
-from typing import Union
 
-from _ruamel_yaml import ScannerError
 from rich.text import Text
 from rich.tree import Tree
 from ruamel.yaml import YAML
+from ruamel.yaml.scanner import ScannerError
 
 logger = logging.getLogger("navdict")
 
@@ -77,7 +75,7 @@ def _load_class(class_name: str):
     return getattr(module, class_name)
 
 
-def _get_resource_location(parent: NavigableDict, in_dir: str) -> Path:
+def _get_resource_location(parent: navdict | None, in_dir: str | None) -> Path:
     """
     Returns the resource location.
 
@@ -119,7 +117,7 @@ def _get_resource_location(parent: NavigableDict, in_dir: str) -> Path:
     return location
 
 
-def _load_csv(resource_name: str, *args, parent: navdict = None, **kwargs):
+def _load_csv(resource_name: str, *args, parent: navdict | None = None, **kwargs):
     """Find and return the content of a CSV file."""
 
     # logger.debug(f"{resource_name=}, {parent=}")
@@ -128,7 +126,7 @@ def _load_csv(resource_name: str, *args, parent: navdict = None, **kwargs):
         resource_name = resource_name[5:]
 
     parts = resource_name.rsplit("/", 1)
-    in_dir, fn = parts if len(parts) > 1 else [None, parts[0]]
+    in_dir, fn = parts if len(parts) > 1 else (None, parts[0])  # use a tuple here to make Mypy happy
 
     try:
         n_header_rows = int(kwargs["header_rows"])
@@ -150,7 +148,7 @@ def _load_csv(resource_name: str, *args, parent: navdict = None, **kwargs):
     return data[:n_header_rows], data[n_header_rows:]
 
 
-def _load_int_enum(enum_name: str, enum_content) -> Type[Enum]:
+def _load_int_enum(enum_name: str, enum_content) -> IntEnum:
     """Dynamically build (and return) and IntEnum.
 
     In the YAML file this will look like below.
@@ -188,10 +186,10 @@ def _load_int_enum(enum_name: str, enum_content) -> Type[Enum]:
         for alias in aliases:
             definition[alias] = value
 
-    return enum.IntEnum(enum_name, definition)
+    return IntEnum(enum_name, definition)
 
 
-def _load_yaml(resource_name: str, parent: NavDict = None) -> NavDict:
+def _load_yaml(resource_name: str, parent: NavigableDict | None = None) -> NavigableDict:
     """Find and return the content of a YAML file."""
 
     # logger.debug(f"{resource_name=}, {parent=}")
@@ -201,7 +199,7 @@ def _load_yaml(resource_name: str, parent: NavDict = None) -> NavDict:
 
     parts = resource_name.rsplit("/", 1)
 
-    in_dir, fn = parts if len(parts) > 1 else [None, parts[0]]
+    in_dir, fn = parts if len(parts) > 1 else (None, parts[0])  # use a tuple here to make Mypy happy
 
     yaml_location = _get_resource_location(parent, in_dir)
 
@@ -259,12 +257,12 @@ class NavigableDict(dict):
 
     """
 
-    def __init__(self, head: dict = None, label: str = None, _filename: str = None):
+    def __init__(self, head: dict | None = None, label: str | None = None, _filename: str | Path | None = None):
         head = head or {}
         super().__init__(head)
         self.__dict__["_memoized"] = {}
         self.__dict__["_label"] = label
-        self.__dict__["_filename"] = _filename
+        self.__dict__["_filename"] = Path(_filename) if _filename is not None else None
 
         # By agreement, we only want the keys to be set as attributes if all keys are strings.
         # That way we enforce that always all keys are navigable, or none.
@@ -601,7 +599,7 @@ class NavigableDict(dict):
         return list(self.__dict__["_memoized"].keys())
 
     @staticmethod
-    def from_dict(my_dict: dict, label: str = None) -> NavigableDict:
+    def from_dict(my_dict: dict, label: str | None = None) -> NavigableDict:
         """Create a NavigableDict from a given dictionary.
 
         Remember that all keys in the given dictionary shall be of type 'str' in order to be
@@ -619,7 +617,7 @@ class NavigableDict(dict):
         return NavigableDict(my_dict, label=label)
 
     @staticmethod
-    def from_yaml_string(yaml_content: str = None, label: str = None) -> NavigableDict:
+    def from_yaml_string(yaml_content: str | None = None, label: str | None = None) -> NavigableDict:
         """Creates a NavigableDict from the given YAML string.
 
         This method is mainly used for easy creation of a navdict from strings during unit tests.
@@ -646,7 +644,7 @@ class NavigableDict(dict):
         return NavigableDict(data, label=label)
 
     @staticmethod
-    def from_yaml_file(filename: Union[str, Path] = None) -> NavigableDict:
+    def from_yaml_file(filename: str | Path | None = None) -> NavigableDict:
         """Creates a navigable dictionary from the given YAML file.
 
         Args:
@@ -674,7 +672,7 @@ class NavigableDict(dict):
 
         return data
 
-    def to_yaml_file(self, filename: str | Path = None) -> None:
+    def to_yaml_file(self, filename: str | Path | None = None) -> None:
         """Saves a NavigableDict to a YAML file.
 
         When no filename is provided, this method will look for a 'private' attribute
@@ -717,7 +715,8 @@ class NavigableDict(dict):
         return self.get_private_attribute("_filename")
 
 
-navdict = NavDict = NavigableDict  # noqa: ignore typo
+navdict = NavigableDict
+NavDict = NavigableDict
 """Shortcuts for NavigableDict and more Pythonic."""
 
 
