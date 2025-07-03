@@ -140,9 +140,7 @@ def _load_csv(resource_name: str, *args, parent: navdict | None = None, **kwargs
             csv_reader = csv.reader(file)
             data = list(csv_reader)
     except FileNotFoundError:
-        logger.error(
-            f"Couldn't load resource '{resource_name}', file not found", exc_info=True
-        )
+        logger.error(f"Couldn't load resource '{resource_name}', file not found", exc_info=True)
         raise
 
     return data[:n_header_rows], data[n_header_rows:]
@@ -209,9 +207,7 @@ def _load_yaml(resource_name: str, parent: NavigableDict | None = None) -> Navig
             data = yaml.load(file)
 
     except FileNotFoundError:
-        logger.error(
-            f"Couldn't load resource '{resource_name}', file not found", exc_info=True
-        )
+        logger.error(f"Couldn't load resource '{resource_name}', file not found", exc_info=True)
         raise
     except IsADirectoryError:
         logger.error(
@@ -257,7 +253,12 @@ class NavigableDict(dict):
 
     """
 
-    def __init__(self, head: dict | None = None, label: str | None = None, _filename: str | Path | None = None):
+    def __init__(
+        self,
+        head: dict | None = None,
+        label: str | None = None,
+        _filename: str | Path | None = None,
+    ):
         head = head or {}
         super().__init__(head)
         self.__dict__["_memoized"] = {}
@@ -461,13 +462,9 @@ class NavigableDict(dict):
 
         """
         if key in self:
-            raise ValueError(
-                f"Invalid argument key='{key}', this key already exists in the dictionary."
-            )
+            raise ValueError(f"Invalid argument key='{key}', this key already exists in the dictionary.")
         if not key.startswith("_"):
-            raise ValueError(
-                f"Invalid argument key='{key}', must start with underscore character '_'."
-            )
+            raise ValueError(f"Invalid argument key='{key}', must start with underscore character '_'.")
         self.__dict__[key] = value
 
     def get_private_attribute(self, key: str) -> Any:
@@ -485,9 +482,7 @@ class NavigableDict(dict):
             understandable. Use the methods to access these 'private' attributes.
         """
         if not key.startswith("_"):
-            raise ValueError(
-                f"Invalid argument key='{key}', must start with underscore character '_'."
-            )
+            raise ValueError(f"Invalid argument key='{key}', must start with underscore character '_'.")
         try:
             return self.__dict__[key]
         except KeyError:
@@ -505,9 +500,7 @@ class NavigableDict(dict):
             ValueError: when the key doesn't start with an underscore.
         """
         if not key.startswith("_"):
-            raise ValueError(
-                f"Invalid argument key='{key}', must start with underscore character '_'."
-            )
+            raise ValueError(f"Invalid argument key='{key}', must start with underscore character '_'.")
 
         # logger.debug(f"{self.__dict__.keys()} for [id={id(self)}]")
 
@@ -631,9 +624,7 @@ class NavigableDict(dict):
         """
 
         if not yaml_content:
-            raise ValueError(
-                "Invalid argument to function: No input string or None given."
-            )
+            raise ValueError("Invalid argument to function: No input string or None given.")
 
         yaml = YAML(typ="safe")
         try:
