@@ -21,9 +21,7 @@ def create_empty_file(filename: str | Path, create_folder: bool = False):
             self.filename = Path(filename)
 
             if self.filename.exists():
-                raise FileExistsError(
-                    f"The empty file you wanted to create already exists: {filename}"
-                )
+                raise FileExistsError(f"The empty file you wanted to create already exists: {filename}")
 
             if create_folder and not self.filename.parent.exists():
                 self.filename.parent.mkdir(parents=True)
@@ -61,9 +59,7 @@ def create_text_file(filename: str | Path, content: str, create_folder: bool = F
             self.filename = Path(filename)
 
             if self.filename.exists():
-                raise FileExistsError(
-                    f"The text file you wanted to create already exists: {filename}"
-                )
+                raise FileExistsError(f"The text file you wanted to create already exists: {filename}")
 
             if create_folder and not self.filename.parent.exists():
                 self.filename.parent.mkdir(parents=True)

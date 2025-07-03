@@ -135,16 +135,16 @@ def test_from_yaml_string():
     ):
         setup = navdict.from_yaml_string(YAML_STRING_MISSING_COLON)
 
-    with pytest.raises(
-        ValueError, match="Invalid argument to function: No input string or None given"
-    ):
+    with pytest.raises(ValueError, match="Invalid argument to function: No input string or None given"):
         setup = navdict.from_yaml_string(YAML_STRING_EMPTY)
 
 
 def test_from_yaml_file():
-
-    with pytest.raises(ValueError, match=r"Invalid argument to function, filename does not exist: "
-                                         r".*/simple.yaml"):
+    with pytest.raises(
+        ValueError,
+        match=r"Invalid argument to function, filename does not exist: "
+        r".*/simple.yaml",
+    ):
         navdict.from_yaml_file("~/simple.yaml")
 
     with create_text_file("simple.yaml", YAML_STRING_SIMPLE) as fn:
@@ -154,9 +154,7 @@ def test_from_yaml_file():
         assert "gse" in setup.Setup
         assert setup.Setup.gse.hexapod.id == "PUNA_01"
 
-    with create_text_file(
-        "with_unknown_class.yaml", YAML_STRING_WITH_UNKNOWN_CLASS
-    ) as fn:
+    with create_text_file("with_unknown_class.yaml", YAML_STRING_WITH_UNKNOWN_CLASS) as fn:
         # The following line shall not generate an exception, meaning the `class//`
         # shall not be evaluated on load!
         data = navdict.from_yaml_file(fn)
@@ -215,9 +213,7 @@ def test_from_dict():
         _ = setup.ID
 
     # Only the (sub-)dictionary that contains non-str keys will not be navigable.
-    setup = navdict.from_dict(
-        {"ID": 1234, "answer": {"book": "H2G2", 42: "forty two"}}, label="Setup"
-    )
+    setup = navdict.from_dict({"ID": 1234, "answer": {"book": "H2G2", 42: "forty two"}}, label="Setup")
     assert setup["ID"] == setup.ID == 1234
     assert setup.answer["book"] == "H2G2"
 
@@ -277,9 +273,7 @@ def test_recursive_load():
 
 def test_relative_load():
     with (
-        create_text_file(
-            HERE / "data/conf/load_relative_yaml.yaml", YAML_STRING_WITH_RELATIVE_YAML
-        ) as fn,
+        create_text_file(HERE / "data/conf/load_relative_yaml.yaml", YAML_STRING_WITH_RELATIVE_YAML) as fn,
     ):
         data = navdict.from_yaml_file(fn)
         assert data.Setup.camera.fm01.calibration.temperature.T1.name == "TRP99"
@@ -300,9 +294,7 @@ def test_relative_load_from_string():
 
     assert "fm01" in data.Setup.camera
 
-    with pytest.raises(
-        FileNotFoundError, match="No such file or directory: 'cameras/fm01.yaml'"
-    ):
+    with pytest.raises(FileNotFoundError, match="No such file or directory: 'cameras/fm01.yaml'"):
         assert data.Setup.camera.fm01
 
     cwd = os.getcwd()
