@@ -117,7 +117,6 @@ def test_is_directive():
 
 def test_get_directive_plugin():
 
-    print()
     assert isinstance(get_directive_plugin("yaml"), Directive)
 
     assert not isinstance(get_directive_plugin("not-a-plugin"), Directive)
@@ -134,7 +133,7 @@ def test_use_a_directive_plugin():
             y: Y
     """
     data = navdict.from_yaml_string(yaml_string)
-    print(f"{data.Setup.info=}")
+    # print(f"{data.Setup.info=}")
     assert data.Setup.info.startswith("my_yaml//")
     assert data.Setup.info.endswith("use/this/file.yaml")
 
