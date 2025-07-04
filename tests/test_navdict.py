@@ -7,6 +7,10 @@ import pytest
 from helpers import create_test_csv_file
 from helpers import create_text_file
 from navdict import navdict
+from navdict.directive import Directive
+from navdict.directive import get_directive_plugin
+from navdict.directive import is_directive
+from navdict.navdict import get_resource_location
 
 HERE = Path(__file__).parent
 
@@ -93,6 +97,54 @@ age: 30
 """
 
 YAML_STRING_EMPTY = """"""
+
+
+def test_is_directive():
+
+    assert is_directive("yaml//sample.yaml")
+    assert is_directive("class//navdict.navdict")
+    assert is_directive("my_directive//value")
+
+    assert not is_directive("just a string")
+    assert not is_directive("relative/path")
+    assert not is_directive("my-directive//value")
+
+    assert not is_directive(42)
+    assert not is_directive(23.7)
+
+    assert not is_directive("my-setup-001")
+
+
+def test_get_directive_plugin():
+
+    print()
+    assert isinstance(get_directive_plugin("yaml"), Directive)
+
+    assert not isinstance(get_directive_plugin("not-a-plugin"), Directive)
+
+
+def test_use_a_directive_plugin():
+
+    yaml_string = """
+    Setup:
+        info: my_yaml//../use/this/file.yaml
+        info_args: [1, 2]
+        info_kwargs:
+            x: X
+            y: Y
+    """
+    data = navdict.from_yaml_string(yaml_string)
+    print(f"{data.Setup.info=}")
+    assert data.Setup.info.startswith("my_yaml//")
+    assert data.Setup.info.endswith("use/this/file.yaml")
+
+
+def test_get_resource_location():
+
+    assert get_resource_location(None, None) == Path('.')
+    assert get_resource_location(None, "../data") == Path('.') / "../data"
+    assert get_resource_location(Path("~"), "data") == Path("~") / "data"
+    assert get_resource_location(Path("~"), None) == Path('~')
 
 
 def test_construction():

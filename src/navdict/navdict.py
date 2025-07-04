@@ -46,16 +46,14 @@ from rich.tree import Tree
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
 
+from navdict.directive import is_directive
+from navdict.directive import unravel_directive
+from navdict.directive import get_directive_plugin
+
 logger = logging.getLogger("navdict")
 
 
-def _load_directive_plugins():
-    """
-    Load any directive plugins that are available in your environment.
-    """
-
-
-def _load_class(class_name: str):
+def load_class(class_name: str):
     """
     Find and returns a class based on the fully qualified name.
 
@@ -75,7 +73,7 @@ def _load_class(class_name: str):
     return getattr(module, class_name)
 
 
-def _get_resource_location(parent: navdict | None, in_dir: str | None) -> Path:
+def get_resource_location(parent_location: Path | None, in_dir: str | None) -> Path:
     """
     Returns the resource location.
 
@@ -83,14 +81,14 @@ def _get_resource_location(parent: navdict | None, in_dir: str | None) -> Path:
     such as `yaml//` or `csv//`. The location of the file can be given as an absolute
     path or can be relative in which case there are two possibilities:
 
-    1. the parent NavDict exists and has a `_filename` attribute that is not None. In
-       this case the resource location will be relative to the parent's location.
-    2. the parent is not given, or it has no `_filename` attribute, or it's `_filename`
-       attribute is None. In this case the resource location is taken to be relative
-       to the current working directory '.'.
+    1. the parent location is not None.
+       In this case the resource location will be relative to the parent's location.
+    2. the parent location is None.
+       In this case the resource location is taken to be relative to the current working directory '.'.
+    3. when both arguments are None, the resource location will be the current working directory.
 
     Args:
-        parent: the parent NavDict of this key-value pair, or None
+        parent_location: the location of the parent navdict, or None
         in_dir: a location extracted from the directive's value.
 
     Returns:
@@ -98,29 +96,27 @@ def _get_resource_location(parent: navdict | None, in_dir: str | None) -> Path:
 
     """
 
-    def get_default_location() -> Path:
-        if parent and (resource_location := parent.get_private_attribute("_filename")):
-            return resource_location.parent
-
-        return Path(".").expanduser()
-
-    match in_dir:
-        case str() if Path(in_dir).is_absolute():
+    match (parent_location, in_dir):
+        case (_, str()) if Path(in_dir).is_absolute():
             location = Path(in_dir)
-        case None:
-            location = get_default_location()
+        case (None, str()):
+            location = Path('.') / in_dir
+        case (Path(), str()):
+            location = parent_location / in_dir
+        case (Path(), None):
+            location = parent_location
         case _:
-            location = get_default_location() / in_dir
+            location = Path('.')
 
     # logger.debug(f"{location=}, {fn=}")
 
     return location
 
 
-def _load_csv(resource_name: str, *args, parent: navdict | None = None, **kwargs):
+def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs):
     """Find and return the content of a CSV file."""
 
-    # logger.debug(f"{resource_name=}, {parent=}")
+    logger.debug(f"{resource_name=}, {parent_location=}")
 
     if resource_name.startswith("csv//"):
         resource_name = resource_name[5:]
@@ -133,7 +129,7 @@ def _load_csv(resource_name: str, *args, parent: navdict | None = None, **kwargs
     except KeyError:
         n_header_rows = 0
 
-    csv_location = _get_resource_location(parent, in_dir)
+    csv_location = get_resource_location(parent_location, in_dir)
 
     try:
         with open(csv_location / fn, "r", encoding="utf-8") as file:
@@ -146,7 +142,7 @@ def _load_csv(resource_name: str, *args, parent: navdict | None = None, **kwargs
     return data[:n_header_rows], data[n_header_rows:]
 
 
-def _load_int_enum(enum_name: str, enum_content) -> IntEnum:
+def load_int_enum(enum_name: str, enum_content) -> IntEnum:
     """Dynamically build (and return) and IntEnum.
 
     In the YAML file this will look like below.
@@ -187,7 +183,7 @@ def _load_int_enum(enum_name: str, enum_content) -> IntEnum:
     return IntEnum(enum_name, definition)
 
 
-def _load_yaml(resource_name: str, parent: NavigableDict | None = None) -> NavigableDict:
+def load_yaml(resource_name: str, parent_location: Path | None = None, *args, **kwargs) -> NavigableDict:
     """Find and return the content of a YAML file."""
 
     # logger.debug(f"{resource_name=}, {parent=}")
@@ -199,7 +195,7 @@ def _load_yaml(resource_name: str, parent: NavigableDict | None = None) -> Navig
 
     in_dir, fn = parts if len(parts) > 1 else (None, parts[0])  # use a tuple here to make Mypy happy
 
-    yaml_location = _get_resource_location(parent, in_dir)
+    yaml_location = get_resource_location(parent_location, in_dir)
 
     try:
         yaml = YAML(typ="safe")
@@ -334,8 +330,11 @@ class NavigableDict(dict):
         if key.startswith("__"):  # small optimization
             return value
         # We can not directly call the `_handle_directive` function here due to infinite recursion
-        m = object.__getattribute__(self, "_handle_directive")
-        return m(key, value)
+        if is_directive(value):
+            m = object.__getattribute__(self, "_handle_directive")
+            return m(key, value)
+        else:
+            return value
 
     def __delattr__(self, item):
         # logger.info(f"called __delattr__({self!r}, {item})")
@@ -363,13 +362,17 @@ class NavigableDict(dict):
         if key.startswith("__"):
             return value
         # no danger for recursion here, so we can directly call the function
-        return self._handle_directive(key, value)
+        if is_directive(value):
+            return self._handle_directive(key, value)
+        else:
+            return value
 
     def _handle_directive(self, key, value) -> Any:
         """
         This method will handle the available directives. This may be builtin directives
-        like `class/` or `yaml//`, or it may be external directives that were provided
-        as a plugin. TO BE IMPLEMENTED
+        like `class/` or `factory//`, or it may be external directives that were provided
+        as a plugin. Some builtin directives have also been provided as a plugin, e.g.
+        'yaml//' and 'csv//'.
 
         Args:
             key: the key of the field that might contain a directive
@@ -380,35 +383,46 @@ class NavigableDict(dict):
                 evaluating and executing a directive.
         """
         # logger.debug(f"called _handle_directive({key}, {value!r}) [id={id(self)}]")
-        if isinstance(value, str) and value.startswith("class//"):
-            args, kwargs = self._get_args_and_kwargs(key)
-            return _load_class(value)(*args, **kwargs)
 
-        elif isinstance(value, str) and value.startswith("factory//"):
-            factory_args = _get_attribute(self, f"{key}_args", {})
-            return _load_class(value)().create(**factory_args)
+        directive_key, directive_value = unravel_directive(value)
+        logger.debug(f"{directive_key=}, {directive_value=}")
 
-        elif isinstance(value, str) and value.startswith("yaml//"):
+        if directive := get_directive_plugin(directive_key):
+            logger.debug(f"{directive.name=}")
+
             if key in self.__dict__["_memoized"]:
                 return self.__dict__["_memoized"][key]
-            content = _load_yaml(value, parent=self)
-            self.__dict__["_memoized"][key] = content
-            return content
 
-        elif isinstance(value, str) and value.startswith("csv//"):
-            if key in self.__dict__["_memoized"]:
-                return self.__dict__["_memoized"][key]
             args, kwargs = self._get_args_and_kwargs(key)
-            content = _load_csv(value, parent=self, **kwargs)
-            self.__dict__["_memoized"][key] = content
-            return content
+            parent_location = self._get_location()
+            result = directive.func(directive_value, parent_location, *args, **kwargs)
 
-        elif isinstance(value, str) and value.startswith("int_enum//"):
-            content = object.__getattribute__(self, "content")
-            return _load_int_enum(value, content)
+            self.__dict__["_memoized"][key] = result
+            return result
 
-        else:
-            return value
+        match directive_key:
+            case "class":
+                args, kwargs = self._get_args_and_kwargs(key)
+                return load_class(directive_value)(*args, **kwargs)
+
+            case "factory":
+                factory_args = _get_attribute(self, f"{key}_args", {})
+                return load_class(directive_value)().create(**factory_args)
+
+            case "int_enum":
+                content = object.__getattribute__(self, "content")
+                return load_int_enum(directive_value, content)
+
+            case _:
+                return value
+
+    def _get_location(self):
+        """Returns the location of the file from which this NavDict was loaded or None if no location exists."""
+        try:
+            filename = self.__dict__["_filename"]
+            return filename.parent if filename else None
+        except KeyError:
+            return None
 
     def _get_args_and_kwargs(self, key):
         """
@@ -656,7 +670,7 @@ class NavigableDict(dict):
         if not filename.is_file():
             raise ValueError(f"Invalid argument to function, filename does not exist: {filename!s}")
 
-        data = _load_yaml(str(filename))
+        data = load_yaml(str(filename))
 
         if data == {}:
             warnings.warn(f"Empty YAML file: {filename!s}")
