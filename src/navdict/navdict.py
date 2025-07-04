@@ -116,7 +116,7 @@ def get_resource_location(parent_location: Path | None, in_dir: str | None) -> P
 def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs):
     """Find and return the content of a CSV file."""
 
-    logger.debug(f"{resource_name=}, {parent_location=}")
+    # logger.debug(f"{resource_name=}, {parent_location=}")
 
     if resource_name.startswith("csv//"):
         resource_name = resource_name[5:]
@@ -385,10 +385,10 @@ class NavigableDict(dict):
         # logger.debug(f"called _handle_directive({key}, {value!r}) [id={id(self)}]")
 
         directive_key, directive_value = unravel_directive(value)
-        logger.debug(f"{directive_key=}, {directive_value=}")
+        # logger.debug(f"{directive_key=}, {directive_value=}")
 
         if directive := get_directive_plugin(directive_key):
-            logger.debug(f"{directive.name=}")
+            # logger.debug(f"{directive.name=}")
 
             if key in self.__dict__["_memoized"]:
                 return self.__dict__["_memoized"][key]

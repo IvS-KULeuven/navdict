@@ -25,13 +25,13 @@ logger = logging.getLogger("navdict.plugin")
 
 
 def load_yaml(value: str, parent_location: Path | None, *args, **kwargs):
-    logger.info(f"Loading YAML file: '{value}'.")
+    # logger.debug(f"Loading YAML file: '{value}'.")
 
     return _load_yaml(value, parent_location)
 
 
 def load_csv(value: str, parent_location: Path | None, *args, **kwargs):
-    logger.info(f"Loading CSV file: '{value}'.")
+    # logger.debug(f"Loading CSV file: '{value}'.")
 
     return _load_csv(value, parent_location, *args, **kwargs)
 
