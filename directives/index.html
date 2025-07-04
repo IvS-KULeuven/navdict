@@ -739,7 +739,50 @@ function. A relative filename is interpreted as follows:</p>
   the directive value is relative to the current working directory.</li>
 </ul>
 <h2 id="custom-directives">Custom directives<a class="headerlink" href="#custom-directives" title="Permanent link">&para;</a></h2>
-<p>TBW. This section will describe how to write your own directives as a plugin.</p>
+<p>If you have special needs to handle directives in your YAML files, you can 
+implement your own directive as a plugin. What you need is a unique name for 
+the directive and a function to handle and process the data.</p>
+<p>The builtin directives <code>yaml//</code> and <code>csv//</code> are implemented as a plugin and 
+can serve as an example for your directive plugin.</p>
+<p>In the <code>pyproject.toml</code> file of your project, you should add an entrypoint 
+for your directive plugin. As an example, taken from the navdict project:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[project.entry-points.</span><span class="s2">&quot;navdict.directive&quot;</span><span class="k">]</span>
+<span class="n">yaml</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;navdict.directives:load_yaml&#39;</span>
+<span class="n">csv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;navdict.directives:load_csv&#39;</span>
+</code></pre></div>
+<p>The functions that you define to handle the directive shall have the 
+following interface definition. The example is from the builtin <code>yaml</code> 
+directive.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_yaml</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent_location</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="o">...</span>
+</code></pre></div>
+<p>The <code>value</code> is the part of the directive that comes after the double slashes 
+'//'. This might be a filename or path, or any other string that your 
+directive needs for processing. </p>
+<p>The <code>parent_location</code> is the location of the YAML file that was used to load 
+the navdict. You can use this location to determine the full path of a 
+resource that you need for processing the directive. For example, if the 
+<code>value</code> contains a filename and a relative path, the <code>parent_location</code> can 
+be used as the root for this relative path. The builtin directives use a 
+function <code>get_resource_location(...)</code> to determine the full path of the 
+resource to be loaded, e.g.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">navdict.navdict</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_resource_location</span>
+
+<span class="n">yaml_location</span> <span class="o">=</span> <span class="n">get_resource_location</span><span class="p">(</span><span class="n">parent_location</span><span class="p">,</span> <span class="n">relative_path</span><span class="p">)</span>
+</code></pre></div>
+<p>The <code>args</code> and <code>kwargs</code> are entries from the YAML file that are passed into 
+the directive function without processing. The <code>args</code> are determined from 
+the YAML field <code>&lt;key&gt;_args</code> and the <code>kwargs</code> from <code>&lt;key&gt;_kwargs</code>. For 
+example, the <code>csv</code> directive can take a keyword argument <code>header_rows</code> to 
+parse and skip a number of rows in the CSV file. The YAML file would look 
+something like this:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">setup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hk_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv//data/hk_metrics_daq.csv</span>
+<span class="w">    </span><span class="nt">hk_metrics_kwargs</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">header_rows</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</code></pre></div>
+<p>This will pass <code>header_rows=2</code> as a keyword argument into the <code>load_csv()</code> 
+directive function.</p>
 
 
 
