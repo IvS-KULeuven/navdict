@@ -29,6 +29,7 @@ __all__ = [
     "navdict",  # noqa: ignore typo
     "NavDict",
     "NavigableDict",
+    "get_resource_location",
 ]
 
 import csv
