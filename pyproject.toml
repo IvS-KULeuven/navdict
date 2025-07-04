@@ -42,6 +42,10 @@ lint = [
     "ruff>=0.11.12",
 ]
 
+[project.entry-points."navdict.directive"]
+yaml = 'navdict.directives:load_yaml'
+csv = 'navdict.directives:load_csv'
+
 [tool.uv]
 default-groups = ["dev", "docs"]
 
@@ -54,7 +58,7 @@ testpaths = [
 ]
 addopts = "-rA --cov --cov-branch --cov-report html"
 log_cli = true
-log_cli_level = "INFO"
+log_cli_level = "DEBUG"
 filterwarnings = [
     "ignore::DeprecationWarning"
 ]

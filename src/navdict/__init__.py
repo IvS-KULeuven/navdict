@@ -1,3 +1,9 @@
-__all__ = ["navdict", "NavDict"]
+__all__ = [
+    "navdict",
+    "NavDict",
+    "NavigableDict",
+]
 
-from .navdict import navdict, NavDict
+from .navdict import NavigableDict
+from .navdict import NavDict
+from .navdict import navdict
