@@ -712,12 +712,15 @@ version: 0.3.2
 expression:</p>
 <p>The value is a string matching <code>r"^([a-zA-Z]\w+)[\/]{2}(.*)$"</code> where:</p>
 <ul>
-<li>group 1 is the directive and </li>
-<li>group 2 is the value that is passed into the function that is associated 
-  with the directive.</li>
+<li>group 1 is the directive key and </li>
+<li>group 2 is the directive value that is passed into the function that is 
+  associated with the directive.</li>
 </ul>
 <p>For example, the value 'yaml//config.yaml' will match and group 1 is 'yaml' 
 and group 2 is 'config.yaml'.</p>
+<p>The function <code>unravel_directive(...) -&gt; tuple[str, str]</code> parses the 
+directive and returns the two groups as a tuple. This happens under the hood 
+and should not bother you unless you are a navdict developer 🧐</p>
 <h2 id="default-directives">Default directives<a class="headerlink" href="#default-directives" title="Permanent link">&para;</a></h2>
 <p>The <code>navdict</code> project has defined the following directives:</p>
 <ul>
