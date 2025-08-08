@@ -437,3 +437,12 @@ def test_non_string_keys():
     assert x.A[1] == "one"
     assert x.A[2] == "two"
     assert x.A[(3,)] == "three-tuple"
+
+
+def test_invalid_yaml():
+
+    # This would normally raise a ScannerError from the ruamel.yaml package
+    #  -  ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
+
+    with pytest.raises(IOError):
+        _ = navdict.from_yaml_file(__file__)
