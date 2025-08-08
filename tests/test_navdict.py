@@ -100,7 +100,6 @@ YAML_STRING_EMPTY = """"""
 
 
 def test_is_directive():
-
     assert is_directive("yaml//sample.yaml")
     assert is_directive("class//navdict.navdict")
     assert is_directive("my_directive//value")
@@ -116,14 +115,12 @@ def test_is_directive():
 
 
 def test_get_directive_plugin():
-
     assert isinstance(get_directive_plugin("yaml"), Directive)
 
     assert not isinstance(get_directive_plugin("not-a-plugin"), Directive)
 
 
 def test_use_a_directive_plugin():
-
     yaml_string = """
     Setup:
         info: my_yaml//../use/this/file.yaml
@@ -139,11 +136,10 @@ def test_use_a_directive_plugin():
 
 
 def test_get_resource_location():
-
-    assert get_resource_location(None, None) == Path('.')
-    assert get_resource_location(None, "../data") == Path('.') / "../data"
+    assert get_resource_location(None, None) == Path(".")
+    assert get_resource_location(None, "../data") == Path(".") / "../data"
     assert get_resource_location(Path("~"), "data") == Path("~") / "data"
-    assert get_resource_location(Path("~"), None) == Path('~')
+    assert get_resource_location(Path("~"), None) == Path("~")
 
 
 def test_construction():
@@ -396,8 +392,8 @@ config:
     token: env//AUTH_TOKEN
 """
 
-def test_env_var():
 
+def test_env_var():
     data = navdict.from_yaml_string(YAML_STRING_WITH_ENV_VAR)
 
     assert data.config.token is None
@@ -410,8 +406,8 @@ def test_env_var():
 
     del os.environ["AUTH_TOKEN"]
 
-def test_memoized_keys():
 
+def test_memoized_keys():
     # NOTE:
     #   * memoized keys are only for directives.
     #   * a key is memoized only after it was accessed.

@@ -101,13 +101,13 @@ def get_resource_location(parent_location: Path | None, in_dir: str | None) -> P
         case (_, str()) if Path(in_dir).is_absolute():
             location = Path(in_dir)
         case (None, str()):
-            location = Path('.') / in_dir
+            location = Path(".") / in_dir
         case (Path(), str()):
             location = parent_location / in_dir
         case (Path(), None):
             location = parent_location
         case _:
-            location = Path('.')
+            location = Path(".")
 
     # logger.debug(f"{location=}, {fn=}")
 
