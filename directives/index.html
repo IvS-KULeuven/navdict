@@ -729,6 +729,7 @@ and should not bother you unless you are a navdict developer 🧐</p>
 <li><code>csv//</code>: load the CSV file and return a numpy array</li>
 <li><code>yaml//</code>: load the YAML file and return a dictionary</li>
 <li><code>int-enum//</code>: dynamically create the enumeration and return the Enum object</li>
+<li><code>env//</code>: returns the value of the environment variable or None</li>
 </ul>
 <h2 id="filenames">Filenames<a class="headerlink" href="#filenames" title="Permanent link">&para;</a></h2>
 <p>When the directive value is a filename or path, it can be absolute or 
@@ -745,13 +746,15 @@ function. A relative filename is interpreted as follows:</p>
 <p>If you have special needs to handle directives in your YAML files, you can 
 implement your own directive as a plugin. What you need is a unique name for 
 the directive and a function to handle and process the data.</p>
-<p>The builtin directives <code>yaml//</code> and <code>csv//</code> are implemented as a plugin and 
+<p>The builtin directives <code>yaml//</code>, <code>csv//</code> and <code>env//</code> are implemented as a plugin 
+and 
 can serve as an example for your directive plugin.</p>
 <p>In the <code>pyproject.toml</code> file of your project, you should add an entrypoint 
 for your directive plugin. As an example, taken from the navdict project:</p>
 <div class="highlight"><pre><span></span><code><span class="k">[project.entry-points.</span><span class="s2">&quot;navdict.directive&quot;</span><span class="k">]</span>
 <span class="n">yaml</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;navdict.directives:load_yaml&#39;</span>
 <span class="n">csv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;navdict.directives:load_csv&#39;</span>
+<span class="n">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;navdict.directives:env_var&#39;</span>
 </code></pre></div>
 <p>The functions that you define to handle the directive shall have the 
 following interface definition. The example is from the builtin <code>yaml</code> 
