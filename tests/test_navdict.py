@@ -428,3 +428,12 @@ def test_memoized_keys():
 
     # returns False when a key is not memoized and could not be deleted
     assert not data.config.del_memoized_key("unknown")
+
+
+def test_non_string_keys():
+
+    x = navdict({"A": {1: "one", 2: "two", (3,): "three-tuple"}})
+
+    assert x.A[1] == "one"
+    assert x.A[2] == "two"
+    assert x.A[(3,)] == "three-tuple"

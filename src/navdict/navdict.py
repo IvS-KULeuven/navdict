@@ -360,7 +360,7 @@ class NavigableDict(dict):
     def __getitem__(self, key):
         # logger.info(f"called __getitem__({self!r}, {key})")
         value = super().__getitem__(key)
-        if key.startswith("__"):
+        if isinstance(key, str) and key.startswith("__"):
             return value
         # no danger for recursion here, so we can directly call the function
         if is_directive(value):
