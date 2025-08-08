@@ -212,6 +212,10 @@ def load_yaml(resource_name: str, parent_location: Path | None = None, *args, **
             exc_info=True,
         )
         raise
+    except ScannerError as exc:
+        msg = f"A error occurred while scanning the YAML file: {yaml_location / fn}."
+        logger.error(msg, exc_info=True)
+        raise IOError(msg) from exc
 
     data = NavigableDict(data, _filename=yaml_location / fn)
 
