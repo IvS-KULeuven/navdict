@@ -389,3 +389,46 @@ def test_load_csv():
 
         assert csv_data[0][0] == "1001"
         assert csv_data[0][8] == "john.smith@company.com"
+
+
+YAML_STRING_WITH_ENV_VAR = """
+config:
+    token: env//AUTH_TOKEN
+"""
+
+def test_env_var():
+
+    data = navdict.from_yaml_string(YAML_STRING_WITH_ENV_VAR)
+
+    assert data.config.token is None
+
+    os.environ["AUTH_TOKEN"] = "this-is-my-token"
+
+    data.config.del_memoized_key("token")
+
+    assert data.config.token == "this-is-my-token"
+
+    del os.environ["AUTH_TOKEN"]
+
+def test_memoized_keys():
+
+    # NOTE:
+    #   * memoized keys are only for directives.
+    #   * a key is memoized only after it was accessed.
+
+    data = navdict.from_yaml_string(YAML_STRING_WITH_ENV_VAR)
+
+    assert data.config.get_memoized_keys() == []
+
+    os.environ["AUTH_TOKEN"] = "this-is-my-token-too"
+
+    assert data.config.token == "this-is-my-token-too"
+
+    assert data.config.get_memoized_keys() == ["token"]
+
+    assert data.config.del_memoized_key("token")
+
+    assert "token" not in data.config.get_memoized_keys()
+
+    # returns False when a key is not memoized and could not be deleted
+    assert not data.config.del_memoized_key("unknown")

@@ -16,6 +16,7 @@ where:
 
 """
 import logging
+import os
 from pathlib import Path
 
 from navdict.navdict import load_yaml as _load_yaml
@@ -34,6 +35,12 @@ def load_csv(value: str, parent_location: Path | None, *args, **kwargs):
     # logger.debug(f"Loading CSV file: '{value}'.")
 
     return _load_csv(value, parent_location, *args, **kwargs)
+
+
+def env_var(value: str, parent_location: Path | None, *args, **kwargs):
+    # logger.debug(f"Loading environment variable: '{value}'.")
+
+    return os.environ.get(value)
 
 
 # TODO:
