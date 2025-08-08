@@ -5,7 +5,6 @@ def load_yaml(resource_name: str, parent: NavigableDict | None = ...) -> NavDict
 def load_csv(resource_name: str, *args, parent: navdict | None = None, **kwargs): ...
 def get_resource_location(parent_location: Path | None, in_dir: str | None) -> Path: ...
 
-
 class NavigableDict(dict):
     def __init__(
         self,

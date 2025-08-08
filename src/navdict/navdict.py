@@ -101,13 +101,13 @@ def get_resource_location(parent_location: Path | None, in_dir: str | None) -> P
         case (_, str()) if Path(in_dir).is_absolute():
             location = Path(in_dir)
         case (None, str()):
-            location = Path('.') / in_dir
+            location = Path(".") / in_dir
         case (Path(), str()):
             location = parent_location / in_dir
         case (Path(), None):
             location = parent_location
         case _:
-            location = Path('.')
+            location = Path(".")
 
     # logger.debug(f"{location=}, {fn=}")
 
@@ -605,6 +605,13 @@ class NavigableDict(dict):
 
     def get_memoized_keys(self):
         return list(self.__dict__["_memoized"].keys())
+
+    def del_memoized_key(self, key: str):
+        try:
+            del self.__dict__["_memoized"][key]
+            return True
+        except KeyError:
+            return False
 
     @staticmethod
     def from_dict(my_dict: dict, label: str | None = None) -> NavigableDict:

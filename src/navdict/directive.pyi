@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from importlib.metadata import EntryPoint
 from typing import Callable
 
-
 @dataclass
 class Directive:
     ep: EntryPoint

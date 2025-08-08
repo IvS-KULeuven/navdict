@@ -48,13 +48,16 @@ expression:
 
 The value is a string matching `r"^([a-zA-Z]\w+)[\/]{2}(.*)$"` where:
 
-- group 1 is the directive and 
-- group 2 is the value that is passed into the function that is associated 
-  with the directive.
+- group 1 is the directive key and 
+- group 2 is the directive value that is passed into the function that is 
+  associated with the directive.
 
 For example, the value 'yaml//config.yaml' will match and group 1 is 'yaml' 
 and group 2 is 'config.yaml'.
 
+The function `unravel_directive(...) -> tuple[str, str]` parses the 
+directive and returns the two groups as a tuple. This happens under the hood 
+and should not bother you unless you are a navdict developer 🧐
 
 ## Default directives
 
@@ -65,6 +68,7 @@ The `navdict` project has defined the following directives:
 * `csv//`: load the CSV file and return a numpy array
 * `yaml//`: load the YAML file and return a dictionary
 * `int-enum//`: dynamically create the enumeration and return the Enum object
+* `env//`: returns the value of the environment variable or None
 
 ## Filenames
 
@@ -84,7 +88,8 @@ If you have special needs to handle directives in your YAML files, you can
 implement your own directive as a plugin. What you need is a unique name for 
 the directive and a function to handle and process the data.
 
-The builtin directives `yaml//` and `csv//` are implemented as a plugin and 
+The builtin directives `yaml//`, `csv//` and `env//` are implemented as a plugin 
+and 
 can serve as an example for your directive plugin.
 
 In the `pyproject.toml` file of your project, you should add an entrypoint 
@@ -94,6 +99,7 @@ for your directive plugin. As an example, taken from the navdict project:
 [project.entry-points."navdict.directive"]
 yaml = 'navdict.directives:load_yaml'
 csv = 'navdict.directives:load_csv'
+env = 'navdict.directives:env_var'
 ```
 
 The functions that you define to handle the directive shall have the 
