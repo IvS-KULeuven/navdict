@@ -8,7 +8,6 @@ __all__ = [
 ]
 
 import re
-from dataclasses import dataclass
 from importlib.metadata import EntryPoint
 from importlib.metadata import entry_points
 from typing import Callable
