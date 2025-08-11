@@ -35,6 +35,7 @@ __all__ = [
 import csv
 import datetime
 import importlib
+import itertools
 import logging
 import textwrap
 import warnings
@@ -114,13 +115,25 @@ def get_resource_location(parent_location: Path | None, in_dir: str | None) -> P
     return location
 
 
-def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs):
-    """Find and return the content of a CSV file."""
+def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs) -> list[list[str]]:
+    """
+    Find and return the content of a CSV file.
+
+    If the `resource_name` argument starts with the directive (`csv//`), it will be split off automatically.
+    The `kwargs` dictionary can contain the key `header_rows` which indicates the number of header rows to
+    be skipped when processing the file.
+
+    Returns:
+        A list of the split lines, i.e. a list of lists of strings.
+    """
 
     # logger.debug(f"{resource_name=}, {parent_location=}")
 
     if resource_name.startswith("csv//"):
         resource_name = resource_name[5:]
+
+    if not resource_name:
+        raise ValueError(f"Resource name should not be empty, but contain a valid filename.")
 
     parts = resource_name.rsplit("/", 1)
     in_dir, fn = parts if len(parts) > 1 else (None, parts[0])  # use a tuple here to make Mypy happy
@@ -132,15 +145,26 @@ def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs):
 
     csv_location = get_resource_location(parent_location, in_dir)
 
+    def filter_lines(file_obj, n_skip):
+        """
+        Generator that filters out comment lines and skips header lines.
+        The standard library csv module cannot handle this functionality.
+        """
+
+        for line in itertools.islice(file_obj, n_skip, None):
+            if not line.strip().startswith("#"):
+                yield line
+
     try:
         with open(csv_location / fn, "r", encoding="utf-8") as file:
-            csv_reader = csv.reader(file)
+            filtered_lines = filter_lines(file, n_header_rows)
+            csv_reader = csv.reader(filtered_lines)
             data = list(csv_reader)
     except FileNotFoundError:
         logger.error(f"Couldn't load resource '{resource_name}', file not found", exc_info=True)
         raise
 
-    return data[:n_header_rows], data[n_header_rows:]
+    return data
 
 
 def load_int_enum(enum_name: str, enum_content) -> IntEnum:
@@ -187,7 +211,7 @@ def load_int_enum(enum_name: str, enum_content) -> IntEnum:
 def load_yaml(resource_name: str, parent_location: Path | None = None, *args, **kwargs) -> NavigableDict:
     """Find and return the content of a YAML file."""
 
-    # logger.debug(f"{resource_name=}, {parent=}")
+    # logger.debug(f"{resource_name=}, {parent_location=}")
 
     if resource_name.startswith("yaml//"):
         resource_name = resource_name[6:]
@@ -281,9 +305,11 @@ class NavigableDict(dict):
             else:
                 setattr(self, key, head.__getitem__(key))
 
-    @property
-    def label(self) -> str | None:
-        return self._label
+    def get_label(self) -> str | None:
+        return self.__dict__["_label"]
+
+    def set_label(self, value: str):
+        self.__dict__["_label"] = value
 
     def add(self, key: str, value: Any):
         """Set a value for the given key.
@@ -673,6 +699,8 @@ class NavigableDict(dict):
         Raises:
             ValueError: when no filename is given.
         """
+
+        # logger.debug(f"{filename=}")
 
         if not filename:
             raise ValueError("Invalid argument to function: No filename or None given.")
