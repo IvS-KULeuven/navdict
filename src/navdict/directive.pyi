@@ -1,10 +1,11 @@
-from dataclasses import dataclass
 from importlib.metadata import EntryPoint
 from typing import Callable
 
-@dataclass
 class Directive:
-    ep: EntryPoint
+    def __init__(self, ep: EntryPoint | None = None, *, name: str | None = None, func: Callable | None = None):
+        self.ep = None
+        self.directive_func = None
+        self.directive_name = None
 
     @property
     def name(self) -> str: ...
