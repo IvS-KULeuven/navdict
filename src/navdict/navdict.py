@@ -308,7 +308,7 @@ class NavigableDict(dict):
                 value = NavigableDict(head.__getitem__(key), _filename=_filename)
                 setattr(self, key, value)
             else:
-                setattr(self, key, head.__getitem__(key))
+                setattr(self, key, super().__getitem__(key))
 
     def get_label(self) -> str | None:
         return self.__dict__["_label"]
