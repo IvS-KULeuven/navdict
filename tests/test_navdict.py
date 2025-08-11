@@ -146,10 +146,22 @@ def test_construction():
     setup = navdict()
 
     assert setup == {}
-    assert setup.label is None
+    assert setup.get_label() is None
 
     setup = navdict(label="Setup")
-    assert setup.label == "Setup"
+    assert setup.get_label() == "Setup"
+
+
+def test_label():
+    setup = navdict()
+
+    assert setup == {}
+    assert setup.get_label() is None
+
+    setup.set_label("Setup")
+
+    assert setup == {}
+    assert setup.get_label() == "Setup"
 
 
 def test_navigation():
@@ -362,30 +374,30 @@ YAML_STRING_LOADS_CSV_FILE = """
 root:
     sample: csv//data/sample.csv
     sample_kwargs:
-        header_rows: 2
+        header_rows: 1
 """
 
 
 def test_load_csv():
+    """
+    The sample.csv file will be read using the standard load_csv directive.
+
+    - one header row will be skipped (header_rows=1)
+    - the comment line will be filtered
+    - a list of list[str] will be returned
+
+    """
     with (
         create_text_file(HERE / "load_csv.yaml", YAML_STRING_LOADS_CSV_FILE) as fn,
         create_test_csv_file(HERE / "data/sample.csv"),
     ):
         data = navdict.from_yaml_file(fn)
 
-        header, csv_data = data.root.sample
-
-        assert len(header) == 2
-        assert len(header[0]) == 9
-        assert isinstance(header, list)
-        assert isinstance(header[0], list)
+        csv_data = data.root.sample
 
         assert len(csv_data[0]) == 9
         assert isinstance(csv_data, list)
         assert isinstance(csv_data[0], list)
-
-        assert header[0][3] == "department"
-        assert header[1][0] == "# a comment line"
 
         assert csv_data[0][0] == "1001"
         assert csv_data[0][8] == "john.smith@company.com"

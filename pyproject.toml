@@ -1,6 +1,6 @@
 [project]
 name = "navdict"
-version = "0.5.4"
+version = "0.5.5"
 description = "A navigable dictionary with dot notation access and automatic file loading"
 readme = "README.md"
 authors = [
@@ -57,9 +57,11 @@ pythonpath = [
 testpaths = [
     "tests",
 ]
-addopts = "-rA --cov --cov-branch --cov-report html"
+addopts = "-ra --cov --cov-branch --cov-report html"
+log_capture = true
 log_cli = true
 log_cli_level = "DEBUG"
+log_cli_format = "[%(asctime)s] %(threadName)-12s %(levelname)-8s %(name)-12s %(lineno)5d:%(funcName)-15s:%(module)-15s %(message)s"
 filterwarnings = [
     "ignore::DeprecationWarning"
 ]
