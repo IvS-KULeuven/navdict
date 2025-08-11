@@ -37,6 +37,7 @@ import datetime
 import importlib
 import itertools
 import logging
+import os
 import textwrap
 import warnings
 from enum import IntEnum
@@ -86,8 +87,12 @@ def get_resource_location(parent_location: Path | None, in_dir: str | None) -> P
     1. the parent location is not None.
        In this case the resource location will be relative to the parent's location.
     2. the parent location is None.
-       In this case the resource location is taken to be relative to the current working directory '.'.
-    3. when both arguments are None, the resource location will be the current working directory.
+       In this case the resource location is taken to be relative to the current working directory '.'
+       unless the environment variable NAVDICT_DEFAULT_RESOURCE_LOCATION is provided in which case
+       it is taken from that variable.
+    3. when both arguments are None, the resource location will be the current working directory '.'
+       unless the environment variable NAVDICT_DEFAULT_RESOURCE_LOCATION is provided in which case
+       it is taken from that variable.
 
     Args:
         parent_location: the location of the parent navdict, or None
@@ -102,13 +107,13 @@ def get_resource_location(parent_location: Path | None, in_dir: str | None) -> P
         case (_, str()) if Path(in_dir).is_absolute():
             location = Path(in_dir)
         case (None, str()):
-            location = Path(".") / in_dir
+            location = Path(os.getenv("NAVDICT_DEFAULT_RESOURCE_LOCATION", ".")) / in_dir
         case (Path(), str()):
             location = parent_location / in_dir
         case (Path(), None):
             location = parent_location
         case _:
-            location = Path(".")
+            location = Path(os.getenv("NAVDICT_DEFAULT_RESOURCE_LOCATION", "."))
 
     # logger.debug(f"{location=}, {fn=}")
 
