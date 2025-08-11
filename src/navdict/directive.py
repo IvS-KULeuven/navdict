@@ -4,6 +4,7 @@ __all__ = [
     "is_directive",
     "load_directive_plugins",
     "unravel_directive",
+    "register_directive",
 ]
 
 import re
@@ -11,25 +12,46 @@ from dataclasses import dataclass
 from importlib.metadata import EntryPoint
 from importlib.metadata import entry_points
 from typing import Callable
+from typing import overload
 
 DIRECTIVE_PATTERN = re.compile(r"^([a-zA-Z]\w+)/{2}(.*)$")
 
 
-@dataclass
 class Directive:
-    ep: EntryPoint
+    @overload
+    def __init__(self, ep: EntryPoint): ...
+
+    @overload
+    def __init__(self, *, name: str, func: Callable): ...
+
+    def __init__(self, ep: EntryPoint | None = None, *, name: str | None = None, func: Callable | None = None):
+        self.ep: EntryPoint | None = None
+        self.directive_name: str | None = None
+        self.directive_func: Callable | None = None
+
+        if ep is not None:
+            self.ep = ep
+        elif name is not None and func is not None:
+            self.directive_name = name
+            self.directive_func = func
+        else:
+            raise ValueError("Must provide either 'ep' or both 'name' and 'func'")
 
     @property
     def name(self) -> str:
-        return self.ep.name
+        return self.ep.name if self.ep else self.directive_name
 
     @property
     def func(self) -> Callable:
-        return self.ep.load()
+        return self.ep.load() if self.ep else self.directive_func
 
 
 # Keep a record of all navdict directive plugins
 _directive_plugins: dict[str, Directive] = {}
+
+
+def register_directive(name: str, func: Callable):
+    _directive_plugins[name] = Directive(name=name, func=func)
 
 
 def load_directive_plugins():

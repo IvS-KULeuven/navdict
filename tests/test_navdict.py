@@ -10,6 +10,7 @@ from navdict import navdict
 from navdict.directive import Directive
 from navdict.directive import get_directive_plugin
 from navdict.directive import is_directive
+from navdict.directive import register_directive
 from navdict.navdict import get_resource_location
 
 HERE = Path(__file__).parent
@@ -401,6 +402,31 @@ def test_load_csv():
 
         assert csv_data[0][0] == "1001"
         assert csv_data[0][8] == "john.smith@company.com"
+
+
+def test_directive_registration():
+    def inspect_directive(value, parent_location, *args, **kwargs) -> dict:
+        return dict(value=value, parent_location=parent_location, args=args, kwargs=kwargs)
+
+    # The following should overwrite the default `csv//` directive
+    register_directive("csv", inspect_directive)
+
+    with (
+        create_text_file(HERE / "load_csv.yaml", YAML_STRING_LOADS_CSV_FILE) as fn,
+        create_test_csv_file(HERE / "data/sample.csv"),
+    ):
+        data = navdict.from_yaml_file(fn)
+
+        csv_data = data.root.sample
+
+        assert isinstance(csv_data, dict)
+        assert "value" in csv_data
+        assert csv_data["value"] == "data/sample.csv"
+        assert csv_data["parent_location"] == HERE
+
+        assert "kwargs" in csv_data
+        assert "header_rows" in csv_data["kwargs"]
+        assert csv_data["kwargs"]["header_rows"] == 1
 
 
 YAML_STRING_WITH_ENV_VAR = """
