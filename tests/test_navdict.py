@@ -431,7 +431,6 @@ def test_memoized_keys():
 
 
 def test_non_string_keys():
-
     x = navdict({"A": {1: "one", 2: "two", (3,): "three-tuple"}})
 
     assert x.A[1] == "one"
@@ -440,7 +439,6 @@ def test_non_string_keys():
 
 
 def test_invalid_yaml():
-
     # This would normally raise a ScannerError from the ruamel.yaml package
     #  -  ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
 
