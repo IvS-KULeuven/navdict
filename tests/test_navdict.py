@@ -221,6 +221,10 @@ def test_to_yaml_file():
     """
 
     setup = navdict.from_yaml_string(YAML_STRING_SIMPLE)
+
+    with pytest.raises(ValueError, match="No filename given or known, can not save navdict."):
+        setup.to_yaml_file()
+
     setup.to_yaml_file("simple.yaml")
 
     setup = navdict.from_yaml_string(YAML_STRING_WITH_CLASS)

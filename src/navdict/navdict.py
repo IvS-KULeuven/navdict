@@ -705,11 +705,8 @@ class NavigableDict(dict):
             lose proper formatting and/or comments.
 
         """
-        if not filename:
-            try:
-                filename = self.get_private_attribute("_filename")
-            except KeyError:
-                raise ValueError("No filename given or known, can not save navdict.")
+        if filename is None and self.get_private_attribute("_filename") is None:
+            raise ValueError("No filename given or known, can not save navdict.")
 
         if header is None:
             header = textwrap.dedent(
