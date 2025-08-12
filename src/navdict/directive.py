@@ -7,6 +7,7 @@ __all__ = [
     "register_directive",
 ]
 
+import logging
 import re
 from importlib.metadata import EntryPoint
 from importlib.metadata import entry_points
@@ -14,6 +15,8 @@ from typing import Callable
 from typing import overload
 
 DIRECTIVE_PATTERN = re.compile(r"^([a-zA-Z]\w+)/{2}(.*)$")
+
+logger = logging.getLogger("navdict")
 
 
 class Directive:
@@ -60,7 +63,7 @@ def load_directive_plugins():
     global _directive_plugins
 
     eps = entry_points()
-    print(sorted(eps.groups))
+    # logger.debug(f"entrypoint groups: {sorted(eps.groups)}")
     eps = eps.select(group="navdict.directive")
 
     for ep in eps:
