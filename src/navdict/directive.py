@@ -18,6 +18,7 @@ DIRECTIVE_PATTERN = re.compile(r"^([a-zA-Z]\w+)/{2}(.*)$")
 
 logger = logging.getLogger("navdict")
 
+
 class Directive:
     @overload
     def __init__(self, ep: EntryPoint): ...
