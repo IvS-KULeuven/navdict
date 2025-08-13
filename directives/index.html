@@ -726,7 +726,7 @@ and should not bother you unless you are a navdict developer 🧐</p>
 <ul>
 <li><code>class//</code>: instantiate the class and return the object</li>
 <li><code>factory//</code>: instantiates a factory and executes its <code>create()</code> method</li>
-<li><code>csv//</code>: load the CSV file and return a numpy array</li>
+<li><code>csv//</code>: load the CSV file and return a list of lists of strings</li>
 <li><code>yaml//</code>: load the YAML file and return a dictionary</li>
 <li><code>int-enum//</code>: dynamically create the enumeration and return the Enum object</li>
 <li><code>env//</code>: returns the value of the environment variable or None</li>
@@ -740,7 +740,12 @@ function. A relative filename is interpreted as follows:</p>
   attribute, the value of the directive is interpreted relative to the 
   location of the parent.</li>
 <li>when the parent doesn't have a <code>_filename</code> attribute or if it is <code>None</code>, 
-  the directive value is relative to the current working directory.</li>
+  then,<ul>
+<li>if the <code>NAVDICT_DEFAULT_RESOURCE_LOCATION</code> is defined, that location is 
+  used, otherwise</li>
+<li>the directive value is relative to the current working directory.</li>
+</ul>
+</li>
 </ul>
 <h2 id="custom-directives">Custom directives<a class="headerlink" href="#custom-directives" title="Permanent link">&para;</a></h2>
 <p>If you have special needs to handle directives in your YAML files, you can 
