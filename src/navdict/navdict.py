@@ -379,19 +379,6 @@ class NavigableDict(dict):
         except KeyError:
             pass
 
-    # This function is called when the attribute is not found in the hierarchy.
-    # So, what do we do? We check if the key that was provided is an alias for
-    # an existing key. The alias mapping is a function that is provided as a
-    # hook, see `set_alias_hook()`.
-    def __getattr__(self, key):
-        # logger.info(f"Called __getattr__({key}) ...")
-
-        try:
-            alias = self._alias_hook(key)
-            return self.__dict__[alias]
-        except NotImplementedError:
-            raise AttributeError(f"{type(self).__name__!r} object has no attribute {key!r}")
-
     @staticmethod
     def _alias_hook(key: str) -> str:
         raise NotImplementedError
@@ -420,7 +407,11 @@ class NavigableDict(dict):
         try:
             value = object.__getattribute__(self, key)
         except AttributeError:
-            raise  # this will call self.__getattr__(key)
+            try:
+                alias = self._alias_hook(key)
+                value = object.__getattribute__(self, alias)
+            except NotImplementedError:
+                raise AttributeError(f"{type(self).__name__!r} object has no attribute {key!r}")
 
         if key.startswith("__"):  # small optimization
             return value
