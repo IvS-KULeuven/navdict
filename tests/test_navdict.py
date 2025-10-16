@@ -486,3 +486,60 @@ def test_invalid_yaml():
 
     with pytest.raises(IOError):
         _ = navdict.from_yaml_file(__file__)
+
+
+def test_alias_hook():
+    x = navdict({"letters": {"a": "A", "b": "B", "c": "C"}, "numbers": [1, 2, 3, 4, 5]})
+
+    def greek(letter: str):
+        greek_to_latin = {"alpha": "a", "beta": "b", "gamma": "c"}
+        return greek_to_latin[letter]
+
+    assert x.letters.a == "A"
+    assert x.numbers[2] == 3
+
+    with pytest.raises(AttributeError):
+        _ = x.letters.alpha
+
+    with pytest.raises(KeyError):
+        _ = x.letters["alpha"]
+
+    x.letters.set_alias_hook(greek)
+
+    assert x.letters.alpha == "A"
+    assert x.letters["alpha"] == "A"
+
+    assert x.numbers[2] == 3
+
+def test_alias_hook_from_yaml_string():
+
+    cams = """
+    House:
+        Cameras:
+            cam_1:
+                location: front door
+                type: XYZ-A123
+            cam_2:
+                location: front garage
+                type: XYZ-B123
+    """
+
+    iot = navdict.from_yaml_string(cams)
+
+    assert iot.House.Cameras.cam_1.type == "XYZ-A123"
+    assert iot.House.Cameras.cam_2.type == "XYZ-B123"
+
+    def abbrev(name: str) -> str:
+        aliases = {
+            "front_door": "cam_1",
+            "front_garage": "cam_2"
+        }
+        return aliases[name]
+
+    iot.House.Cameras.set_alias_hook(abbrev)
+
+    assert iot.House.Cameras.cam_1.type == "XYZ-A123"
+    assert iot.House.Cameras.cam_2.type == "XYZ-B123"
+
+    assert iot.House.Cameras.front_door.type == "XYZ-A123"
+    assert iot.House.Cameras.front_garage.type == "XYZ-B123"
