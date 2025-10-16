@@ -90,4 +90,5 @@ nav:
     - navdict:
         - index.md
         - directives.md
+        - aliases.md
     - roadmap.md

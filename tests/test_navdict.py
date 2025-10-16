@@ -510,3 +510,36 @@ def test_alias_hook():
     assert x.letters["alpha"] == "A"
 
     assert x.numbers[2] == 3
+
+def test_alias_hook_from_yaml_string():
+
+    cams = """
+    House:
+        Cameras:
+            cam_1:
+                location: front door
+                type: XYZ-A123
+            cam_2:
+                location: front garage
+                type: XYZ-B123
+    """
+
+    iot = navdict.from_yaml_string(cams)
+
+    assert iot.House.Cameras.cam_1.type == "XYZ-A123"
+    assert iot.House.Cameras.cam_2.type == "XYZ-B123"
+
+    def abbrev(name: str) -> str:
+        aliases = {
+            "front_door": "cam_1",
+            "front_garage": "cam_2"
+        }
+        return aliases[name]
+
+    iot.House.Cameras.set_alias_hook(abbrev)
+
+    assert iot.House.Cameras.cam_1.type == "XYZ-A123"
+    assert iot.House.Cameras.cam_2.type == "XYZ-B123"
+
+    assert iot.House.Cameras.front_door.type == "XYZ-A123"
+    assert iot.House.Cameras.front_garage.type == "XYZ-B123"
