@@ -43,6 +43,7 @@ import warnings
 from enum import IntEnum
 from pathlib import Path
 from typing import Any
+from typing import Callable
 
 from rich.text import Text
 from rich.tree import Tree
@@ -254,6 +255,24 @@ def load_yaml(resource_name: str, parent_location: Path | None = None, *args, **
 
 
 def _get_attribute(self, name, default):
+    """
+    Safely retrieve an attribute from the object, returning a default if not found.
+
+    This method uses object.__getattribute__() to bypass any custom __getattr__
+    or __getattribute__ implementations on the class, accessing attributes directly
+    from the object's internal dictionary.
+
+    Args:
+        name (str): The name of the attribute to retrieve.
+        default: The value to return if the attribute does not exist.
+
+    Returns:
+        The attribute value if it exists, otherwise the default value.
+
+    Note:
+        This is typically used internally to avoid infinite recursion when
+        implementing custom attribute access methods.
+    """
     try:
         attr = object.__getattribute__(self, name)
     except AttributeError:
@@ -294,6 +313,14 @@ class NavigableDict(dict):
         self.__dict__["_memoized"] = {}
         self.__dict__["_label"] = label
         self.__dict__["_filename"] = Path(_filename) if _filename is not None else None
+
+        # TODO:
+        #    if _filename was not given as an argument, we might want to check if the `head` has a `_filename` and do
+        #    something like:
+        #
+        #    if _filename is None and isinstance(head, navdict):
+        #        _filename = head.__dict__["_filename"]
+        #        self.__dict__["_filename"] = _filename
 
         # By agreement, we only want the keys to be set as attributes if all keys are strings.
         # That way we enforce that always all keys are navigable, or none.
@@ -352,6 +379,34 @@ class NavigableDict(dict):
         except KeyError:
             pass
 
+    # This function is called when the attribute is not found in the hierarchy.
+    # So, what do we do? We check if the key that was provided is an alias for
+    # an existing key. The alias mapping is a function that is provided as a
+    # hook, see `set_alias_hook()`.
+    def __getattr__(self, key):
+        # logger.info(f"Called __getattr__({key}) ...")
+
+        try:
+            alias = self._alias_hook(key)
+            return self.__dict__[alias]
+        except NotImplementedError:
+            raise AttributeError(f"{type(self).__name__!r} object has no attribute {key!r}")
+
+    @staticmethod
+    def _alias_hook(key: str) -> str:
+        raise NotImplementedError
+
+    def set_alias_hook(self, hook: Callable[[str], str]):
+        """
+        Sets an alias (hook) function that maps the given argument, an attribute
+        or a dict key, to a valid attribute or key.
+
+        The `hook` function accepts a string argument and return a string for
+        which the argument is an alias. The returned argument is expected to
+        be a valid attribute or key for this navdict.
+        """
+        setattr(self, "_alias_hook", hook)
+
     # This method is called:
     #   - for *every* single attribute access on an object using dot notation.
     #   - when using the `getattr(obj, 'name') function
@@ -361,8 +416,12 @@ class NavigableDict(dict):
     # Note: `__getattr__` is only called when an attribute cannot be found
     #       through normal means.
     def __getattribute__(self, key):
-        # logger.info(f"called __getattribute__({key})")
-        value = object.__getattribute__(self, key)
+        # logger.info(f"called __getattribute__({key}) ...")
+        try:
+            value = object.__getattribute__(self, key)
+        except AttributeError:
+            raise  # this will call self.__getattr__(key)
+
         if key.startswith("__"):  # small optimization
             return value
         # We can not directly call the `_handle_directive` function here due to infinite recursion
@@ -394,7 +453,15 @@ class NavigableDict(dict):
     #     to iterate using __getitem__ with successive integer indices starting from 0.
     def __getitem__(self, key):
         # logger.info(f"called __getitem__({self!r}, {key})")
-        value = super().__getitem__(key)
+        try:
+            value = super().__getitem__(key)
+        except KeyError:
+            try:
+                alias = self._alias_hook(key)
+                value = super().__getitem__(alias)
+            except NotImplementedError:
+                raise KeyError(f"{type(self).__name__!r} has no key {key!r}")
+
         if isinstance(key, str) and key.startswith("__"):
             return value
         # no danger for recursion here, so we can directly call the function
@@ -538,7 +605,7 @@ class NavigableDict(dict):
         except KeyError:
             return None
 
-    def has_private_attribute(self, key):
+    def has_private_attribute(self, key) -> bool:
         """
         Check if the given key is defined as a private attribute.
 

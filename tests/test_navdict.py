@@ -486,3 +486,27 @@ def test_invalid_yaml():
 
     with pytest.raises(IOError):
         _ = navdict.from_yaml_file(__file__)
+
+
+def test_alias_hook():
+    x = navdict({"letters": {"a": "A", "b": "B", "c": "C"}, "numbers": [1, 2, 3, 4, 5]})
+
+    def greek(letter: str):
+        greek_to_latin = {"alpha": "a", "beta": "b", "gamma": "c"}
+        return greek_to_latin[letter]
+
+    assert x.letters.a == "A"
+    assert x.numbers[2] == 3
+
+    with pytest.raises(AttributeError):
+        _ = x.letters.alpha
+
+    with pytest.raises(KeyError):
+        _ = x.letters["alpha"]
+
+    x.letters.set_alias_hook(greek)
+
+    assert x.letters.alpha == "A"
+    assert x.letters["alpha"] == "A"
+
+    assert x.numbers[2] == 3
