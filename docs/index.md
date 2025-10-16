@@ -50,7 +50,7 @@ with:
 
 * `class//`: instantiate the class and return the object
 * `factory//`: instantiates a factory and executes its `create()` method
-* `csv//`: load the CSV file and return a numpy array
+* `csv//`: load the CSV file and return a list of lists of strings
 * `yaml//`: load the YAML file and return a dictionary
 * `int-enum//`: dynamically create the enumeration and return the Enum object
 

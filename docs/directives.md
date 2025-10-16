@@ -65,7 +65,7 @@ The `navdict` project has defined the following directives:
 
 * `class//`: instantiate the class and return the object
 * `factory//`: instantiates a factory and executes its `create()` method
-* `csv//`: load the CSV file and return a numpy array
+* `csv//`: load the CSV file and return a list of lists of strings
 * `yaml//`: load the YAML file and return a dictionary
 * `int-enum//`: dynamically create the enumeration and return the Enum object
 * `env//`: returns the value of the environment variable or None
@@ -80,7 +80,10 @@ function. A relative filename is interpreted as follows:
   attribute, the value of the directive is interpreted relative to the 
   location of the parent.
 - when the parent doesn't have a `_filename` attribute or if it is `None`, 
-  the directive value is relative to the current working directory.
+  then,
+    - if the `NAVDICT_DEFAULT_RESOURCE_LOCATION` is defined, that location is 
+      used, otherwise
+    - the directive value is relative to the current working directory.
 
 ## Custom directives
 
