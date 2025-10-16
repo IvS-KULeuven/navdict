@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.10"
 
 [[package]]
@@ -420,7 +420,7 @@ wheels = [
 
 [[package]]
 name = "navdict"
-version = "0.5.9"
+version = "0.6.0"
 source = { editable = "." }
 dependencies = [
     { name = "rich" },
