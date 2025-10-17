@@ -392,7 +392,10 @@ class NavigableDict(dict):
         which the argument is an alias. The returned argument is expected to
         be a valid attribute or key for this navdict.
         """
-        setattr(self, "_alias_hook", hook)
+        # The setattr() function will add the attribute to the dictionary
+        # which is not what we want.
+        # setattr(self, "_alias_hook", hook)
+        self.__dict__["_alias_hook"] = hook
 
     # This method is called:
     #   - for *every* single attribute access on an object using dot notation.
@@ -411,6 +414,9 @@ class NavigableDict(dict):
                 alias = self._alias_hook(key)
                 value = object.__getattribute__(self, alias)
             except NotImplementedError:
+                raise AttributeError(f"{type(self).__name__!r} object has no attribute {key!r}")
+            except Exception as exc:
+                logger.error(f"Alias hook function raised {type(exc).__name__!r}: {exc}")
                 raise AttributeError(f"{type(self).__name__!r} object has no attribute {key!r}")
 
         if key.startswith("__"):  # small optimization
@@ -452,6 +458,10 @@ class NavigableDict(dict):
                 value = super().__getitem__(alias)
             except NotImplementedError:
                 raise KeyError(f"{type(self).__name__!r} has no key {key!r}")
+            except Exception as exc:
+                logger.error(f"Alias hook function raised {type(exc).__name__!r}: {exc}")
+                raise KeyError(f"{type(self).__name__!r} has no key {key!r}")
+
 
         if isinstance(key, str) and key.startswith("__"):
             return value
