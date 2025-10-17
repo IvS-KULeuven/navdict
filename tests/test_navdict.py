@@ -543,3 +543,5 @@ def test_alias_hook_from_yaml_string():
 
     assert iot.House.Cameras.front_door.type == "XYZ-A123"
     assert iot.House.Cameras.front_garage.type == "XYZ-B123"
+
+    assert "_alias_hook" not in iot.House.Cameras

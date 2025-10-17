@@ -392,7 +392,10 @@ class NavigableDict(dict):
         which the argument is an alias. The returned argument is expected to
         be a valid attribute or key for this navdict.
         """
-        setattr(self, "_alias_hook", hook)
+        # The setattr() function will add the attribute to the dictionary
+        # which is not what we want.
+        # setattr(self, "_alias_hook", hook)
+        self.__dict__["_alias_hook"] = hook
 
     # This method is called:
     #   - for *every* single attribute access on an object using dot notation.
