@@ -511,20 +511,21 @@ def test_alias_hook():
 
     assert x.numbers[2] == 3
 
+YAML_STRING_HOUSE = """
+House:
+    Cameras:
+        cam_1:
+            location: front door
+            type: XYZ-A123
+        cam_2:
+            location: front garage
+            type: XYZ-B123
+"""
+
+
 def test_alias_hook_from_yaml_string():
 
-    cams = """
-    House:
-        Cameras:
-            cam_1:
-                location: front door
-                type: XYZ-A123
-            cam_2:
-                location: front garage
-                type: XYZ-B123
-    """
-
-    iot = navdict.from_yaml_string(cams)
+    iot = navdict.from_yaml_string(YAML_STRING_HOUSE)
 
     assert iot.House.Cameras.cam_1.type == "XYZ-A123"
     assert iot.House.Cameras.cam_2.type == "XYZ-B123"
@@ -545,3 +546,28 @@ def test_alias_hook_from_yaml_string():
     assert iot.House.Cameras.front_garage.type == "XYZ-B123"
 
     assert "_alias_hook" not in iot.House.Cameras
+
+def test_rich_print_with_alias_hook():
+
+    iot = navdict.from_yaml_string(YAML_STRING_HOUSE)
+
+    def abbrev(name: str) -> str:
+        aliases = {
+            "front_door": "cam_1",
+            "front_garage": "cam_2"
+        }
+        return aliases[name]
+
+    iot.House.Cameras.set_alias_hook(abbrev)
+
+    with pytest.raises(AttributeError, match="'NavigableDict' object has no attribute 'no_such_camera'"):
+        # The following line will cause a KeyError in the abbrev()` hook
+        # Any Exception from the alias hook should not propagate to the top
+        # but should raise an AttributeError as expected.
+        _ = iot.House.Cameras.no_such_camera
+
+    with pytest.raises(KeyError, match="'NavigableDict' has no key 'no_such_camera'"):
+        # The following line will cause a KeyError in the abbrev()` hook
+        # Any Exception from the alias hook should not propagate to the top
+        # but should raise a KeyError as expected.
+        _ = iot.House.Cameras["no_such_camera"]

@@ -415,6 +415,9 @@ class NavigableDict(dict):
                 value = object.__getattribute__(self, alias)
             except NotImplementedError:
                 raise AttributeError(f"{type(self).__name__!r} object has no attribute {key!r}")
+            except Exception as exc:
+                logger.error(f"Alias hook function raised {type(exc).__name__!r}: {exc}")
+                raise AttributeError(f"{type(self).__name__!r} object has no attribute {key!r}")
 
         if key.startswith("__"):  # small optimization
             return value
@@ -455,6 +458,10 @@ class NavigableDict(dict):
                 value = super().__getitem__(alias)
             except NotImplementedError:
                 raise KeyError(f"{type(self).__name__!r} has no key {key!r}")
+            except Exception as exc:
+                logger.error(f"Alias hook function raised {type(exc).__name__!r}: {exc}")
+                raise KeyError(f"{type(self).__name__!r} has no key {key!r}")
+
 
         if isinstance(key, str) and key.startswith("__"):
             return value
