@@ -549,6 +549,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#environment-variables-in-the-csv-directive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Environment variables in the csv directive
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -678,6 +687,15 @@
   <a href="#custom-directives" class="md-nav__link">
     <span class="md-ellipsis">
       Custom directives
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables-in-the-csv-directive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Environment variables in the csv directive
     </span>
   </a>
   
@@ -819,6 +837,26 @@ something like this:</p>
 </code></pre></div>
 <p>This will pass <code>header_rows=2</code> as a keyword argument into the <code>load_csv()</code> 
 directive function.</p>
+<h2 id="environment-variables-in-the-csv-directive">Environment variables in the csv directive<a class="headerlink" href="#environment-variables-in-the-csv-directive" title="Permanent link">&para;</a></h2>
+<p>The <code>csv//</code> directive supports <code>ENV[VARNAME]</code> references anywhere in the 
+resource path. Each reference is replaced with the value of the 
+corresponding environment variable before the file is located, and the 
+result is then expanded for a leading <code>~</code> (user home directory). The 
+variable name may optionally be wrapped in single or double quotes — 
+<code>ENV[VARNAME]</code>, <code>ENV['VARNAME']</code> and <code>ENV["VARNAME"]</code> are all equivalent.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">setup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hk_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv//ENV[DATA_STORAGE]/hk_metrics_daq.csv</span>
+</code></pre></div>
+<p>If <code>DATA_STORAGE</code> is set to <code>~/data</code>, this resolves to 
+<code>~/data/hk_metrics_daq.csv</code>, i.e. <code>/home/&lt;user&gt;/data/hk_metrics_daq.csv</code>.</p>
+<p>If a referenced environment variable is not set, a <code>ValueError</code> is raised.</p>
+<p>This expansion is enabled by default. To disable it, set <code>expand_env: false</code> 
+in the <code>&lt;key&gt;_kwargs</code> entry:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">setup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hk_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv//ENV[DATA_STORAGE]/hk_metrics_daq.csv</span>
+<span class="w">    </span><span class="nt">hk_metrics_kwargs</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">expand_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div>
 
 
 
