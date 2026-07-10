@@ -148,3 +148,32 @@ setup:
 
 This will pass `header_rows=2` as a keyword argument into the `load_csv()` 
 directive function.
+
+## Environment variables in the csv directive
+
+The `csv//` directive supports `ENV[VARNAME]` references anywhere in the 
+resource path. Each reference is replaced with the value of the 
+corresponding environment variable before the file is located, and the 
+result is then expanded for a leading `~` (user home directory). The 
+variable name may optionally be wrapped in single or double quotes — 
+`ENV[VARNAME]`, `ENV['VARNAME']` and `ENV["VARNAME"]` are all equivalent.
+
+```yaml
+setup:
+    hk_metrics: csv//ENV[DATA_STORAGE]/hk_metrics_daq.csv
+```
+
+If `DATA_STORAGE` is set to `~/data`, this resolves to 
+`~/data/hk_metrics_daq.csv`, i.e. `/home/<user>/data/hk_metrics_daq.csv`.
+
+If a referenced environment variable is not set, a `ValueError` is raised.
+
+This expansion is enabled by default. To disable it, set `expand_env: false` 
+in the `<key>_kwargs` entry:
+
+```yaml
+setup:
+    hk_metrics: csv//ENV[DATA_STORAGE]/hk_metrics_daq.csv
+    hk_metrics_kwargs:
+        expand_env: false
+```
