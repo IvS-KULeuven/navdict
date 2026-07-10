@@ -38,6 +38,7 @@ import importlib
 import itertools
 import logging
 import os
+import re
 import textwrap
 import warnings
 from enum import IntEnum
@@ -121,13 +122,49 @@ def get_resource_location(parent_location: Path | None, in_dir: str | None) -> P
     return location
 
 
+ENV_VAR_PATTERN = re.compile(r"ENV\[\s*['\"]?(\w+)['\"]?\s*]")
+
+
+def expand_env_vars(value: str) -> str:
+    """
+    Expand `ENV[VARNAME]` references in `value` with the value of the corresponding environment
+    variable, then apply `~` (user) expansion to the result.
+
+    The variable name may optionally be wrapped in single or double quotes, i.e. `ENV[VARNAME]`,
+    `ENV['VARNAME']` and `ENV["VARNAME"]` are all equivalent.
+
+    Args:
+        value: a string that may contain zero or more `ENV[VARNAME]` references.
+
+    Returns:
+        The string with all `ENV[VARNAME]` references expanded and `~` expanded to the user's
+        home directory.
+
+    Raises:
+        ValueError: when a referenced environment variable is not set.
+    """
+
+    def _replace(match: re.Match) -> str:
+        var_name = match[1]
+        try:
+            return os.environ[var_name]
+        except KeyError:
+            raise ValueError(f"Environment variable '{var_name}' referenced in '{value}' is not set.") from None
+
+    return str(Path(ENV_VAR_PATTERN.sub(_replace, value)).expanduser())
+
+
 def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs) -> list[list[str]]:
     """
     Find and return the content of a CSV file.
 
     If the `resource_name` argument starts with the directive (`csv//`), it will be split off automatically.
-    The `kwargs` dictionary can contain the key `header_rows` which indicates the number of header rows to
-    be skipped when processing the file.
+    The `kwargs` dictionary can contain the following keys:
+
+    - `header_rows`: the number of header rows to skip when processing the file.
+    - `expand_env`: when `True` (the default), `ENV[VARNAME]` references in `resource_name` are expanded
+      with the value of the corresponding environment variable before the file is located. Set to `False`
+      to disable this expansion.
 
     Returns:
         A list of the split lines, i.e. a list of lists of strings.
@@ -140,6 +177,9 @@ def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs) 
 
     if not resource_name:
         raise ValueError(f"Resource name should not be empty, but contain a valid filename.")
+
+    if kwargs.get("expand_env", True):
+        resource_name = expand_env_vars(resource_name)
 
     parts = resource_name.rsplit("/", 1)
     in_dir, fn = parts if len(parts) > 1 else (None, parts[0])  # use a tuple here to make Mypy happy

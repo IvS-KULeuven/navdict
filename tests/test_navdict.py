@@ -11,6 +11,7 @@ from navdict.directive import Directive
 from navdict.directive import get_directive_plugin
 from navdict.directive import is_directive
 from navdict.directive import register_directive
+from navdict.navdict import expand_env_vars
 from navdict.navdict import get_resource_location
 
 HERE = Path(__file__).parent
@@ -402,6 +403,88 @@ def test_load_csv():
 
         assert csv_data[0][0] == "1001"
         assert csv_data[0][8] == "john.smith@company.com"
+
+
+def test_expand_env_vars():
+    os.environ["NAVDICT_TEST_VAR"] = "some/value"
+
+    assert expand_env_vars("prefix/ENV[NAVDICT_TEST_VAR]/suffix") == "prefix/some/value/suffix"
+    assert expand_env_vars("prefix/ENV['NAVDICT_TEST_VAR']/suffix") == "prefix/some/value/suffix"
+    assert expand_env_vars('prefix/ENV["NAVDICT_TEST_VAR"]/suffix') == "prefix/some/value/suffix"
+
+    os.environ["NAVDICT_TEST_HOME_VAR"] = "~"
+
+    assert expand_env_vars("ENV[NAVDICT_TEST_HOME_VAR]/data") == str(Path.home() / "data")
+
+    del os.environ["NAVDICT_TEST_VAR"]
+    del os.environ["NAVDICT_TEST_HOME_VAR"]
+
+    with pytest.raises(ValueError):
+        expand_env_vars("ENV[NAVDICT_TEST_VAR_NOT_SET]/data")
+
+
+YAML_STRING_LOADS_CSV_FILE_WITH_ENV_VAR = """
+root:
+    sample: csv//ENV[NAVDICT_TEST_DATA_DIR]/sample.csv
+    sample_kwargs:
+        header_rows: 1
+"""
+
+YAML_STRING_LOADS_CSV_FILE_WITH_ENV_VAR_DISABLED = """
+root:
+    sample: csv//ENV[NAVDICT_TEST_DATA_DIR]/sample.csv
+    sample_kwargs:
+        header_rows: 1
+        expand_env: false
+"""
+
+YAML_STRING_LOADS_CSV_FILE_WITH_MISSING_ENV_VAR = """
+root:
+    sample: csv//ENV[NAVDICT_TEST_VAR_NOT_SET]/sample.csv
+"""
+
+
+def test_load_csv_with_env_var():
+    os.environ["NAVDICT_TEST_DATA_DIR"] = str(HERE / "data")
+
+    try:
+        with (
+            create_text_file(HERE / "load_csv_env.yaml", YAML_STRING_LOADS_CSV_FILE_WITH_ENV_VAR) as fn,
+            create_test_csv_file(HERE / "data/sample.csv"),
+        ):
+            data = navdict.from_yaml_file(fn)
+
+            csv_data = data.root.sample
+
+            assert isinstance(csv_data, list)
+            assert csv_data[0][0] == "1001"
+            assert csv_data[0][8] == "john.smith@company.com"
+    finally:
+        del os.environ["NAVDICT_TEST_DATA_DIR"]
+
+
+def test_load_csv_env_var_expansion_disabled():
+    os.environ["NAVDICT_TEST_DATA_DIR"] = str(HERE / "data")
+
+    try:
+        with (
+            create_text_file(HERE / "load_csv_env_disabled.yaml", YAML_STRING_LOADS_CSV_FILE_WITH_ENV_VAR_DISABLED) as fn,
+            create_test_csv_file(HERE / "data/sample.csv"),
+        ):
+            data = navdict.from_yaml_file(fn)
+
+            with pytest.raises(FileNotFoundError):
+                _ = data.root.sample
+    finally:
+        del os.environ["NAVDICT_TEST_DATA_DIR"]
+
+
+def test_load_csv_missing_env_var():
+    with create_text_file(HERE / "load_csv_missing_env.yaml", YAML_STRING_LOADS_CSV_FILE_WITH_MISSING_ENV_VAR) as fn:
+        data = navdict.from_yaml_file(fn)
+
+        with pytest.raises(ValueError):
+            _ = data.root.sample
 
 
 def test_directive_registration():
