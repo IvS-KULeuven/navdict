@@ -45,4 +45,4 @@ def env_var(value: str, parent_location: Path | None, *args, **kwargs):
 
 
 # TODO:
-#   I can have 'panda' as an optional dependency and provide a pandas directive here.
+#   I can have 'pandas' as an optional dependency and provide a pandas directive here.

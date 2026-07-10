@@ -17,3 +17,6 @@ wheels/
 
 # Documentation
 /site/
+
+# macOS
+.DS_Store

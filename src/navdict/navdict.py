@@ -372,7 +372,7 @@ class NavigableDict(dict):
 
         for key, value in head.items():
             if isinstance(value, dict):
-                value = NavigableDict(head.__getitem__(key), _filename=_filename)
+                value = NavigableDict(head.__getitem__(key), _filename=_filename, label=key)
                 setattr(self, key, value)
             else:
                 setattr(self, key, super().__getitem__(key))
@@ -394,7 +394,7 @@ class NavigableDict(dict):
             value (Any): the value to assign to the key
         """
         if isinstance(value, dict) and not isinstance(value, NavigableDict):
-            value = NavigableDict(value)
+            value = NavigableDict(value, label=key)
         setattr(self, key, value)
 
     def clear(self) -> None:
@@ -411,7 +411,7 @@ class NavigableDict(dict):
     def __setattr__(self, key, value):
         # logger.info(f"called __setattr__({self!r}, {key}, {value})")
         if isinstance(value, dict) and not isinstance(value, NavigableDict):
-            value = NavigableDict(value)
+            value = NavigableDict(value, label=key)
         self.__dict__[key] = value
         super().__setitem__(key, value)
         try:
@@ -476,7 +476,7 @@ class NavigableDict(dict):
     def __setitem__(self, key, value):
         # logger.debug(f"called __setitem__({self!r}, {key}, {value})")
         if isinstance(value, dict) and not isinstance(value, NavigableDict):
-            value = NavigableDict(value)
+            value = NavigableDict(value, label=key)
         super().__setitem__(key, value)
         self.__dict__[key] = value
         try:

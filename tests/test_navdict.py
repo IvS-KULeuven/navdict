@@ -79,6 +79,13 @@ F_FEE:
                 value: 0
 """
 
+YAML_STRING_WITH_USER_DEFINED_FUNCTION = """
+telemetry:
+     dictionary: pandas//data/telemetry.csv
+     dictionary_kwargs:
+         separator: ;
+"""
+
 YAML_STRING_WITH_UNKNOWN_CLASS = """
 root:
     part_one:
@@ -262,6 +269,24 @@ def test_class_directive():
     obj = setup.root.with_kwarg.dev
     assert isinstance(obj, TakeOneKeywordArgument)
     assert str(obj) == "sim = True"
+
+
+def test_user_defined_function_directive():
+    setup = navdict.from_yaml_string(YAML_STRING_WITH_USER_DEFINED_FUNCTION)
+
+    # By default, the 'pandas' directive is not registered, so, the 'dictionary' value will be returned as is.
+    result = setup.telemetry.dictionary
+    assert result == "pandas//data/telemetry.csv"
+
+    # Now we register a simple 'pandas' directive for testing purposes.
+    def mock_pandas_directive(value: str, parent_location: Path | None, *args, **kwargs):
+        return f"Mocked pandas loading of '{value}' with args={args} and kwargs={kwargs}"
+
+    register_directive("pandas", mock_pandas_directive)
+
+    result = setup.telemetry.dictionary
+    print(f"{result=}")
+    assert result == "Mocked pandas loading of 'data/telemetry.csv' with args=() and kwargs={'separator': ';'}"
 
 
 def test_from_dict():
@@ -594,6 +619,7 @@ def test_alias_hook():
 
     assert x.numbers[2] == 3
 
+
 YAML_STRING_HOUSE = """
 House:
     Cameras:
@@ -607,17 +633,13 @@ House:
 
 
 def test_alias_hook_from_yaml_string():
-
     iot = navdict.from_yaml_string(YAML_STRING_HOUSE)
 
     assert iot.House.Cameras.cam_1.type == "XYZ-A123"
     assert iot.House.Cameras.cam_2.type == "XYZ-B123"
 
     def abbrev(name: str) -> str:
-        aliases = {
-            "front_door": "cam_1",
-            "front_garage": "cam_2"
-        }
+        aliases = {"front_door": "cam_1", "front_garage": "cam_2"}
         return aliases[name]
 
     iot.House.Cameras.set_alias_hook(abbrev)
@@ -630,15 +652,12 @@ def test_alias_hook_from_yaml_string():
 
     assert "_alias_hook" not in iot.House.Cameras
 
-def test_rich_print_with_alias_hook():
 
+def test_rich_print_with_alias_hook():
     iot = navdict.from_yaml_string(YAML_STRING_HOUSE)
 
     def abbrev(name: str) -> str:
-        aliases = {
-            "front_door": "cam_1",
-            "front_garage": "cam_2"
-        }
+        aliases = {"front_door": "cam_1", "front_garage": "cam_2"}
         return aliases[name]
 
     iot.House.Cameras.set_alias_hook(abbrev)
