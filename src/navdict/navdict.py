@@ -30,6 +30,7 @@ __all__ = [
     "NavDict",
     "NavigableDict",
     "get_resource_location",
+    "expand_env_vars",
 ]
 
 import csv
@@ -96,6 +97,9 @@ def get_resource_location(parent_location: Path | None, in_dir: str | None) -> P
        unless the environment variable NAVDICT_DEFAULT_RESOURCE_LOCATION is provided in which case
        it is taken from that variable.
 
+    In all cases, the returned path is expanded, i.e. `~` is expanded to the user's home directory,
+    and resolved, but not checked for existence.
+
     Args:
         parent_location: the location of the parent navdict, or None
         in_dir: a location extracted from the directive's value.
@@ -106,7 +110,7 @@ def get_resource_location(parent_location: Path | None, in_dir: str | None) -> P
     """
 
     match (parent_location, in_dir):
-        case (_, str()) if Path(in_dir).is_absolute():
+        case (_, str()) if in_dir.startswith("~") or Path(in_dir).is_absolute():
             location = Path(in_dir)
         case (None, str()):
             location = Path(os.getenv("NAVDICT_DEFAULT_RESOURCE_LOCATION", ".")) / in_dir
@@ -119,7 +123,7 @@ def get_resource_location(parent_location: Path | None, in_dir: str | None) -> P
 
     # logger.debug(f"{location=}, {fn=}")
 
-    return location
+    return location.expanduser()
 
 
 ENV_VAR_PATTERN = re.compile(r"ENV\[\s*['\"]?(\w+)['\"]?\s*]")
@@ -128,7 +132,7 @@ ENV_VAR_PATTERN = re.compile(r"ENV\[\s*['\"]?(\w+)['\"]?\s*]")
 def expand_env_vars(value: str) -> str:
     """
     Expand `ENV[VARNAME]` references in `value` with the value of the corresponding environment
-    variable, then apply `~` (user) expansion to the result.
+    variable.
 
     The variable name may optionally be wrapped in single or double quotes, i.e. `ENV[VARNAME]`,
     `ENV['VARNAME']` and `ENV["VARNAME"]` are all equivalent.
@@ -137,8 +141,7 @@ def expand_env_vars(value: str) -> str:
         value: a string that may contain zero or more `ENV[VARNAME]` references.
 
     Returns:
-        The string with all `ENV[VARNAME]` references expanded and `~` expanded to the user's
-        home directory.
+        The string with all `ENV[VARNAME]` references expanded.
 
     Raises:
         ValueError: when a referenced environment variable is not set.
@@ -151,7 +154,7 @@ def expand_env_vars(value: str) -> str:
         except KeyError:
             raise ValueError(f"Environment variable '{var_name}' referenced in '{value}' is not set.") from None
 
-    return str(Path(ENV_VAR_PATTERN.sub(_replace, value)).expanduser())
+    return ENV_VAR_PATTERN.sub(_replace, value)
 
 
 def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs) -> list[list[str]]:
@@ -176,7 +179,7 @@ def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs) 
         resource_name = resource_name[5:]
 
     if not resource_name:
-        raise ValueError(f"Resource name should not be empty, but contain a valid filename.")
+        raise ValueError("Resource name should not be empty, but contain a valid filename.")
 
     if kwargs.get("expand_env", True):
         resource_name = expand_env_vars(resource_name)
@@ -204,7 +207,7 @@ def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs) 
     try:
         with open(csv_location / fn, "r", encoding="utf-8") as file:
             filtered_lines = filter_lines(file, n_header_rows)
-            csv_reader = csv.reader(filtered_lines)
+            csv_reader = csv.reader(filtered_lines, delimiter=kwargs.get("delimiter", ","))
             data = list(csv_reader)
     except FileNotFoundError:
         logger.error(f"Couldn't load resource '{resource_name}', file not found", exc_info=True)
@@ -254,7 +257,7 @@ def load_int_enum(enum_name: str, enum_content) -> IntEnum:
     return IntEnum(enum_name, definition)
 
 
-def load_yaml(resource_name: str, parent_location: Path | None = None, *args, **kwargs) -> NavigableDict:
+def load_yaml(resource_name: str, parent_location: Path | None, *args, **kwargs) -> NavigableDict:
     """Find and return the content of a YAML file."""
 
     # logger.debug(f"{resource_name=}, {parent_location=}")
@@ -262,8 +265,13 @@ def load_yaml(resource_name: str, parent_location: Path | None = None, *args, **
     if resource_name.startswith("yaml//"):
         resource_name = resource_name[6:]
 
-    parts = resource_name.rsplit("/", 1)
+    if not resource_name:
+        raise ValueError("Resource name should not be empty, but contain a valid filename.")
 
+    if kwargs.get("expand_env", True):
+        resource_name = expand_env_vars(resource_name)
+
+    parts = resource_name.rsplit("/", 1)
     in_dir, fn = parts if len(parts) > 1 else (None, parts[0])  # use a tuple here to make Mypy happy
 
     yaml_location = get_resource_location(parent_location, in_dir)
@@ -501,7 +509,6 @@ class NavigableDict(dict):
             except Exception as exc:
                 logger.error(f"Alias hook function raised {type(exc).__name__!r}: {exc}")
                 raise KeyError(f"{type(self).__name__!r} has no key {key!r}")
-
 
         if isinstance(key, str) and key.startswith("__"):
             return value
@@ -823,7 +830,7 @@ class NavigableDict(dict):
         if not filename.is_file():
             raise ValueError(f"Invalid argument to function, filename does not exist: {filename!s}")
 
-        data = load_yaml(str(filename))
+        data = load_yaml(str(filename), parent_location=None)
 
         if data == {}:
             warnings.warn(f"Empty YAML file: {filename!s}")
