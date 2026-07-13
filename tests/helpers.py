@@ -117,6 +117,23 @@ def create_test_csv_file(filename: str | Path, create_folder: bool = False):
     return create_text_file(filename, CSV_TEST_DATA, create_folder)
 
 
+CSV_TEST_DATA_SEMICOLON = """\
+product_id;product_name;category;price;stock
+# a comment line
+101;Laptop;Electronics;999.99;15
+102;Mouse;Electronics;29.99;50
+103;Keyboard;Electronics;79.99;30
+104;Monitor;Electronics;299.99;20
+"""
+
+
+def create_test_csv_file_semicolon(filename: str | Path, create_folder: bool = False):
+    """
+    Creates a CSV file with semicolon delimiters for testing custom delimiters.
+    """
+    return create_text_file(filename, CSV_TEST_DATA_SEMICOLON, create_folder)
+
+
 # Test the helper functions
 
 

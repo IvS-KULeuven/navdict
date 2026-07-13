@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from helpers import create_test_csv_file
+from helpers import create_test_csv_file_semicolon
 from helpers import create_text_file
 from navdict import navdict
 from navdict.directive import Directive
@@ -40,7 +41,7 @@ class TakeOneKeywordArgument:
 YAML_STRING_SIMPLE = """
 Setup:
     site_id: KUL
-    
+
     gse:
         hexapod:
             id:    PUNA_01
@@ -147,8 +148,8 @@ def test_use_a_directive_plugin():
 def test_get_resource_location():
     assert get_resource_location(None, None) == Path(".")
     assert get_resource_location(None, "../data") == Path(".") / "../data"
-    assert get_resource_location(Path("~"), "data") == Path("~") / "data"
-    assert get_resource_location(Path("~"), None) == Path("~")
+    assert get_resource_location(Path("~/project/"), "data") == Path.home() / "project/data"
+    assert get_resource_location(Path("~"), None) == Path.home()
 
 
 def test_construction():
@@ -439,7 +440,9 @@ def test_expand_env_vars():
 
     os.environ["NAVDICT_TEST_HOME_VAR"] = "~"
 
-    assert expand_env_vars("ENV[NAVDICT_TEST_HOME_VAR]/data") == str(Path.home() / "data")
+    assert (
+        expand_env_vars("ENV[NAVDICT_TEST_HOME_VAR]/data") == "~/data"
+    )  # environment variable is expanded, but not the '~' character
 
     del os.environ["NAVDICT_TEST_VAR"]
     del os.environ["NAVDICT_TEST_HOME_VAR"]
@@ -493,7 +496,9 @@ def test_load_csv_env_var_expansion_disabled():
 
     try:
         with (
-            create_text_file(HERE / "load_csv_env_disabled.yaml", YAML_STRING_LOADS_CSV_FILE_WITH_ENV_VAR_DISABLED) as fn,
+            create_text_file(
+                HERE / "load_csv_env_disabled.yaml", YAML_STRING_LOADS_CSV_FILE_WITH_ENV_VAR_DISABLED
+            ) as fn,
             create_test_csv_file(HERE / "data/sample.csv"),
         ):
             data = navdict.from_yaml_file(fn)
@@ -510,6 +515,37 @@ def test_load_csv_missing_env_var():
 
         with pytest.raises(ValueError):
             _ = data.root.sample
+
+
+YAML_STRING_LOADS_CSV_FILE_WITH_DELIMITER = """
+root:
+    products: csv//data/sample_semicolon.csv
+    products_kwargs:
+        header_rows: 1
+        delimiter: ';'
+"""
+
+
+def test_load_csv_with_delimiter():
+    """
+    Test that the CSV directive correctly handles custom delimiters.
+    The sample CSV file uses semicolons as delimiters instead of the default comma.
+    """
+    with (
+        create_text_file(HERE / "load_csv_delimiter.yaml", YAML_STRING_LOADS_CSV_FILE_WITH_DELIMITER) as fn,
+        create_test_csv_file_semicolon(HERE / "data/sample_semicolon.csv"),
+    ):
+        data = navdict.from_yaml_file(fn)
+
+        csv_data = data.root.products
+
+        assert isinstance(csv_data, list)
+        assert isinstance(csv_data[0], list)
+
+        assert len(csv_data[0]) == 5
+        assert csv_data[0][0] == "101"
+        assert csv_data[0][1] == "Laptop"
+        assert csv_data[0][4] == "15"
 
 
 def test_directive_registration():

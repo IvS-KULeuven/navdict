@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-07-13
+
+### Added
+
+- `expand_env_vars` function is now explicitly exported from the main module (public API)
+- `get_resource_location` function is now explicitly exported from the main module (public API)
+- `load_yaml` directive now supports `expand_env` kwarg (default `True`) for environment variable expansion in resource paths
+- Enhanced logging: debug logs for `load_yaml`, `load_csv`, and `env_var` directive plugins
+
+### Fixed
+
+- `get_resource_location` now correctly handles tilde (`~`) expansion for home directory paths
+- `expand_env_vars` responsibility clarified: no longer applies path expansion (handled by `get_resource_location`)
+- `load_yaml` now properly forwards `*args` and `**kwargs` to the underlying loader
+- `load_yaml` function signature corrected (`parent_location` parameter is now required, not optional)
+- Added validation for empty resource names in `load_yaml` and `load_csv`
+
+### Changed
+
+- `expand_env_vars` behavior changed: no longer applies `~` expansion (that's now `get_resource_location`'s responsibility)
+- Logging levels adjusted: `load_csv` uses `logger.info` instead of commented-out debug log
+
 ## [0.7.0] - 2026-07-10
 
 ### Added
@@ -201,7 +223,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial commit.
 
-[Unreleased]: https://github.com/IvS-KULeuven/navdict/compare/0.7.0...HEAD
+[Unreleased]: https://github.com/IvS-KULeuven/navdict/compare/0.8.0...HEAD
+[0.8.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.8.0
 [0.7.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.7.0
 [0.6.3]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.6.3
 [0.6.2]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.6.2

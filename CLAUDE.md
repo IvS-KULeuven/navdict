@@ -104,3 +104,8 @@ Directive functions have the signature `func(value: str, parent_location: Path |
 and are registered either via the `navdict.directive` entry-point group in `pyproject.toml` or at
 runtime via `register_directive(name, func)`. See `docs/directives.md` for the full contract and
 `directives.py` for reference implementations.
+
+## Roadmap
+
+- [x] The CSV directive shall also take a kwargs `delimiter [str]`
+- [x] Other directives like YAML shall also expand environment variables.

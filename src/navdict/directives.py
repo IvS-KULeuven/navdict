@@ -27,19 +27,19 @@ logger = logging.getLogger("navdict.plugin")
 
 
 def load_yaml(value: str, parent_location: Path | None, *args, **kwargs):
-    # logger.debug(f"Loading YAML file: '{value}'.")
+    # logger.debug(f"Loading YAML file: '{value}', parent_location: {parent_location}.")
 
-    return _load_yaml(value, parent_location)
+    return _load_yaml(value, parent_location, *args, **kwargs)
 
 
 def load_csv(value: str, parent_location: Path | None, *args, **kwargs):
-    # logger.debug(f"Loading CSV file: '{value}'.")
+    # logger.debug(f"Loading CSV file: '{value}', parent_location: {parent_location}.")
 
     return _load_csv(value, parent_location, *args, **kwargs)
 
 
 def env_var(value: str, parent_location: Path | None, *args, **kwargs):
-    # logger.debug(f"Loading environment variable: '{value}'.")
+    # logger.debug(f"Loading environment variable: '{value}', parent_location: {parent_location}.")
 
     return os.environ.get(value)
 

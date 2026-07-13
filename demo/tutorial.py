@@ -26,6 +26,7 @@ def _(mo):
 @app.cell
 def _():
     from navdict import navdict
+
     return (navdict,)
 
 
@@ -78,7 +79,8 @@ def _(capture_stdout, house, mo, navdict, rich):
     def _():
         rich.print(iot)
 
-    mo.md(text=f"""
+    mo.md(
+        text=f"""
     ```
     >>> rich.print(iot)
     {capture_stdout(_)}
@@ -119,7 +121,8 @@ def _(capture_stdout, iot, mo, rich):
     def _2():
         rich.print(iot["House"]["Cameras"]["cam_01"])
 
-    mo.md(text=f"""
+    mo.md(
+        text=f"""
     When we print the above with the `rich` package, we get the following output:
     ```
     >>> rich.print(iot.House.Cameras.cam_01)
@@ -142,7 +145,7 @@ def _(mo):
 @app.cell
 def _(iot):
     iot.House.Rooms = {
-        "entrance": {"doors": 3, "windows": 1}, 
+        "entrance": {"doors": 3, "windows": 1},
         "room_1": {"doors": 1, "windows": 2},
         "room_2": {"doors": 1, "windows": 1},
     }
@@ -171,31 +174,32 @@ def _(mo):
 
 @app.cell
 def _(capture_stdout, iot, mo, rich):
-
     def _():
         rich.print(iot.House)
 
-    mo.md(text=f"""
+    mo.md(
+        text=f"""
     If we then print the _House_ branch, we see that the rooms have been added.
     ```
     >>> rich.print(iot.House)
     {capture_stdout(_)}
     ```
-    """)
+    """
+    )
 
     return
 
 
 @app.cell
 def _(capture_stdout, iot, mo, rich):
-    iot["House"]["Rooms"]["room_3"] = {'doors': 1, 'windows': 3}
-    iot.House.Rooms.room_4 = {'doors': 2, 'windows': 3}
-
+    iot["House"]["Rooms"]["room_3"] = {"doors": 1, "windows": 3}
+    iot.House.Rooms.room_4 = {"doors": 2, "windows": 3}
 
     def _():
         rich.print(iot.House.Rooms)
 
-    mo.md(text=f"""
+    mo.md(
+        text=f"""
     You can also add a new key like you are used to with a normal dictionary. Both notations can be used, bracket- and dot-notation.
     ```
     iot["House"]["Rooms"]["room_3"] = {{'doors': 1, 'windows': 3}}
@@ -206,7 +210,8 @@ def _(capture_stdout, iot, mo, rich):
     >>> rich.print(iot.House.Rooms)
     {capture_stdout(_)}
     ```
-    """)
+    """
+    )
 
     return
 
@@ -267,10 +272,12 @@ def _(iot):
 def _(capture_stdout, iot, mo, rich):
     def _1():
         rich.print(iot.House.Rooms.master_bedroom)  # this is room_1
+
     def _2():
         rich.print(iot.House.Rooms.visitor_room)  # this is room_3
 
-    mo.md(text=f"""
+    mo.md(
+        text=f"""
     Now you can access the rooms using their aliases. Note however that in the print, the original valid key for the room is used.
     ```
     >>> rich.print(iot.House.Rooms.master_bedroom)
@@ -278,7 +285,8 @@ def _(capture_stdout, iot, mo, rich):
     >>> rich.print(iot.House.Rooms.visitor_room)
     {capture_stdout(_2)}
     ```
-    """)
+    """
+    )
     return
 
 
@@ -301,6 +309,7 @@ def _():
     import rich
     import sys
     import textwrap
+
     return mo, rich
 
 
