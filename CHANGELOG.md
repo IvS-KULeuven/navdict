@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Type-stub support for dynamic attribute access on `NavigableDict` to reduce PyLance attribute-access warnings.
+- `NavigableDict.as_typed(schema_type)` helper for schema-based type hints and improved editor auto-completion.
+
+### Changed
+
+- `NavigableDict.__dir__()` now includes identifier-like dictionary keys to improve interactive discoverability.
+
+### Fixed
+
+- Missing `expand_env_vars` declaration in stubs, removing an unknown-import warning in static analysis.
+- `is_directive` stub typing now accepts non-string inputs used in tests.
+
 ## [0.8.0] - 2026-07-13
 
 ### Added
