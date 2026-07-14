@@ -46,6 +46,8 @@ from enum import IntEnum
 from pathlib import Path
 from typing import Any
 from typing import Callable
+from typing import TypeVar
+from typing import cast
 
 from rich.text import Text
 from rich.tree import Tree
@@ -57,6 +59,8 @@ from navdict.directive import unravel_directive
 from navdict.directive import get_directive_plugin
 
 logger = logging.getLogger("navdict")
+
+T = TypeVar("T")
 
 
 def load_class(class_name: str):
@@ -444,6 +448,25 @@ class NavigableDict(dict):
         # which is not what we want.
         # setattr(self, "_alias_hook", hook)
         self.__dict__["_alias_hook"] = hook
+
+    def as_typed(self, schema_type: type[T]) -> T:
+        """Return this instance typed as `schema_type` for static analysis.
+
+        This helper does not transform data at runtime. It returns `self` and
+        exists to let type checkers and editors infer attribute completion when
+        callers provide a Protocol, TypedDict wrapper, or class describing the
+        expected structure.
+        """
+        return cast(T, self)
+
+    def __dir__(self):
+        """Include navigable keys in `dir()` for better interactive discovery."""
+        base = set(super().__dir__())
+        key_names = {key for key in self.keys() if isinstance(key, str) and key.isidentifier()}
+        for key in self.keys():
+            if isinstance(key, str) and not key.isidentifier():
+                base.discard(key)
+        return sorted(base | key_names)
 
     # This method is called:
     #   - for *every* single attribute access on an object using dot notation.
@@ -837,7 +860,12 @@ class NavigableDict(dict):
 
         return data
 
-    def to_yaml_file(self, filename: str | Path | None = None, header: str = None, top_level_group: str = None) -> None:
+    def to_yaml_file(
+        self,
+        filename: str | Path | None = None,
+        header: str | None = None,
+        top_level_group: str | None = None,
+    ) -> None:
         """Saves a NavigableDict to a YAML file.
 
         When no filename is provided, this method will look for a 'private' attribute
@@ -868,7 +896,9 @@ class NavigableDict(dict):
                 """
             )
 
-        with Path(filename).open("w") as fd:
+        target = Path(filename) if filename is not None else Path(self.get_private_attribute("_filename"))
+
+        with target.open("w") as fd:
             fd.write(header)
             indent = 0
             if top_level_group:
@@ -877,7 +907,7 @@ class NavigableDict(dict):
 
             self._save(fd, indent=indent)
 
-        self.set_private_attribute("_filename", Path(filename))
+        self.set_private_attribute("_filename", target)
 
     def get_filename(self) -> str | None:
         """Returns the filename for this navdict or None when no filename could be determined."""

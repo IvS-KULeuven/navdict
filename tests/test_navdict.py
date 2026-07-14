@@ -1,6 +1,7 @@
 import enum
 import os
 from pathlib import Path
+from typing import Protocol
 
 import pytest
 
@@ -36,6 +37,23 @@ class TakeOneKeywordArgument:
 
     def __str__(self):
         return f"sim = {self._sim}"
+
+
+class _HexapodSchema(Protocol):
+    id: str
+
+
+class _GSESchema(Protocol):
+    hexapod: _HexapodSchema
+
+
+class _SetupSchema(Protocol):
+    site_id: str
+    gse: _GSESchema
+
+
+class _RootSchema(Protocol):
+    Setup: _SetupSchema
 
 
 YAML_STRING_SIMPLE = """
@@ -182,6 +200,25 @@ def test_navigation():
 
     assert data.Setup.site_id == "KUL"
     assert data.Setup.gse.hexapod.id == "PUNA_01"
+
+
+def test_as_typed_helper_for_static_typing():
+    data = navdict.from_yaml_string(YAML_STRING_SIMPLE)
+
+    typed_data = data.as_typed(_RootSchema)
+
+    assert typed_data.Setup.site_id == "KUL"
+    assert typed_data.Setup.gse.hexapod.id == "PUNA_01"
+    assert typed_data is data
+
+
+def test_dir_includes_identifier_keys():
+    data = navdict({"valid_key": 1, "not-valid": 2, "also.not.valid": 3})
+    names = dir(data)
+
+    assert "valid_key" in names
+    assert "not-valid" not in names
+    assert "also.not.valid" not in names
 
 
 def test_from_yaml_string():
