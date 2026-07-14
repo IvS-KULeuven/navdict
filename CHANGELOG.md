@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-07-14
+
 ### Added
 
 - Type-stub support for dynamic attribute access on `NavigableDict` to reduce PyLance attribute-access warnings.
@@ -237,7 +239,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial commit.
 
-[Unreleased]: https://github.com/IvS-KULeuven/navdict/compare/0.8.0...HEAD
+[Unreleased]: https://github.com/IvS-KULeuven/navdict/compare/0.9.0...HEAD
+[0.9.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.9.0
 [0.8.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.8.0
 [0.7.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.7.0
 [0.6.3]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.6.3
