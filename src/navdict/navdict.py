@@ -484,10 +484,14 @@ class NavigableDict(dict):
             try:
                 alias = self._alias_hook(key)
                 value = object.__getattribute__(self, alias)
-            except NotImplementedError:
+            except (NotImplementedError, AttributeError):
+                # Either the alias hook is not implemented or the alias hook just returned a key that still doesn't exist.
+                # In both cases we want to raise an AttributeError to indicate that the attribute does not exist.
                 raise AttributeError(f"{type(self).__name__!r} object has no attribute {key!r}")
             except Exception as exc:
-                logger.error(f"Alias hook function raised {type(exc).__name__!r}: {exc}")
+                logger.error(
+                    f"Alias hook function {self._alias_hook.__name__!r}({key}) raised {type(exc).__name__!r}: {exc}"
+                )
                 raise AttributeError(f"{type(self).__name__!r} object has no attribute {key!r}")
 
         if key.startswith("__"):  # small optimization
@@ -530,7 +534,9 @@ class NavigableDict(dict):
             except NotImplementedError:
                 raise KeyError(f"{type(self).__name__!r} has no key {key!r}")
             except Exception as exc:
-                logger.error(f"Alias hook function raised {type(exc).__name__!r}: {exc}")
+                logger.error(
+                    f"Alias hook function {self._alias_hook.__name__!r}({key}) raised {type(exc).__name__!r}: {exc}"
+                )
                 raise KeyError(f"{type(self).__name__!r} has no key {key!r}")
 
         if isinstance(key, str) and key.startswith("__"):
