@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-07-16
+
+### Fixed
+
+- Fixed alias hook exception handling in NavigableDict. When an alias still returns an unknown attribute, don't log an error message.
+
 ## [0.9.0] - 2026-07-14
 
 ### Added
@@ -239,7 +245,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial commit.
 
-[Unreleased]: https://github.com/IvS-KULeuven/navdict/compare/0.9.0...HEAD
+---
+
+[Unreleased]: https://github.com/IvS-KULeuven/navdict/compare/0.10.0...HEAD
+[0.10.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.10.0
 [0.9.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.9.0
 [0.8.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.8.0
 [0.7.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.7.0

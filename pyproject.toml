@@ -1,6 +1,6 @@
 [project]
 name = "navdict"
-version = "0.9.0"
+version = "0.10.0"
 description = "A navigable dictionary with dot notation access and automatic file loading"
 readme = "README.md"
 authors = [
