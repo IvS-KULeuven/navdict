@@ -5,7 +5,7 @@ site_name: navdict
 site_url: https://ivs-kuleuven.github.io/navdict/
 site_author: Rik Huygen
 site_description: >-
-  Official documentation of Navdict – a navigable dictionary with dot notation access and automatic file loading.
+  Official documentation of Navdict - a navigable dictionary with dot notation access and automatic file loading.
 
 # Repository
 
@@ -37,6 +37,7 @@ markdown_extensions:
 theme:
     name: material
     custom_dir: docs/custom_theme
+    logo: images/navdict-icon-dark-bg.svg
     icon:
         admonition:
             note: fontawesome/solid/note-sticky
@@ -77,8 +78,7 @@ plugins:
     autorefs:
 
 extra_css:
-  - stylesheets/custom.css
-  - stylesheets/extra.css
+  - stylesheets/brand.css
 
 extra:
   social:
@@ -87,8 +87,9 @@ extra:
     name: navdict on GitHub
 
 nav:
-    - navdict:
-        - index.md
-        - directives.md
-        - aliases.md
-    - roadmap.md
+  - navdict:
+    - Introduction: index.md
+    - Getting Started: getting-started.md
+    - How Directives Work: directives.md
+    - Aliases: aliases.md
+  - Roadmap: roadmap.md
