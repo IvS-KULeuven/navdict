@@ -253,7 +253,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/IvS-KULeuven/navdict/compare/0.10.0...HEAD
+[Unreleased]: https://github.com/IvS-KULeuven/navdict/compare/0.11.0...HEAD
+[0.11.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.11.0
 [0.10.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.10.0
 [0.9.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.9.0
 [0.8.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.8.0
