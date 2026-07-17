@@ -1,75 +1,71 @@
-# An intelligent navigable dictionary
+# navdict
 
+<div class="nd-hero">
+    <img
+        class="nd-hero__logo nd-hero__logo--light"
+        src="images/navdict-lockup-light-bg.svg"
+        alt="navdict"
+    >
+    <img
+        class="nd-hero__logo nd-hero__logo--dark"
+        src="images/navdict-lockup-dark-bg.svg"
+        alt="navdict"
+    >
+</div>
 
-🚧– WIP – this is an early version of a project in development. Please use it 
-and fork it and create issues and feature requests.
+`navdict` (also available as `NavigableDict` and `NavDict`) is a Python
+dictionary subclass that lets you access nested configuration and data using
+both dictionary-style access and dot notation.
 
-This module defines the NavigableDict (aka. `navdict`), which is a dictionary
-that is dot-navigable and has some special features to autoload files.
+It is built for configuration-heavy projects where readability and flexibility
+matter.
 
-The information that is in the NavigableDict can be navigated in two different
-ways. First, the navdict is a dictionary, so all information can be accessed by
-keys as in the following example.
+## Why navdict?
 
-    >>> setup = NavigableDict({"gse": {"hexapod": {"ID": 42, "calibration": [0,1,2,3,4,5]}}})
-    >>> setup["gse"]["hexapod"]["ID"]
-    42
+You can use `navdict` as a plain dictionary:
 
-Second, each of the _keys_ is also available as an attribute of the
-NavigableDict and that makes it possible to navigate the navdict with
-dot-notation:
+```python
+setup["gse"]["hexapod"]["ID"]
+```
 
-    >>> id = setup.gse.hexapod.ID
+Or navigate the same structure with dot notation:
 
-If you want to know which keys you can use to navigate the navdict, use
-the `keys()` method.
+```python
+setup.gse.hexapod.ID
+```
 
-    >>> setup.gse.hexapod.keys()
-    dict_keys(['ID', 'calibration'])
-    >>> setup.gse.hexapod.calibration
-    [0, 1, 2, 3, 4, 5]
+In addition, navdict supports directive-based values such as `yaml//...`,
+`csv//...`, and `class//...` that are resolved lazily when accessed. More on directives in [How Directives Work](directives.md).
 
-To get a full printout of the navdict, you can use the print method from the
-rich package. Be careful, because this can print out a lot of information when a
-full configuration is loaded.
+## Core concepts
 
-    >>> from rich import print
-    >>> print(setup)
-    NavigableDict
-    └── gse
-        └── hexapod
-            ├── ID: 42
-            └── calibration: [0, 1, 2, 3, 4, 5]
+- Nested dictionaries are wrapped as navdict objects.
+- Keys are available as both dictionary keys and attributes.
+- Directive strings are interpreted on read and memoized.
+- Relative resource paths can be resolved from the source file location.
 
-### Special Values
+## Example
 
-Some of the information in the navdict is interpreted in a special way, i.e.
-some values are processed before returning. Examples are the classes and
-calibration/data files. The following values are treated special if they start
-with:
+```python
+from navdict import NavDict
 
-* `class//`: instantiate the class and return the object
-* `factory//`: instantiates a factory and executes its `create()` method
-* `csv//`: load the CSV file and return a list of lists of strings
-* `yaml//`: load the YAML file and return a dictionary
-* `int-enum//`: dynamically create the enumeration and return the Enum object
+setup = NavDict(
+    {
+        "gse": {
+            "hexapod": {
+                "ID": 42,
+                "calibration": [0, 1, 2, 3, 4, 5],
+            }
+        }
+    }
+)
 
-We call these values _directives_ and they are explained in more detail in 
-[How directives work](./directives.md).
+assert setup["gse"]["hexapod"]["ID"] == 42
+assert setup.gse.hexapod.ID == 42
+```
 
-#### Data Files
+## Next steps
 
-Some information is too large to add to the navdict as such and should be loaded
-from a data file. Examples are calibration files, flat-fields, temperature
-conversion curves, etc.
-
-The navdict will automatically load the file when you access a key that 
-contains a value that starts with `csv//` or `yaml//`.
-
-    >>> setup = navdict({
-    ...     "instrument": {"coeff": "csv//cal_coeff_1234.csv"}
-    ... })
-    >>> setup.instrument.coeff[0, 4]
-    5.0
-
-Note: the resource location is always relative to the current location XXXX 
+- Start with [Getting Started](getting-started.md)
+- Learn directive behavior in [How directives work](directives.md)
+- See alias support in [Aliases](aliases.md)

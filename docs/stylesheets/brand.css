@@ -1,0 +1,48 @@
+/* Brand assets and theme-aware logo handling */
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 1.3rem;
+  width: auto;
+}
+
+[data-md-color-scheme="slate"] .md-header__button.md-logo img {
+  content: url("../images/navdict-icon-dark-bg.svg");
+}
+
+.nd-hero {
+  margin: 0.6rem 0 1.4rem;
+  max-width: min(560px, 92vw);
+}
+
+.nd-hero__logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.nd-hero__logo--dark {
+  display: none;
+}
+
+[data-md-color-scheme="slate"] .nd-hero__logo--light {
+  display: none;
+}
+
+[data-md-color-scheme="slate"] .nd-hero__logo--dark {
+  display: block;
+}
+
+.md-footer-meta__inner::before {
+  content: "";
+  display: block;
+  width: 9rem;
+  height: 1.75rem;
+  margin: 0 0 0.5rem;
+  background: url("../images/navdict-wordmark-dark-bg.svg") no-repeat left center;
+  background-size: contain;
+}
+
+[data-md-color-scheme="slate"] .md-footer-meta__inner::before {
+  background-image: url("../images/navdict-wordmark-dark-bg.svg");
+}

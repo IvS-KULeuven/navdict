@@ -12,5 +12,9 @@
 - remove previous builds: `rm -r dist`
 - build the package: `uv build`
 - publish the package to PyPI: `uv publish --token $UV_PUBLISH_TOKEN`
+
+## Documentation update
+
+- `uv sync --group docs`
 - update the documentation and check with `uv run mkdocs serve`
 - Publish the updated documentation: `uv run mkdocs gh-deploy -r upstream -m "documentation update on .."`
