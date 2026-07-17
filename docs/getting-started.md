@@ -45,6 +45,27 @@ print(config.instrument.camera.gain)
 
 Both access styles return the same values.
 
+## Caveat: keys must be strings for dot navigation
+
+For a given dictionary level, navdict only enables attribute-style navigation
+if all keys at that level are strings.
+
+If a level contains one or more non-string keys, none of the keys at that
+level are exposed as attributes.
+
+```python
+from navdict import NavDict
+
+cfg = NavDict({"ok": {"name": "camera"}})
+print(cfg.ok.name)  # works
+
+mixed = NavDict({"group": {"name": "camera", 42: "answer"}})
+print(mixed.group["name"])  # works (dict access)
+
+# Attribute access at this level is disabled because of key 42.
+# print(mixed.group.name)
+```
+
 ## Discover available keys
 
 When navigating nested structures, `keys()` helps you discover what is

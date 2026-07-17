@@ -18,3 +18,7 @@ configuration workflows.
 5. Use aliases when multiple names should resolve to the same key.
 
 For label usage, see [Getting Started](../getting-started.md).
+
+Important caveat: dot navigation requires string keys at a given dictionary
+level. If a level contains a non-string key, attribute access is disabled for
+that whole level.
