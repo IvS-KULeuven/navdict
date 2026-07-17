@@ -90,6 +90,14 @@ nav:
   - navdict:
     - Introduction: index.md
     - Getting Started: getting-started.md
-    - How Directives Work: directives.md
-    - Aliases: aliases.md
+  - User Guide:
+    - Overview: user-guide/index.md
+    - Directives: user-guide/directives.md
+    - Aliases: user-guide/aliases.md
+    - Recipes: user-guide/recipes.md
+  - Developer Guide:
+    - Overview: developer-guide/index.md
+    - Directive Plugins: developer-guide/directive-plugins.md
+    - Internals: developer-guide/internals.md
+    - Contributing: developer-guide/contributing.md
   - Roadmap: roadmap.md

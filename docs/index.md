@@ -35,7 +35,9 @@ setup.gse.hexapod.ID
 ```
 
 In addition, navdict supports directive-based values such as `yaml//...`,
-`csv//...`, and `class//...` that are resolved lazily when accessed. More on directives in [How Directives Work](directives.md).
+`csv//...`, and `class//...` that are resolved lazily when accessed.
+These directives are pluggable so you can add your own directives for your project.
+More on directives in [User Guide: Directives](user-guide/directives.md).
 
 ## Core concepts
 
@@ -67,5 +69,6 @@ assert setup.gse.hexapod.ID == 42
 ## Next steps
 
 - Start with [Getting Started](getting-started.md)
-- Learn directive behavior in [How directives work](directives.md)
-- See alias support in [Aliases](aliases.md)
+- Learn directive behavior in [User Guide: Directives](user-guide/directives.md)
+- See alias support in [User Guide: Aliases](user-guide/aliases.md)
+- Extend navdict with [Developer Guide: Directive Plugins](developer-guide/directive-plugins.md)

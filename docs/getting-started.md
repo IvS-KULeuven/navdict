@@ -124,5 +124,6 @@ Common built-in directives include:
 
 ## Where to go next
 
-- Learn details and plugin extension in [How directives work](directives.md)
-- Learn alternative key naming in [Aliases](aliases.md)
+- Learn directive usage in [User Guide: Directives](user-guide/directives.md)
+- Learn alternative key naming in [User Guide: Aliases](user-guide/aliases.md)
+- Learn plugin extension in [Developer Guide: Directive Plugins](developer-guide/directive-plugins.md)
