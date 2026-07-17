@@ -5,19 +5,55 @@
          <lastmod>2026-07-17</lastmod>
     </url>
     <url>
-         <loc>https://ivs-kuleuven.github.io/navdict/aliases/</loc>
-         <lastmod>2026-07-17</lastmod>
-    </url>
-    <url>
-         <loc>https://ivs-kuleuven.github.io/navdict/directives/</loc>
-         <lastmod>2026-07-17</lastmod>
-    </url>
-    <url>
          <loc>https://ivs-kuleuven.github.io/navdict/getting-started/</loc>
          <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://ivs-kuleuven.github.io/navdict/roadmap/</loc>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/api/</loc>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/api/directive-registry/</loc>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/api/navigable-dict/</loc>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/developer-guide/</loc>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/developer-guide/contributing/</loc>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/developer-guide/directive-plugins/</loc>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/developer-guide/internals/</loc>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/user-guide/</loc>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/user-guide/aliases/</loc>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/user-guide/directives/</loc>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/user-guide/recipes/</loc>
          <lastmod>2026-07-17</lastmod>
     </url>
 </urlset>

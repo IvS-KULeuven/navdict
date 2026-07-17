@@ -12,11 +12,13 @@
         <meta name="author" content="Rik Huygen">
       
       
-        <link rel="canonical" href="https://ivs-kuleuven.github.io/navdict/roadmap/">
+        <link rel="canonical" href="https://ivs-kuleuven.github.io/navdict/developer-guide/">
       
       
-        <link rel="prev" href="../api/directive-registry/">
+        <link rel="prev" href="../user-guide/recipes/">
       
+      
+        <link rel="next" href="directive-plugins/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -24,7 +26,7 @@
     
     
       
-        <title>Roadmap - navdict</title>
+        <title>Overview - navdict</title>
       
     
     
@@ -108,9 +110,9 @@
 <!-- / Fathom -->
 
 
-<meta property="og:title" content="navdict - Roadmap">
+<meta property="og:title" content="navdict - Overview">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://ivs-kuleuven.github.io/navdict/roadmap/">
+<meta property="og:url" content="https://ivs-kuleuven.github.io/navdict/developer-guide/">
 <meta property="og:site_name" content="navdict Documentation">
 <meta property="og:description" content="navdict is a navigable dictionary with dot notation and directive-based lazy resource loading.">
 <meta property="og:image" content="https://raw.githubusercontent.com/IvS-KULeuven/navdict/main/docs/images/navdict-lockup-light-bg.svg">
@@ -150,7 +152,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#roadmap" class="md-skip">
+        <a href="#developer-guide" class="md-skip">
           Skip to content
         </a>
       
@@ -185,7 +187,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Roadmap
+              Overview
             
           </span>
         </div>
@@ -332,11 +334,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../developer-guide/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -376,11 +380,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../roadmap/" class="md-tabs__link">
         
   
   
@@ -410,9 +412,7 @@
           
             
               
-                
-              
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -675,6 +675,8 @@
       
   
   
+    
+  
   
   
     
@@ -694,18 +696,21 @@
     
     
       
+        
+        
+      
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../developer-guide/" class="md-nav__link ">
+            <a href="./" class="md-nav__link md-nav__link--active">
               
   
   
@@ -718,13 +723,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+              <label class="md-nav__link md-nav__link--active" for="__nav_3" id="__nav_3_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Developer Guide
@@ -740,7 +745,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../developer-guide/directive-plugins/" class="md-nav__link">
+      <a href="directive-plugins/" class="md-nav__link">
         
   
   
@@ -763,7 +768,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../developer-guide/internals/" class="md-nav__link">
+      <a href="internals/" class="md-nav__link">
         
   
   
@@ -786,7 +791,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../developer-guide/contributing/" class="md-nav__link">
+      <a href="contributing/" class="md-nav__link">
         
   
   
@@ -926,32 +931,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Roadmap
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
         
   
   
@@ -962,35 +945,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    <span class="md-ellipsis">
-      Features
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1002,8 +956,6 @@
               </div>
             
             
-              
-                
               
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
@@ -1024,9 +976,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#in-this-section" class="md-nav__link">
     <span class="md-ellipsis">
-      Features
+      In this section
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      Source layout
     </span>
   </a>
   
@@ -1045,31 +1006,31 @@
               <article class="md-content__inner md-typeset">
                 
                   
-  
-
 
 
   
   
 
 
-<h1 id="roadmap">Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">&para;</a></h1>
-<p>Don't worry, the feature set will grow ...</p>
-<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
-<ul class="task-list">
-<li class="task-list-item">
-<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> add the possibility to define aliases for keys and attributes that are defined in the navdict. That is useful when
-  you want to access the same information with difference keys/attributes.</p>
-</li>
-<li class="task-list-item">
-<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> the <code>csv//</code> directive might be improved with specification of the number of rows that a header takes up, that
-  might need to go into a field, e.g. <code>args</code> below and at the same level as where the directive is.</p>
-</li>
-<li class="task-list-item">
-<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Add pluggable functionality to NavDict to do something like
-  <code>bad_pixels//&lt;filename&gt;.fits</code> and this will then execute a function that takes the <code>&lt;filename&gt;.fits</code> as an argument.
-  That function can return a filename or a file descriptor, or a FITS object....</p>
-</li>
+<h1 id="developer-guide">Developer Guide<a class="headerlink" href="#developer-guide" title="Permanent link">&para;</a></h1>
+<p>This guide covers navdict internals, extension points, and development setup.</p>
+<h2 id="in-this-section">In this section<a class="headerlink" href="#in-this-section" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="directive-plugins/">Directive Plugins</a>: plugin contract and registration</li>
+<li><a href="internals/">Internals</a>: lazy resolution, memoization, and lookup behavior</li>
+<li><a href="contributing/">Contributing</a>: local setup and quality checks</li>
+</ul>
+<p>Key topics covered:</p>
+<ul>
+<li>registering directive plugins via entry points and at runtime</li>
+<li>resetting memoized directive values when runtime state changes</li>
+</ul>
+<h2 id="source-layout">Source layout<a class="headerlink" href="#source-layout" title="Permanent link">&para;</a></h2>
+<p>Core code lives under <code>src/navdict/</code>:</p>
+<ul>
+<li><code>navdict.py</code>: core <code>NavigableDict</code> implementation and built-in directive handling</li>
+<li><code>directive.py</code>: directive parsing and plugin registry</li>
+<li><code>directives.py</code>: built-in plugin implementations</li>
 </ul>
 
 
@@ -1078,13 +1039,8 @@
 
 
 
-  
-  
 
 
-
-
-  
 
 
 
@@ -1102,12 +1058,10 @@
   
     
       
-        
-      
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../api/directive-registry/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Directive Registry">
+          <a href="../user-guide/recipes/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Recipes">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1117,11 +1071,27 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Directive Registry
+                Recipes
               </div>
             </div>
           </a>
         
+        
+          
+          <a href="directive-plugins/" class="md-footer__link md-footer__link--next" aria-label="Next: Directive Plugins">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Directive Plugins
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
         
       </nav>
     

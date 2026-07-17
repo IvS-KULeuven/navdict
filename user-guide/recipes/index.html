@@ -12,28 +12,28 @@
         <meta name="author" content="Rik Huygen">
       
       
-        <link rel="canonical" href="https://ivs-kuleuven.github.io/navdict/directives/">
+        <link rel="canonical" href="https://ivs-kuleuven.github.io/navdict/user-guide/recipes/">
       
       
-        <link rel="prev" href="../getting-started/">
+        <link rel="prev" href="../aliases/">
       
       
-        <link rel="next" href="../aliases/">
+        <link rel="next" href="../../developer-guide/">
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
     
     
       
-        <title>How Directives Work - navdict</title>
+        <title>Recipes - navdict</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
   
@@ -93,9 +93,11 @@
       
     
     
-      <link rel="stylesheet" href="../stylesheets/brand.css">
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+      <link rel="stylesheet" href="../../stylesheets/brand.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -108,9 +110,9 @@
 <!-- / Fathom -->
 
 
-<meta property="og:title" content="navdict - How Directives Work">
+<meta property="og:title" content="navdict - Recipes">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://ivs-kuleuven.github.io/navdict/directives/">
+<meta property="og:url" content="https://ivs-kuleuven.github.io/navdict/user-guide/recipes/">
 <meta property="og:site_name" content="navdict Documentation">
 <meta property="og:description" content="navdict is a navigable dictionary with dot notation and directive-based lazy resource loading.">
 <meta property="og:image" content="https://raw.githubusercontent.com/IvS-KULeuven/navdict/main/docs/images/navdict-lockup-light-bg.svg">
@@ -150,7 +152,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#how-directives-work" class="md-skip">
+        <a href="#recipes" class="md-skip">
           Skip to content
         </a>
       
@@ -166,9 +168,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="navdict" class="md-header__button md-logo" aria-label="navdict" data-md-component="logo">
+    <a href="../.." title="navdict" class="md-header__button md-logo" aria-label="navdict" data-md-component="logo">
       
-  <img src="../images/navdict-icon-dark-bg.svg" alt="logo">
+  <img src="../../images/navdict-icon-dark-bg.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -185,7 +187,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              How Directives Work
+              Recipes
             
           </span>
         </div>
@@ -288,13 +290,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href=".." class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
           
   
   
@@ -312,9 +312,77 @@
   
   
   
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developer-guide/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
   
     <li class="md-tabs__item">
-      <a href="../roadmap/" class="md-tabs__link">
+      <a href="../../roadmap/" class="md-tabs__link">
         
   
   
@@ -344,8 +412,6 @@
           
             
               
-                
-              
               <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
@@ -357,9 +423,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="navdict" class="md-nav__button md-logo" aria-label="navdict" data-md-component="logo">
+    <a href="../.." title="navdict" class="md-nav__button md-logo" aria-label="navdict" data-md-component="logo">
       
-  <img src="../images/navdict-icon-dark-bg.svg" alt="logo">
+  <img src="../../images/navdict-icon-dark-bg.svg" alt="logo">
 
     </a>
     navdict
@@ -378,6 +444,94 @@
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    navdict
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            navdict
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
     
       
       
@@ -414,16 +568,16 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href=".." class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
-    navdict
+    User Guide
     
   </span>
   
@@ -431,16 +585,16 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="">
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_1">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
-            navdict
+            User Guide
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -453,12 +607,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/" class="md-nav__link">
+      <a href="../directives/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Getting Started
+    Directives
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aliases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Aliases
     
   </span>
   
@@ -490,7 +667,7 @@
   
   
   <span class="md-ellipsis">
-    How Directives Work
+    Recipes
     
   </span>
   
@@ -503,7 +680,7 @@
   
   
   <span class="md-ellipsis">
-    How Directives Work
+    Recipes
     
   </span>
   
@@ -526,54 +703,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-are-directives" class="md-nav__link">
+  <a href="#use-navdict-as-an-application-config-object" class="md-nav__link">
     <span class="md-ellipsis">
-      What are directives?
+      Use navdict as an application config object
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#matching-directives" class="md-nav__link">
+  <a href="#keep-large-data-outside-main-config" class="md-nav__link">
     <span class="md-ellipsis">
-      Matching directives
+      Keep large data outside main config
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#default-directives" class="md-nav__link">
+  <a href="#add-optional-environment-dependent-paths" class="md-nav__link">
     <span class="md-ellipsis">
-      Default directives
+      Add optional environment-dependent paths
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#filenames" class="md-nav__link">
+  <a href="#use-aliases-to-support-multiple-naming-conventions" class="md-nav__link">
     <span class="md-ellipsis">
-      Filenames
+      Use aliases to support multiple naming conventions
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#custom-directives" class="md-nav__link">
+  <a href="#avoid-mixed-key-types-at-one-level" class="md-nav__link">
     <span class="md-ellipsis">
-      Custom directives
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#environment-variables-in-the-csv-directive" class="md-nav__link">
-    <span class="md-ellipsis">
-      Environment variables in the csv directive
+      Avoid mixed key types at one level
     </span>
   </a>
   
@@ -588,6 +756,75 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../developer-guide/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Developer Guide
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
               
                 
   
@@ -595,12 +832,171 @@
   
   
     <li class="md-nav__item">
-      <a href="../aliases/" class="md-nav__link">
+      <a href="../../developer-guide/directive-plugins/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Aliases
+    Directive Plugins
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer-guide/internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Internals
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer-guide/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    API
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/navigable-dict/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    NavigableDict
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/directive-registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Directive Registry
     
   </span>
   
@@ -625,7 +1021,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../roadmap/" class="md-nav__link">
+      <a href="../../roadmap/" class="md-nav__link">
         
   
   
@@ -648,9 +1044,7 @@
             
             
               
-                
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -669,54 +1063,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-are-directives" class="md-nav__link">
+  <a href="#use-navdict-as-an-application-config-object" class="md-nav__link">
     <span class="md-ellipsis">
-      What are directives?
+      Use navdict as an application config object
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#matching-directives" class="md-nav__link">
+  <a href="#keep-large-data-outside-main-config" class="md-nav__link">
     <span class="md-ellipsis">
-      Matching directives
+      Keep large data outside main config
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#default-directives" class="md-nav__link">
+  <a href="#add-optional-environment-dependent-paths" class="md-nav__link">
     <span class="md-ellipsis">
-      Default directives
+      Add optional environment-dependent paths
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#filenames" class="md-nav__link">
+  <a href="#use-aliases-to-support-multiple-naming-conventions" class="md-nav__link">
     <span class="md-ellipsis">
-      Filenames
+      Use aliases to support multiple naming conventions
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#custom-directives" class="md-nav__link">
+  <a href="#avoid-mixed-key-types-at-one-level" class="md-nav__link">
     <span class="md-ellipsis">
-      Custom directives
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#environment-variables-in-the-csv-directive" class="md-nav__link">
-    <span class="md-ellipsis">
-      Environment variables in the csv directive
+      Avoid mixed key types at one level
     </span>
   </a>
   
@@ -735,163 +1120,65 @@
               <article class="md-content__inner md-typeset">
                 
                   
-  
-
-
-
-  
-  
-
-
-<h1 id="how-directives-work">How directives work<a class="headerlink" href="#how-directives-work" title="Permanent link">&para;</a></h1>
-<h2 id="what-are-directives">What are directives?<a class="headerlink" href="#what-are-directives" title="Permanent link">&para;</a></h2>
-<p>Directives are <em>instructions</em> in a YAML file that are interpreted by the 
-<code>NavigableDict</code> whenever the value containing the directive is accessed. 
-Let's explain this with an example. We have a simple YAML file (`setup.yaml) 
-with the following content:</p>
-<p><div class="highlight"><pre><span></span><code><span class="nt">Setup</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">project_info</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yaml//project_info.yaml</span>
-</code></pre></div>
-This short YAML string contains a directive <code>yaml//</code> which will load the 
-<code>project_info.yaml</code> file whenever the <code>project_info</code> key is accessed. </p>
-<p>The <code>project_info.yaml</code> file contains the following keys:</p>
-<p><div class="highlight"><pre><span></span><code><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">navdict</span>
-<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.3.2</span>
-</code></pre></div>
-Assume both YAML files are located in your HOME folder.</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from navdict import NavDict
-
-&gt;&gt;&gt; setup = NavDict.from_yaml_file(&quot;~/setup.yaml&quot;)
-&gt;&gt;&gt; print(setup)
-Setup:
-    project_info: yaml//project_info.yaml
-&gt;&gt;&gt; print(setup.Setup)
-project_info: yaml//project_info.yaml
-&gt;&gt;&gt; print(setup.Setup.project_info)
-project: navdict
-version: 0.3.2
-</code></pre></div>
-<h2 id="matching-directives">Matching directives<a class="headerlink" href="#matching-directives" title="Permanent link">&para;</a></h2>
-<p>A value containing a directive shall match against the following regular 
-expression:</p>
-<p>The value is a string matching <code>r"^([a-zA-Z]\w+)[\/]{2}(.*)$"</code> where:</p>
-<ul>
-<li>group 1 is the directive key and </li>
-<li>group 2 is the directive value that is passed into the function that is 
-  associated with the directive.</li>
-</ul>
-<p>For example, the value 'yaml//config.yaml' will match and group 1 is 'yaml' 
-and group 2 is 'config.yaml'.</p>
-<p>The function <code>unravel_directive(...) -&gt; tuple[str, str]</code> parses the 
-directive and returns the two groups as a tuple. This happens under the hood 
-and should not bother you unless you are a navdict developer 🧐</p>
-<h2 id="default-directives">Default directives<a class="headerlink" href="#default-directives" title="Permanent link">&para;</a></h2>
-<p>The <code>navdict</code> project has defined the following directives:</p>
-<ul>
-<li><code>class//</code>: instantiate the class and return the object</li>
-<li><code>factory//</code>: instantiates a factory and executes its <code>create()</code> method</li>
-<li><code>csv//</code>: load the CSV file and return a list of lists of strings</li>
-<li><code>yaml//</code>: load the YAML file and return a dictionary</li>
-<li><code>int-enum//</code>: dynamically create the enumeration and return the Enum object</li>
-<li><code>env//</code>: returns the value of the environment variable or None</li>
-</ul>
-<h2 id="filenames">Filenames<a class="headerlink" href="#filenames" title="Permanent link">&para;</a></h2>
-<p>When the directive value is a filename or path, it can be absolute or 
-relative. An absolute filename is used as-is and passed to the directive 
-function. A relative filename is interpreted as follows:</p>
-<ul>
-<li>when the parent —which should be a NavDict— contains a <code>_filename</code> 
-  attribute, the value of the directive is interpreted relative to the 
-  location of the parent.</li>
-<li>when the parent doesn't have a <code>_filename</code> attribute or if it is <code>None</code>, 
-  then,<ul>
-<li>if the <code>NAVDICT_DEFAULT_RESOURCE_LOCATION</code> is defined, that location is 
-  used, otherwise</li>
-<li>the directive value is relative to the current working directory.</li>
-</ul>
-</li>
-</ul>
-<h2 id="custom-directives">Custom directives<a class="headerlink" href="#custom-directives" title="Permanent link">&para;</a></h2>
-<p>If you have special needs to handle directives in your YAML files, you can 
-implement your own directive as a plugin. What you need is a unique name for 
-the directive and a function to handle and process the data.</p>
-<p>The builtin directives <code>yaml//</code>, <code>csv//</code> and <code>env//</code> are implemented as a plugin 
-and 
-can serve as an example for your directive plugin.</p>
-<p>In the <code>pyproject.toml</code> file of your project, you should add an entrypoint 
-for your directive plugin. As an example, taken from the navdict project:</p>
-<div class="highlight"><pre><span></span><code><span class="k">[project.entry-points.</span><span class="s2">&quot;navdict.directive&quot;</span><span class="k">]</span>
-<span class="n">yaml</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;navdict.directives:load_yaml&#39;</span>
-<span class="n">csv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;navdict.directives:load_csv&#39;</span>
-<span class="n">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;navdict.directives:env_var&#39;</span>
-</code></pre></div>
-<p>The functions that you define to handle the directive shall have the 
-following interface definition. The example is from the builtin <code>yaml</code> 
-directive.</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_yaml</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent_location</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="o">...</span>
-</code></pre></div>
-<p>The <code>value</code> is the part of the directive that comes after the double slashes 
-'//'. This might be a filename or path, or any other string that your 
-directive needs for processing. </p>
-<p>The <code>parent_location</code> is the location of the YAML file that was used to load 
-the navdict. You can use this location to determine the full path of a 
-resource that you need for processing the directive. For example, if the 
-<code>value</code> contains a filename and a relative path, the <code>parent_location</code> can 
-be used as the root for this relative path. The builtin directives use a 
-function <code>get_resource_location(...)</code> to determine the full path of the 
-resource to be loaded, e.g.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">navdict.navdict</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_resource_location</span>
-
-<span class="n">yaml_location</span> <span class="o">=</span> <span class="n">get_resource_location</span><span class="p">(</span><span class="n">parent_location</span><span class="p">,</span> <span class="n">relative_path</span><span class="p">)</span>
-</code></pre></div>
-<p>The <code>args</code> and <code>kwargs</code> are entries from the YAML file that are passed into 
-the directive function without processing. The <code>args</code> are determined from 
-the YAML field <code>&lt;key&gt;_args</code> and the <code>kwargs</code> from <code>&lt;key&gt;_kwargs</code>. For 
-example, the <code>csv</code> directive can take a keyword argument <code>header_rows</code> to 
-parse and skip a number of rows in the CSV file. The YAML file would look 
-something like this:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">setup</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">hk_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv//data/hk_metrics_daq.csv</span>
-<span class="w">    </span><span class="nt">hk_metrics_kwargs</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">header_rows</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-</code></pre></div>
-<p>This will pass <code>header_rows=2</code> as a keyword argument into the <code>load_csv()</code> 
-directive function.</p>
-<h2 id="environment-variables-in-the-csv-directive">Environment variables in the csv directive<a class="headerlink" href="#environment-variables-in-the-csv-directive" title="Permanent link">&para;</a></h2>
-<p>The <code>csv//</code> directive supports <code>ENV[VARNAME]</code> references anywhere in the 
-resource path. Each reference is replaced with the value of the 
-corresponding environment variable before the file is located, and the 
-result is then expanded for a leading <code>~</code> (user home directory). The 
-variable name may optionally be wrapped in single or double quotes — 
-<code>ENV[VARNAME]</code>, <code>ENV['VARNAME']</code> and <code>ENV["VARNAME"]</code> are all equivalent.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">setup</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">hk_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv//ENV[DATA_STORAGE]/hk_metrics_daq.csv</span>
-</code></pre></div>
-<p>If <code>DATA_STORAGE</code> is set to <code>~/data</code>, this resolves to 
-<code>~/data/hk_metrics_daq.csv</code>, i.e. <code>/home/&lt;user&gt;/data/hk_metrics_daq.csv</code>.</p>
-<p>If a referenced environment variable is not set, a <code>ValueError</code> is raised.</p>
-<p>This expansion is enabled by default. To disable it, set <code>expand_env: false</code> 
-in the <code>&lt;key&gt;_kwargs</code> entry:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">setup</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">hk_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv//ENV[DATA_STORAGE]/hk_metrics_daq.csv</span>
-<span class="w">    </span><span class="nt">hk_metrics_kwargs</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">expand_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-</code></pre></div>
-
-
-
-
-
 
 
   
   
 
 
+<h1 id="recipes">Recipes<a class="headerlink" href="#recipes" title="Permanent link">&para;</a></h1>
+<h2 id="use-navdict-as-an-application-config-object">Use navdict as an application config object<a class="headerlink" href="#use-navdict-as-an-application-config-object" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">navdict</span><span class="w"> </span><span class="kn">import</span> <span class="n">NavDict</span>
+
+<span class="n">cfg</span> <span class="o">=</span> <span class="n">NavDict</span><span class="o">.</span><span class="n">from_yaml_file</span><span class="p">(</span><span class="s2">&quot;app.yaml&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span>
+    <span class="n">connect</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="keep-large-data-outside-main-config">Keep large data outside main config<a class="headerlink" href="#keep-large-data-outside-main-config" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nt">pipeline</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">calibration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv//data/calibration.csv</span>
+</code></pre></div>
+<p>This keeps config readable while loading data lazily.</p>
+<h2 id="add-optional-environment-dependent-paths">Add optional environment-dependent paths<a class="headerlink" href="#add-optional-environment-dependent-paths" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nt">storage</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv//ENV[DATA_ROOT]/index.csv</span>
+</code></pre></div>
+<p>Set <code>DATA_ROOT</code> per environment to reuse the same config.</p>
+<h2 id="use-aliases-to-support-multiple-naming-conventions">Use aliases to support multiple naming conventions<a class="headerlink" href="#use-aliases-to-support-multiple-naming-conventions" title="Permanent link">&para;</a></h2>
+<p>Define an alias map when users and code use different names for the same key.</p>
+<h2 id="avoid-mixed-key-types-at-one-level">Avoid mixed key types at one level<a class="headerlink" href="#avoid-mixed-key-types-at-one-level" title="Permanent link">&para;</a></h2>
+<p>Dot navigation is enabled per dictionary level only when all keys at that level
+are strings.</p>
+<p>If one key is non-string, attribute access is disabled for all keys at that
+level to avoid partial and confusing behavior.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">navdict</span><span class="w"> </span><span class="kn">import</span> <span class="n">NavDict</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">NavDict</span><span class="p">(</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span>
+      <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># Dictionary access still works.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">root</span><span class="p">[</span><span class="s2">&quot;valid&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">root</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># Attribute access at this level is not available.</span>
+<span class="c1"># print(data.root.valid)</span>
+</code></pre></div>
+<p>Recommendation: keep keys as strings for levels where dot navigation is used.</p>
 
 
-  
+
+
+
+
+
+
+
 
 
 
@@ -909,12 +1196,10 @@ in the <code>&lt;key&gt;_kwargs</code> entry:</p>
   
     
       
-        
-      
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../getting-started/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Getting Started">
+          <a href="../aliases/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Aliases">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -924,20 +1209,20 @@ in the <code>&lt;key&gt;_kwargs</code> entry:</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Getting Started
+                Aliases
               </div>
             </div>
           </a>
         
         
           
-          <a href="../aliases/" class="md-footer__link md-footer__link--next" aria-label="Next: Aliases">
+          <a href="../../developer-guide/" class="md-footer__link md-footer__link--next" aria-label="Next: Overview">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Aliases
+                Overview
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -985,10 +1270,10 @@ in the <code>&lt;key&gt;_kwargs</code> entry:</p>
     
     
       
-      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.indexes", "navigation.tabs.sticky", "navigation.footer", "content.code.annotate", "content.code.copy"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.tabs.sticky", "navigation.footer", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
       
     
   </body>
