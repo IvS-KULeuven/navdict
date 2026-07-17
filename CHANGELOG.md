@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.2] - 2026-07-17
+
+- Fix the public interface for the `navdict` module, making `load_class`, `load_csv`, and `load_yaml` officially public.
+
 ## [0.11.1] - 2026-07-17
 
-- Fix the type stubs for navdict as they didn't match the real API.
+- Fix the type stubs for `navdict` as they didn't match the real API.
 
 ## [0.11.0] - 2026-07-17
 

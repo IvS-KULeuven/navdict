@@ -29,8 +29,11 @@ __all__ = [
     "navdict",  # noqa: ignore typo
     "NavDict",
     "NavigableDict",
-    "get_resource_location",
     "expand_env_vars",
+    "get_resource_location",
+    "load_class",
+    "load_csv",
+    "load_yaml",
 ]
 
 import csv
@@ -166,9 +169,11 @@ def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs) 
     Find and return the content of a CSV file.
 
     If the `resource_name` argument starts with the directive (`csv//`), it will be split off automatically.
+
     The `kwargs` dictionary can contain the following keys:
 
     - `header_rows`: the number of header rows to skip when processing the file.
+    - `delimiter`: the delimiter to use when parsing the CSV file. The default is a comma (`,`).
     - `expand_env`: when `True` (the default), `ENV[VARNAME]` references in `resource_name` are expanded
       with the value of the corresponding environment variable before the file is located. Set to `False`
       to disable this expansion.
@@ -220,7 +225,7 @@ def load_csv(resource_name: str, parent_location: Path | None, *args, **kwargs) 
     return data
 
 
-def load_int_enum(enum_name: str, enum_content) -> IntEnum:
+def _load_int_enum(enum_name: str, enum_content) -> IntEnum:
     """Dynamically build (and return) and IntEnum.
 
     In the YAML file this will look like below.
@@ -241,6 +246,9 @@ def load_int_enum(enum_name: str, enum_content) -> IntEnum:
     Args:
         - enum_name: Enumeration name (potentially prepended with "int_enum//").
         - enum_content: Content of the enumeration, as read from the navdict field.
+
+    Returns:
+        An IntEnum class with the given name and content.
     """
     if enum_name.startswith("int_enum//"):
         enum_name = enum_name[10:]
@@ -262,7 +270,23 @@ def load_int_enum(enum_name: str, enum_content) -> IntEnum:
 
 
 def load_yaml(resource_name: str, parent_location: Path | None, *args, **kwargs) -> NavigableDict:
-    """Find and return the content of a YAML file."""
+    """Find and return the content of a YAML file.
+
+    The `kwargs` dictionary can contain the following keys:
+
+    - `expand_env`: when `True` (the default), `ENV[VARNAME]` references in `resource_name` are expanded
+      with the value of the corresponding environment variable before the file is located. Set to `False`
+      to disable this expansion.
+
+    Args:
+        resource_name: the name of the YAML file to load, optionally prepended with `yaml//`.
+        parent_location: the location of the parent navdict, or None.
+        *args: additional positional arguments (currently unused).
+        **kwargs: additional keyword arguments.
+
+    Returns:
+        A NavigableDict containing the content of the YAML file.
+    """
 
     # logger.debug(f"{resource_name=}, {parent_location=}")
 
@@ -591,7 +615,7 @@ class NavigableDict(dict):
 
             case "int_enum":
                 content = object.__getattribute__(self, "content")
-                return load_int_enum(directive_value, content)
+                return _load_int_enum(directive_value, content)
 
             case _:
                 return value
