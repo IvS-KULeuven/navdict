@@ -12,6 +12,9 @@ configuration workflows.
 ## Typical workflow
 
 1. Load data from Python dicts or YAML files.
-2. Navigate nested values using either key access or dot notation.
-3. Use directives for file loading, class instantiation, and environment-based configuration.
-4. Use aliases when multiple names should resolve to the same key.
+2. Optionally add a label to control the rich tree root title when printing.
+3. Navigate nested values using either key access or dot notation.
+4. Use directives for file loading, class instantiation, and environment-based configuration.
+5. Use aliases when multiple names should resolve to the same key.
+
+For label usage, see [Getting Started](../getting-started.md).

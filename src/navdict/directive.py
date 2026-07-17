@@ -84,7 +84,7 @@ def unravel_directive(value: str) -> tuple[str, str]:
     Returns the directive key and the directive value in a tuple.
 
     Raises:
-        A ValueError if the given value is not a directive.
+        ValueError: If the given value is not a directive.
     """
     match = re.match(DIRECTIVE_PATTERN, value)
     if match:

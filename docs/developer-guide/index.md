@@ -8,6 +8,11 @@ This guide covers navdict internals, extension points, and development setup.
 - [Internals](internals.md): lazy resolution, memoization, and lookup behavior
 - [Contributing](contributing.md): local setup and quality checks
 
+Key topics covered:
+
+- registering directive plugins via entry points and at runtime
+- resetting memoized directive values when runtime state changes
+
 ## Source layout
 
 Core code lives under `src/navdict/`:

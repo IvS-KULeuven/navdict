@@ -76,6 +76,11 @@ theme:
 plugins:
     search:
     autorefs:
+    mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - src
 
 extra_css:
   - stylesheets/brand.css
@@ -100,4 +105,8 @@ nav:
     - Directive Plugins: developer-guide/directive-plugins.md
     - Internals: developer-guide/internals.md
     - Contributing: developer-guide/contributing.md
+  - API:
+    - Overview: api/index.md
+    - NavigableDict: api/navigable-dict.md
+    - Directive Registry: api/directive-registry.md
   - Roadmap: roadmap.md

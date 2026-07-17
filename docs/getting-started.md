@@ -81,6 +81,49 @@ NavigableDict
 
 Be aware that printing a large configuration can produce a lot of output.
 
+## Add a label
+
+You can attach a label when creating a navdict. The label is mainly used as the
+root title in rich tree output.
+
+```python
+from navdict import NavDict
+from rich import print
+
+config = NavDict(
+    {
+        "instrument": {
+            "name": "NIR-1",
+        }
+    },
+    label="Instrument Config",
+)
+
+print(config)
+```
+
+Example output:
+
+```text
+Instrument Config
+└── instrument
+    └── name: NIR-1
+```
+
+You can also set or change the label later:
+
+```python
+config.set_label("Setup")
+print(config.get_label())
+# Setup
+```
+
+Notes:
+
+- Labels can be passed through `NavDict(...)`, `NavDict.from_dict(...)`, and
+  `NavDict.from_yaml_string(...)`.
+- `from_yaml_file(...)` does not accept a `label` argument.
+
 ## Load from YAML
 
 When your configuration lives in files, load it directly:

@@ -28,6 +28,38 @@ env = 'navdict.directives:env_var'
 
 You can also register plugins programmatically at runtime.
 
+## Register plugins at runtime
+
+Use `register_directive` for process-local registration:
+
+```python
+from pathlib import Path
+
+from navdict.directive import register_directive
+
+
+def txt_loader(value: str, parent_location: Path | None, *args, **kwargs):
+    base = parent_location or Path(".")
+    path = (base / value).expanduser()
+    return path.read_text(encoding="utf-8")
+
+
+register_directive("txt", txt_loader)
+```
+
+Then use it like any other directive:
+
+```yaml
+notes:
+  release: txt//notes/release.txt
+```
+
+Runtime registration details:
+
+- Registration applies to the current Python process.
+- If you register a name that already exists, the new function replaces the old one.
+- This mechanism is useful for app-specific directives and tests.
+
 ## Passing plugin arguments from YAML
 
 For a key `hk_metrics`, navdict reads:
