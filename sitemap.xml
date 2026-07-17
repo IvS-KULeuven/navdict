@@ -2,18 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://ivs-kuleuven.github.io/navdict/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://ivs-kuleuven.github.io/navdict/aliases/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://ivs-kuleuven.github.io/navdict/directives/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-17</lastmod>
+    </url>
+    <url>
+         <loc>https://ivs-kuleuven.github.io/navdict/getting-started/</loc>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://ivs-kuleuven.github.io/navdict/roadmap/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
 </urlset>

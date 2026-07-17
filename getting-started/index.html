@@ -12,11 +12,13 @@
         <meta name="author" content="Rik Huygen">
       
       
-        <link rel="canonical" href="https://ivs-kuleuven.github.io/navdict/roadmap/">
+        <link rel="canonical" href="https://ivs-kuleuven.github.io/navdict/getting-started/">
       
       
-        <link rel="prev" href="../aliases/">
+        <link rel="prev" href="..">
       
+      
+        <link rel="next" href="../directives/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -24,7 +26,7 @@
     
     
       
-        <title>Roadmap - navdict</title>
+        <title>Getting Started - navdict</title>
       
     
     
@@ -106,9 +108,9 @@
 <!-- / Fathom -->
 
 
-<meta property="og:title" content="navdict - Roadmap">
+<meta property="og:title" content="navdict - Getting Started">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://ivs-kuleuven.github.io/navdict/roadmap/">
+<meta property="og:url" content="https://ivs-kuleuven.github.io/navdict/getting-started/">
 <meta property="og:site_name" content="navdict Documentation">
 <meta property="og:description" content="navdict is a navigable dictionary with dot notation and directive-based lazy resource loading.">
 <meta property="og:image" content="https://raw.githubusercontent.com/IvS-KULeuven/navdict/main/docs/images/navdict-lockup-light-bg.svg">
@@ -148,7 +150,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#roadmap" class="md-skip">
+        <a href="#getting-started" class="md-skip">
           Skip to content
         </a>
       
@@ -183,7 +185,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Roadmap
+              Getting Started
             
           </span>
         </div>
@@ -286,10 +288,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href=".." class="md-tabs__link">
           
   
@@ -308,11 +312,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../roadmap/" class="md-tabs__link">
         
   
   
@@ -342,9 +344,7 @@
           
             
               
-                
-              
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -381,6 +381,8 @@
       
   
   
+    
+  
   
   
     
@@ -400,14 +402,17 @@
     
     
       
+        
+        
+      
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -424,13 +429,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1">
             <span class="md-nav__icon md-icon"></span>
             navdict
@@ -443,10 +448,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../getting-started/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -457,6 +484,89 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-your-first-navdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create your first navdict
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discover-available-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      Discover available keys
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pretty-print-a-navdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pretty-print a navdict
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#load-from-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      Load from YAML
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-a-directive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use a directive
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-to-go-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      Where to go next
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -519,32 +629,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Roadmap
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
         
   
   
@@ -555,35 +643,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    <span class="md-ellipsis">
-      Features
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -595,8 +654,6 @@
               </div>
             
             
-              
-                
               
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
@@ -617,9 +674,63 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#install" class="md-nav__link">
     <span class="md-ellipsis">
-      Features
+      Install
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-your-first-navdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create your first navdict
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discover-available-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      Discover available keys
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pretty-print-a-navdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pretty-print a navdict
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#load-from-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      Load from YAML
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-a-directive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use a directive
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-to-go-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      Where to go next
     </span>
   </a>
   
@@ -638,31 +749,103 @@
               <article class="md-content__inner md-typeset">
                 
                   
-  
-
 
 
   
   
 
 
-<h1 id="roadmap">Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">&para;</a></h1>
-<p>Don't worry, the feature set will grow ...</p>
-<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
-<ul class="task-list">
-<li class="task-list-item">
-<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> add the possibility to define aliases for keys and attributes that are defined in the navdict. That is useful when
-  you want to access the same information with difference keys/attributes.</p>
-</li>
-<li class="task-list-item">
-<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> the <code>csv//</code> directive might be improved with specification of the number of rows that a header takes up, that
-  might need to go into a field, e.g. <code>args</code> below and at the same level as where the directive is.</p>
-</li>
-<li class="task-list-item">
-<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Add pluggable functionality to NavDict to do something like
-  <code>bad_pixels//&lt;filename&gt;.fits</code> and this will then execute a function that takes the <code>&lt;filename&gt;.fits</code> as an argument.
-  That function can return a filename or a file descriptor, or a FITS object....</p>
-</li>
+<h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
+<p>This guide gets you from installation to your first practical <code>navdict</code> usage
+in a few minutes.</p>
+<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<p>Use your preferred environment workflow.</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span>navdict
+</code></pre></div>
+<p>Or with pip in a virtual environment:</p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+pip<span class="w"> </span>install<span class="w"> </span>navdict
+</code></pre></div>
+<h2 id="create-your-first-navdict">Create your first navdict<a class="headerlink" href="#create-your-first-navdict" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">navdict</span><span class="w"> </span><span class="kn">import</span> <span class="n">NavDict</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">NavDict</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;instrument&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;NIR-1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;camera&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;gain&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
+                <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># Dictionary style</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;instrument&quot;</span><span class="p">][</span><span class="s2">&quot;camera&quot;</span><span class="p">][</span><span class="s2">&quot;gain&quot;</span><span class="p">])</span>
+
+<span class="c1"># Dot notation style</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">gain</span><span class="p">)</span>
+</code></pre></div>
+<p>Both access styles return the same values.</p>
+<h2 id="discover-available-keys">Discover available keys<a class="headerlink" href="#discover-available-keys" title="Permanent link">&para;</a></h2>
+<p>When navigating nested structures, <code>keys()</code> helps you discover what is
+available at each level.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="c1"># dict_keys([&#39;name&#39;, &#39;camera&#39;])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="c1"># dict_keys([&#39;gain&#39;, &#39;offset&#39;])</span>
+</code></pre></div>
+<h2 id="pretty-print-a-navdict">Pretty-print a navdict<a class="headerlink" href="#pretty-print-a-navdict" title="Permanent link">&para;</a></h2>
+<p>For a full readable view of a nested structure, use <code>rich.print</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</code></pre></div>
+<p>Example output:</p>
+<div class="highlight"><pre><span></span><code>NavigableDict
+└── instrument
+    ├── name: NIR-1
+    └── camera
+        ├── gain: 1.5
+        └── offset: 100
+</code></pre></div>
+<p>Be aware that printing a large configuration can produce a lot of output.</p>
+<h2 id="load-from-yaml">Load from YAML<a class="headerlink" href="#load-from-yaml" title="Permanent link">&para;</a></h2>
+<p>When your configuration lives in files, load it directly:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">navdict</span><span class="w"> </span><span class="kn">import</span> <span class="n">NavDict</span>
+
+<span class="n">setup</span> <span class="o">=</span> <span class="n">NavDict</span><span class="o">.</span><span class="n">from_yaml_file</span><span class="p">(</span><span class="s2">&quot;setup.yaml&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">setup</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="use-a-directive">Use a directive<a class="headerlink" href="#use-a-directive" title="Permanent link">&para;</a></h2>
+<p>Directives are values with the format <code>&lt;name&gt;//&lt;value&gt;</code>. They are resolved when
+accessed.</p>
+<p>Example YAML:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">instrument</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">calibration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv//calibration.csv</span>
+</code></pre></div>
+<p>Example Python:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">navdict</span><span class="w"> </span><span class="kn">import</span> <span class="n">NavDict</span>
+
+<span class="n">setup</span> <span class="o">=</span> <span class="n">NavDict</span><span class="o">.</span><span class="n">from_yaml_file</span><span class="p">(</span><span class="s2">&quot;setup.yaml&quot;</span><span class="p">)</span>
+<span class="n">coefficients</span> <span class="o">=</span> <span class="n">setup</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">calibration</span>
+</code></pre></div>
+<p>Common built-in directives include:</p>
+<ul>
+<li><code>yaml//</code>: load nested YAML</li>
+<li><code>csv//</code>: load CSV resources</li>
+<li><code>class//</code>: instantiate a class</li>
+<li><code>factory//</code>: instantiate a factory and call <code>create()</code></li>
+<li><code>int-enum//</code>: build an enum dynamically</li>
+<li><code>env//</code>: read an environment variable</li>
+</ul>
+<h2 id="where-to-go-next">Where to go next<a class="headerlink" href="#where-to-go-next" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Learn details and plugin extension in <a href="../directives/">How directives work</a></li>
+<li>Learn alternative key naming in <a href="../aliases/">Aliases</a></li>
 </ul>
 
 
@@ -671,13 +854,8 @@
 
 
 
-  
-  
 
 
-
-
-  
 
 
 
@@ -695,12 +873,10 @@
   
     
       
-        
-      
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../aliases/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Aliases">
+          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Introduction">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -710,11 +886,27 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Aliases
+                Introduction
               </div>
             </div>
           </a>
         
+        
+          
+          <a href="../directives/" class="md-footer__link md-footer__link--next" aria-label="Next: How Directives Work">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                How Directives Work
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
         
       </nav>
     

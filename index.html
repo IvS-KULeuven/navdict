@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Official documentation of Navdict – a navigable dictionary with dot notation access and automatic file loading.">
+        <meta name="description" content="Official documentation of Navdict - a navigable dictionary with dot notation access and automatic file loading.">
       
       
         <meta name="author" content="Rik Huygen">
@@ -16,7 +16,7 @@
       
       
       
-        <link rel="next" href="directives/">
+        <link rel="next" href="getting-started/">
       
       
       <link rel="icon" href="assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>An intelligent navigable dictionary - navdict</title>
+        <title>Introduction - navdict</title>
       
     
     
@@ -91,9 +91,7 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/custom.css">
-    
-      <link rel="stylesheet" href="stylesheets/extra.css">
+      <link rel="stylesheet" href="stylesheets/brand.css">
     
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -108,12 +106,12 @@
 <!-- / Fathom -->
 
 
-<meta property="og:title" content="CGSE - An intelligent navigable dictionary">
+<meta property="og:title" content="navdict - Introduction">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://ivs-kuleuven.github.io/navdict/">
-<meta property="og:site_name" content="CGSE Documentation">
-<meta property="og:description" content="CGSE is an instrument test framework for Python.">
-<meta property="og:image" content="https://raw.githubusercontent.com/IvS-KULeuven/cgse/refs/heads/main/docs/images/icons/cgse-logo.svg">
+<meta property="og:site_name" content="navdict Documentation">
+<meta property="og:description" content="navdict is a navigable dictionary with dot notation and directive-based lazy resource loading.">
+<meta property="og:image" content="https://raw.githubusercontent.com/IvS-KULeuven/navdict/main/docs/images/navdict-lockup-light-bg.svg">
 
 <style>
 
@@ -150,7 +148,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#an-intelligent-navigable-dictionary" class="md-skip">
+        <a href="#navdict" class="md-skip">
           Skip to content
         </a>
       
@@ -168,8 +166,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="." title="navdict" class="md-header__button md-logo" aria-label="navdict" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="images/navdict-icon-dark-bg.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -186,7 +183,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              An intelligent navigable dictionary
+              Introduction
             
           </span>
         </div>
@@ -358,8 +355,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href="." title="navdict" class="md-nav__button md-logo" aria-label="navdict" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="images/navdict-icon-dark-bg.svg" alt="logo">
 
     </a>
     navdict
@@ -392,6 +388,8 @@
       
         
           
+        
+      
         
       
         
@@ -451,12 +449,35 @@
   
   
     <li class="md-nav__item">
+      <a href="getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="directives/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    How directives work
+    How Directives Work
     
   </span>
   
@@ -546,26 +567,38 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#special-values" class="md-nav__link">
+  <a href="#why-navdict" class="md-nav__link">
     <span class="md-ellipsis">
-      Special Values
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Special Values">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#data-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      Data Files
+      Why navdict?
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core concepts
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next steps
+    </span>
+  </a>
   
 </li>
       
@@ -588,68 +621,64 @@
   
 
 
-<h1 id="an-intelligent-navigable-dictionary">An intelligent navigable dictionary<a class="headerlink" href="#an-intelligent-navigable-dictionary" title="Permanent link">&para;</a></h1>
-<p>🚧– WIP – this is an early version of a project in development. Please use it 
-and fork it and create issues and feature requests.</p>
-<p>This module defines the NavigableDict (aka. <code>navdict</code>), which is a dictionary
-that is dot-navigable and has some special features to autoload files.</p>
-<p>The information that is in the NavigableDict can be navigated in two different
-ways. First, the navdict is a dictionary, so all information can be accessed by
-keys as in the following example.</p>
-<pre><code>&gt;&gt;&gt; setup = NavigableDict({"gse": {"hexapod": {"ID": 42, "calibration": [0,1,2,3,4,5]}}})
-&gt;&gt;&gt; setup["gse"]["hexapod"]["ID"]
-42
-</code></pre>
-<p>Second, each of the <em>keys</em> is also available as an attribute of the
-NavigableDict and that makes it possible to navigate the navdict with
-dot-notation:</p>
-<pre><code>&gt;&gt;&gt; id = setup.gse.hexapod.ID
-</code></pre>
-<p>If you want to know which keys you can use to navigate the navdict, use
-the <code>keys()</code> method.</p>
-<pre><code>&gt;&gt;&gt; setup.gse.hexapod.keys()
-dict_keys(['ID', 'calibration'])
-&gt;&gt;&gt; setup.gse.hexapod.calibration
-[0, 1, 2, 3, 4, 5]
-</code></pre>
-<p>To get a full printout of the navdict, you can use the print method from the
-rich package. Be careful, because this can print out a lot of information when a
-full configuration is loaded.</p>
-<pre><code>&gt;&gt;&gt; from rich import print
-&gt;&gt;&gt; print(setup)
-NavigableDict
-└── gse
-    └── hexapod
-        ├── ID: 42
-        └── calibration: [0, 1, 2, 3, 4, 5]
-</code></pre>
-<h3 id="special-values">Special Values<a class="headerlink" href="#special-values" title="Permanent link">&para;</a></h3>
-<p>Some of the information in the navdict is interpreted in a special way, i.e.
-some values are processed before returning. Examples are the classes and
-calibration/data files. The following values are treated special if they start
-with:</p>
+<h1 id="navdict">navdict<a class="headerlink" href="#navdict" title="Permanent link">&para;</a></h1>
+<div class="nd-hero">
+    <img
+        class="nd-hero__logo nd-hero__logo--light"
+        src="images/navdict-lockup-light-bg.svg"
+        alt="navdict"
+    >
+    <img
+        class="nd-hero__logo nd-hero__logo--dark"
+        src="images/navdict-lockup-dark-bg.svg"
+        alt="navdict"
+    >
+</div>
+
+<p><code>navdict</code> (also available as <code>NavigableDict</code> and <code>NavDict</code>) is a Python
+dictionary subclass that lets you access nested configuration and data using
+both dictionary-style access and dot notation.</p>
+<p>It is built for configuration-heavy projects where readability and flexibility
+matter.</p>
+<h2 id="why-navdict">Why navdict?<a class="headerlink" href="#why-navdict" title="Permanent link">&para;</a></h2>
+<p>You can use <code>navdict</code> as a plain dictionary:</p>
+<div class="highlight"><pre><span></span><code><span class="n">setup</span><span class="p">[</span><span class="s2">&quot;gse&quot;</span><span class="p">][</span><span class="s2">&quot;hexapod&quot;</span><span class="p">][</span><span class="s2">&quot;ID&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p>Or navigate the same structure with dot notation:</p>
+<div class="highlight"><pre><span></span><code><span class="n">setup</span><span class="o">.</span><span class="n">gse</span><span class="o">.</span><span class="n">hexapod</span><span class="o">.</span><span class="n">ID</span>
+</code></pre></div>
+<p>In addition, navdict supports directive-based values such as <code>yaml//...</code>,
+<code>csv//...</code>, and <code>class//...</code> that are resolved lazily when accessed. More on directives in <a href="directives/">How Directives Work</a>.</p>
+<h2 id="core-concepts">Core concepts<a class="headerlink" href="#core-concepts" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>class//</code>: instantiate the class and return the object</li>
-<li><code>factory//</code>: instantiates a factory and executes its <code>create()</code> method</li>
-<li><code>csv//</code>: load the CSV file and return a list of lists of strings</li>
-<li><code>yaml//</code>: load the YAML file and return a dictionary</li>
-<li><code>int-enum//</code>: dynamically create the enumeration and return the Enum object</li>
+<li>Nested dictionaries are wrapped as navdict objects.</li>
+<li>Keys are available as both dictionary keys and attributes.</li>
+<li>Directive strings are interpreted on read and memoized.</li>
+<li>Relative resource paths can be resolved from the source file location.</li>
 </ul>
-<p>We call these values <em>directives</em> and they are explained in more detail in 
-<a href="directives/">How directives work</a>.</p>
-<h4 id="data-files">Data Files<a class="headerlink" href="#data-files" title="Permanent link">&para;</a></h4>
-<p>Some information is too large to add to the navdict as such and should be loaded
-from a data file. Examples are calibration files, flat-fields, temperature
-conversion curves, etc.</p>
-<p>The navdict will automatically load the file when you access a key that 
-contains a value that starts with <code>csv//</code> or <code>yaml//</code>.</p>
-<pre><code>&gt;&gt;&gt; setup = navdict({
-...     "instrument": {"coeff": "csv//cal_coeff_1234.csv"}
-... })
-&gt;&gt;&gt; setup.instrument.coeff[0, 4]
-5.0
-</code></pre>
-<p>Note: the resource location is always relative to the current location XXXX </p>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">navdict</span><span class="w"> </span><span class="kn">import</span> <span class="n">NavDict</span>
+
+<span class="n">setup</span> <span class="o">=</span> <span class="n">NavDict</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;gse&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;hexapod&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+                <span class="s2">&quot;calibration&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">setup</span><span class="p">[</span><span class="s2">&quot;gse&quot;</span><span class="p">][</span><span class="s2">&quot;hexapod&quot;</span><span class="p">][</span><span class="s2">&quot;ID&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">42</span>
+<span class="k">assert</span> <span class="n">setup</span><span class="o">.</span><span class="n">gse</span><span class="o">.</span><span class="n">hexapod</span><span class="o">.</span><span class="n">ID</span> <span class="o">==</span> <span class="mi">42</span>
+</code></pre></div>
+<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Start with <a href="getting-started/">Getting Started</a></li>
+<li>Learn directive behavior in <a href="directives/">How directives work</a></li>
+<li>See alias support in <a href="aliases/">Aliases</a></li>
+</ul>
 
 
 
@@ -680,13 +709,13 @@ contains a value that starts with <code>csv//</code> or <code>yaml//</code>.</p>
         
         
           
-          <a href="directives/" class="md-footer__link md-footer__link--next" aria-label="Next: How directives work">
+          <a href="getting-started/" class="md-footer__link md-footer__link--next" aria-label="Next: Getting Started">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                How directives work
+                Getting Started
               </div>
             </div>
             <div class="md-footer__button md-icon">
