@@ -1,7 +1,15 @@
+<p align="center">
+	<picture>
+		<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/IvS-KULeuven/navdict/main/docs/images/navdict-lockup-dark-bg.svg">
+		<source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/IvS-KULeuven/navdict/main/docs/images/navdict-lockup-light-bg.svg">
+		<img src="https://raw.githubusercontent.com/IvS-KULeuven/navdict/main/docs/images/navdict-lockup-light-bg.svg" alt="navdict" width="420">
+	</picture>
+</p>
+
 # NavigableDict (aka. navdict)
 
 A Python dictionary that supports both traditional key access (`dict["key"]`)
-and convenient dot notation (`dict.key`) for navigating nested data 
+and convenient dot notation (`dict.key`) for navigating nested data
 structures, plus some extras.
 
 ## Features
@@ -13,7 +21,7 @@ structures, plus some extras.
 - **Type Hints**: Full typing support for better IDE integration
 - **Lightweight**: Minimal overhead over standard dictionaries
 
-and 
+and
 
 - **Automatic File Loading**: Seamlessly load and parse data files (CSV, YAML, JSON, etc.) when accessing dictionary keys, eliminating manual file handling
 - **Dynamic Class Instantiation**: Automatically import and instantiate classes with configurable parameters, enabling flexible object creation from configuration data
@@ -37,7 +45,7 @@ source .venv/bin/activate
 pip install navdict
 ```
 
-or with `uv`, simply run the following, since `uv` will automatically use 
+or with `uv`, simply run the following, since `uv` will automatically use
 the environment.
 
 ```shell
@@ -46,7 +54,7 @@ uv pip install navdict
 
 ### Installation in a project
 
-When you want to use `navdict` in a project you are developing, add the 
+When you want to use `navdict` in a project you are developing, add the
 dependency to your `pyproject.toml` manually, or using `uv`
 
 ```shell
