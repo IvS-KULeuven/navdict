@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-07-17
+
+- Fix the type stubs for navdict as they didn't match the real API.
+
 ## [0.11.0] - 2026-07-17
 
 - Documentation updated: separate and enhance user and developer docs
@@ -253,7 +257,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/IvS-KULeuven/navdict/compare/0.11.0...HEAD
+[Unreleased]: https://github.com/IvS-KULeuven/navdict/compare/0.11.1...HEAD
+[0.11.1]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.11.1
 [0.11.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.11.0
 [0.10.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.10.0
 [0.9.0]: https://github.com/IvS-KULeuven/navdict/releases/tag/0.9.0
