@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Documentation update - phase 1
+## [0.11.0] - 2026-07-17
+
+- Documentation updated: separate and enhance user and developer docs
 - Added navdict logo `[.]`
 - Updated README
 

@@ -45,6 +45,27 @@ print(config.instrument.camera.gain)
 
 Both access styles return the same values.
 
+## Caveat: keys must be strings for dot navigation
+
+For a given dictionary level, navdict only enables attribute-style navigation
+if all keys at that level are strings.
+
+If a level contains one or more non-string keys, none of the keys at that
+level are exposed as attributes.
+
+```python
+from navdict import NavDict
+
+cfg = NavDict({"ok": {"name": "camera"}})
+print(cfg.ok.name)  # works
+
+mixed = NavDict({"group": {"name": "camera", 42: "answer"}})
+print(mixed.group["name"])  # works (dict access)
+
+# Attribute access at this level is disabled because of key 42.
+# print(mixed.group.name)
+```
+
 ## Discover available keys
 
 When navigating nested structures, `keys()` helps you discover what is
@@ -80,6 +101,49 @@ NavigableDict
 ```
 
 Be aware that printing a large configuration can produce a lot of output.
+
+## Add a label
+
+You can attach a label when creating a navdict. The label is mainly used as the
+root title in rich tree output.
+
+```python
+from navdict import NavDict
+from rich import print
+
+config = NavDict(
+    {
+        "instrument": {
+            "name": "NIR-1",
+        }
+    },
+    label="Instrument Config",
+)
+
+print(config)
+```
+
+Example output:
+
+```text
+Instrument Config
+└── instrument
+    └── name: NIR-1
+```
+
+You can also set or change the label later:
+
+```python
+config.set_label("Setup")
+print(config.get_label())
+# Setup
+```
+
+Notes:
+
+- Labels can be passed through `NavDict(...)`, `NavDict.from_dict(...)`, and
+  `NavDict.from_yaml_string(...)`.
+- `from_yaml_file(...)` does not accept a `label` argument.
 
 ## Load from YAML
 
@@ -124,5 +188,6 @@ Common built-in directives include:
 
 ## Where to go next
 
-- Learn details and plugin extension in [How directives work](directives.md)
-- Learn alternative key naming in [Aliases](aliases.md)
+- Learn directive usage in [User Guide: Directives](user-guide/directives.md)
+- Learn alternative key naming in [User Guide: Aliases](user-guide/aliases.md)
+- Learn plugin extension in [Developer Guide: Directive Plugins](developer-guide/directive-plugins.md)
